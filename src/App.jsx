@@ -148,9 +148,13 @@ function App({ playerName, userId, onBackToMenu }) {
   // Result overlay button handlers
   const handleRelease = async () => {
     console.log("물고기를 방생했습니다:", caughtFish?.name);
+    console.log("DEBUG - caughtFish:", caughtFish);
+    console.log("DEBUG - userId:", userId);
+    console.log("DEBUG - selectedHabitat:", selectedHabitat);
 
     if (caughtFish?.species_id && userId) {
       try {
+        console.log("DEBUG - API 호출 시작:", { userId, species_id: caughtFish.species_id, action: "RELEASE", habitat: selectedHabitat });
         const response = await handleAction(userId, caughtFish.species_id, "RELEASE", selectedHabitat);
         console.log("방생 처리 완료", response);
         setActionResult({
@@ -183,9 +187,13 @@ function App({ playerName, userId, onBackToMenu }) {
 
   const handleSell = async () => {
     console.log("물고기를 판매했습니다:", caughtFish?.name);
+    console.log("DEBUG - caughtFish:", caughtFish);
+    console.log("DEBUG - userId:", userId);
+    console.log("DEBUG - selectedHabitat:", selectedHabitat);
 
     if (caughtFish?.species_id && userId) {
       try {
+        console.log("DEBUG - API 호출 시작:", { userId, species_id: caughtFish.species_id, action: "SELL", habitat: selectedHabitat });
         const response = await handleAction(userId, caughtFish.species_id, "SELL", selectedHabitat);
         console.log("판매 처리 완료", response);
         setActionResult({
@@ -220,9 +228,13 @@ function App({ playerName, userId, onBackToMenu }) {
 
   const handleSendToAquarium = async () => {
     console.log("물고기를 아쿠아리움으로 보냈습니다:", caughtFish?.name);
+    console.log("DEBUG - caughtFish:", caughtFish);
+    console.log("DEBUG - userId:", userId);
+    console.log("DEBUG - selectedHabitat:", selectedHabitat);
 
     if (caughtFish?.species_id && userId) {
       try {
+        console.log("DEBUG - API 호출 시작:", { userId, species_id: caughtFish.species_id, action: "AQUARIUM", habitat: selectedHabitat });
         const response = await handleAction(userId, caughtFish.species_id, "AQUARIUM", selectedHabitat);
         console.log("아쿠아리움 수송 처리 완료", response);
         setActionResult({

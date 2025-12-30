@@ -8,7 +8,8 @@
     "/game/fish": {
       "post": {
         "tags": ["game"],
-        "summary": "Fishing",
+        "summary": "낚시하기",
+        "description": "서식지(Habitat)에서 낚시를 진행합니다.\n- **확률**: 오염도와 낚싯대 등급에 따라 쓰레기/일반/멸종위기종 확률이 결정됩니다.\n- **로직**: 서식지에 맞는 물고기를 랜덤하게 낚습니다. 만약 해당 등급 물고기가 없으면 일반 물고기로 대체됩니다.\n- **결과**: 잡은 물고기 정보와 도감 등록 여부, 유저의 상태 변화를 반환합니다.",
         "operationId": "fishing_game_fish_post",
         "parameters": [
           {
@@ -18,6 +19,15 @@
             "schema": {
               "type": "integer",
               "title": "User Id"
+            }
+          },
+          {
+            "name": "habitat",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "title": "Habitat"
             }
           }
         ],
@@ -48,8 +58,8 @@
     "/game/action": {
       "post": {
         "tags": ["game"],
-        "summary": "Handle Action",
-        "description": "유저가 낚시 후 선택한 행동(판매, 방생, 수족관)을 처리하는 API",
+        "summary": "낚시 후 행동 선택",
+        "description": "낚시로 잡은 물고기에 대해 행동(판매/방생/수족관)을 선택합니다.\n- **판매**: 돈을 획득합니다. (쓰레기는 오염도 감소)\n- **방생**: 오염도가 감소하거나(일반/멸종위기), 증가합니다(쓰레기).\n- **수족관**: 특별한 효과는 없으나 도감에 기록됩니다 (현재는 판매와 유사).",
         "operationId": "handle_action_game_action_post",
         "requestBody": {
           "content": {
@@ -86,7 +96,8 @@
     "/game/collection/{user_id}": {
       "get": {
         "tags": ["game"],
-        "summary": "Get Collection",
+        "summary": "유저 도감 조회",
+        "description": "유저가 잡은 물고기 도감을 조회합니다. 잡지 못한 물고기는 ???로 표시됩니다.",
         "operationId": "get_collection_game_collection__user_id__get",
         "parameters": [
           {
@@ -127,10 +138,50 @@
         }
       }
     },
+    "/game/invalidate-last-fish": {
+      "post": {
+        "tags": ["game"],
+        "summary": "최근 낚시 무효화",
+        "description": "가장 최근에 잡은 물고기를 무효화하고 도감 기록을 되돌립니다.",
+        "operationId": "invalidate_last_fish_game_invalidate_last_fish_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/users/": {
       "post": {
         "tags": ["users"],
-        "summary": "Create User",
+        "summary": "회원가입",
+        "description": "닉네임을 입력받아 새로운 사용자를 생성합니다.",
         "operationId": "create_user_users__post",
         "requestBody": {
           "content": {
@@ -169,7 +220,8 @@
     "/users/list": {
       "get": {
         "tags": ["users"],
-        "summary": "Get All Users",
+        "summary": "전체 유저 목록 조회",
+        "description": "등록된 모든 사용자의 목록을 조회합니다.",
         "operationId": "get_all_users_users_list_get",
         "responses": {
           "200": {
@@ -192,7 +244,8 @@
     "/users/{user_id}": {
       "get": {
         "tags": ["users"],
-        "summary": "Read User",
+        "summary": "특정 유저 정보 조회",
+        "description": "User ID를 통해 특정 사용자의 상세 정보를 조회합니다.",
         "operationId": "read_user_users__user_id__get",
         "parameters": [
           {
@@ -232,7 +285,8 @@
     "/shop/items": {
       "get": {
         "tags": ["shop"],
-        "summary": "Get Items",
+        "summary": "상점 아이템 목록 조회",
+        "description": "구매 가능한 낚싯대 목록을 조회합니다. 각 낚싯대의 효과(쓰레기 감소, 좋은 물고기 확률 증가)를 확인할 수 있습니다.",
         "operationId": "get_items_shop_items_get",
         "responses": {
           "200": {
@@ -249,7 +303,8 @@
     "/shop/buy": {
       "post": {
         "tags": ["shop"],
-        "summary": "Buy Item",
+        "summary": "아이템 구매",
+        "description": "돈을 사용하여 상점에서 낚싯대를 구매하고 장착합니다. 이미 보유한 아이템은 장착만 수행됩니다.",
         "operationId": "buy_item_shop_buy_post",
         "requestBody": {
           "content": {
@@ -267,6 +322,47 @@
             "content": {
               "application/json": {
                 "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/aquarium/{user_id}": {
+      "get": {
+        "tags": ["aquarium"],
+        "summary": "아쿠아리움 목록 조회",
+        "description": "유저의 아쿠아리움에 있는 물고기 목록을 조회합니다.",
+        "operationId": "get_aquarium_aquarium__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/AquariumResponse"
+                }
               }
             }
           },
@@ -306,6 +402,55 @@
         "type": "string",
         "enum": ["SELL", "RELEASE", "AQUARIUM"],
         "title": "ActionType"
+      },
+      "AquariumItem": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "species_id": {
+            "type": "integer",
+            "title": "Species Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          },
+          "caught_at": {
+            "type": "string",
+            "title": "Caught At"
+          }
+        },
+        "type": "object",
+        "required": ["id", "species_id", "name", "image_url", "caught_at"],
+        "title": "AquariumItem"
+      },
+      "AquariumResponse": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          },
+          "fish_list": {
+            "items": {
+              "$ref": "#/components/schemas/AquariumItem"
+            },
+            "type": "array",
+            "title": "Fish List"
+          }
+        },
+        "type": "object",
+        "required": ["user_id", "nickname", "fish_list"],
+        "title": "AquariumResponse"
       },
       "BuyRequest": {
         "properties": {
@@ -347,6 +492,15 @@
           "is_caught": {
             "type": "boolean",
             "title": "Is Caught"
+          },
+          "habitat": {
+            "type": "string",
+            "title": "Habitat"
+          },
+          "DstcftCn": {
+            "type": "string",
+            "title": "Dstcftcn",
+            "default": ""
           }
         },
         "type": "object",
@@ -356,46 +510,79 @@
           "type",
           "image_url",
           "caught_count",
-          "is_caught"
+          "is_caught",
+          "habitat"
         ],
         "title": "CollectionItem"
       },
-      "FishResponse": {
+      "FishDetail": {
         "properties": {
-          "species_name": {
+          "name": {
             "type": "string",
-            "title": "Species Name"
+            "title": "Name"
           },
-          "species_type": {
-            "$ref": "#/components/schemas/SpeciesType"
+          "type": {
+            "type": "integer",
+            "title": "Type"
+          },
+          "price": {
+            "type": "integer",
+            "title": "Price"
           },
           "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          },
+          "habitat": {
+            "type": "string",
+            "title": "Habitat"
+          }
+        },
+        "type": "object",
+        "required": ["name", "type", "price", "image_url", "habitat"],
+        "title": "FishDetail"
+      },
+      "FishResponse": {
+        "properties": {
+          "message": {
+            "type": "string",
+            "title": "Message"
+          },
+          "fish": {
             "anyOf": [
               {
-                "type": "string"
+                "$ref": "#/components/schemas/FishDetail"
+              },
+              {
+                "type": "null"
+              }
+            ]
+          },
+          "is_new": {
+            "anyOf": [
+              {
+                "type": "boolean"
               },
               {
                 "type": "null"
               }
             ],
-            "title": "Image Url"
+            "title": "Is New",
+            "default": false
           },
-          "is_new": {
-            "type": "boolean",
-            "title": "Is New"
-          },
-          "pollution_level": {
-            "type": "integer",
-            "title": "Pollution Level"
+          "user_status": {
+            "anyOf": [
+              {
+                "$ref": "#/components/schemas/UserStatus"
+              },
+              {
+                "type": "null"
+              }
+            ]
           }
         },
         "type": "object",
-        "required": [
-          "species_name",
-          "species_type",
-          "is_new",
-          "pollution_level"
-        ],
+        "required": ["message"],
         "title": "FishResponse"
       },
       "HTTPValidationError": {
@@ -411,10 +598,20 @@
         "type": "object",
         "title": "HTTPValidationError"
       },
-      "SpeciesType": {
-        "type": "string",
-        "enum": ["TRASH", "INVASIVE", "NORMAL", "ENDANGERED"],
-        "title": "SpeciesType"
+      "HabitatPollutionSchema": {
+        "properties": {
+          "habitat_name": {
+            "type": "string",
+            "title": "Habitat Name"
+          },
+          "pollution_level": {
+            "type": "integer",
+            "title": "Pollution Level"
+          }
+        },
+        "type": "object",
+        "required": ["habitat_name", "pollution_level"],
+        "title": "HabitatPollutionSchema"
       },
       "UserActionRequest": {
         "properties": {
@@ -428,10 +625,14 @@
           },
           "action": {
             "$ref": "#/components/schemas/ActionType"
+          },
+          "habitat": {
+            "type": "string",
+            "title": "Habitat"
           }
         },
         "type": "object",
-        "required": ["user_id", "species_id", "action"],
+        "required": ["user_id", "species_id", "action", "habitat"],
         "title": "UserActionRequest"
       },
       "UserCreate": {
@@ -459,14 +660,37 @@
             "type": "integer",
             "title": "Money"
           },
-          "pollution_level": {
+          "rod_level": {
             "type": "integer",
-            "title": "Pollution Level"
+            "title": "Rod Level"
+          },
+          "habitat_pollutions": {
+            "items": {
+              "$ref": "#/components/schemas/HabitatPollutionSchema"
+            },
+            "type": "array",
+            "title": "Habitat Pollutions",
+            "default": []
           }
         },
         "type": "object",
-        "required": ["id", "nickname", "money", "pollution_level"],
+        "required": ["id", "nickname", "money", "rod_level"],
         "title": "UserResponse"
+      },
+      "UserStatus": {
+        "properties": {
+          "money": {
+            "type": "integer",
+            "title": "Money"
+          },
+          "habitat_pollution": {
+            "type": "integer",
+            "title": "Habitat Pollution"
+          }
+        },
+        "type": "object",
+        "required": ["money", "habitat_pollution"],
+        "title": "UserStatus"
       },
       "ValidationError": {
         "properties": {

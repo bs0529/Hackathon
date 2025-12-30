@@ -132,20 +132,25 @@ const GameLogic = ({
     // 낚시 시작할 때 API 호출하여 물고기 미리 가져오기
     const preFetchFish = async () => {
       try {
+        console.log("DEBUG - fishing API 호출 전 userId:", userId);
+        console.log("DEBUG - fishing API 호출 전 selectedHabitat:", selectedHabitat);
         const fishResponse = await fishing(userId, selectedHabitat);
         console.log("Pre-fetched API Response:", fishResponse);
+        console.log("DEBUG - fishResponse 전체 구조:", JSON.stringify(fishResponse, null, 2));
 
-        // 응답에서 물고기 정보 추출
+        // 응답에서 물고기 정보 추출 (새로운 API 구조)
         const apiFish = {
-          species_id: fishResponse.fish.species_id,
-          name: fishResponse.fish.name,
-          type: fishResponse.fish.type,
-          price: fishResponse.fish.price,
-          image_url: fishResponse.fish.image_url,
-          habitat: fishResponse.fish.habitat,
+          species_id: fishResponse.fish?.id, // fish.id가 species_id입니다
+          name: fishResponse.fish?.name,
+          type: fishResponse.fish?.type,
+          price: fishResponse.fish?.price,
+          image_url: fishResponse.fish?.image_url,
+          habitat: fishResponse.fish?.habitat,
           is_new: fishResponse.is_new,
           message: fishResponse.message,
         };
+
+        console.log("DEBUG - apiFish 구조:", apiFish);
 
         // fishData에서 매칭되는 물고기 찾기 (3D 모델 등 추가 정보)
         const matchedFish = fishData.find((f) => f.name === apiFish.name);
