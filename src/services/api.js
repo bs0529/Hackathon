@@ -119,4 +119,29 @@ export const markLetterAsRead = async (letterId) => {
   }
 };
 
+// 상점 아이템 목록 조회
+export const getShopItems = async () => {
+  try {
+    const response = await api.get("/shop/items");
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get shop items:", error);
+    throw error;
+  }
+};
+
+// 상점 아이템 구매
+export const buyItem = async (userId, itemId) => {
+  try {
+    const response = await api.post("/shop/buy", {
+      user_id: userId,
+      item_id: itemId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to buy item:", error);
+    throw error;
+  }
+};
+
 export default api;
