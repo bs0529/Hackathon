@@ -6,6 +6,7 @@ import Menu from "./Menu";
 import App from "../App";
 import Collection from "./collection/Collection";
 import CollectionDetail from "./collection/CollectionDetail";
+import Aquarium from "./Aquarium";
 import { createUser } from "../services/api";
 import "../App.css";
 
@@ -91,7 +92,7 @@ function GameFlow() {
 
   const handleSelectHabitat = (habitat) => {
     setSelectedHabitat(habitat);
-    navigate("/game");
+    navigate(`/game/${encodeURIComponent(habitat)}`);
   };
 
   const handleBackToMenu = () => {
@@ -100,6 +101,10 @@ function GameFlow() {
 
   const handleShowCollection = () => {
     navigate("/collection");
+  };
+
+  const handleShowAquarium = () => {
+    navigate("/aquarium");
   };
 
   const handleLogout = () => {
@@ -137,6 +142,7 @@ function GameFlow() {
             userId={userId}
             onLogout={handleLogout}
             onShowCollection={handleShowCollection}
+            onShowAquarium={handleShowAquarium}
           />
         }
       />
@@ -166,12 +172,11 @@ function GameFlow() {
         }
       />
       <Route
-        path="/game"
+        path="/game/:habitat"
         element={
           <App
             playerName={playerName}
             userId={userId}
-            selectedHabitat={selectedHabitat}
             onBackToMenu={handleBackToMenu}
           />
         }
@@ -181,6 +186,10 @@ function GameFlow() {
         element={<Collection onClose={handleBackToMenu} />}
       />
       <Route path="/collection/:fishId" element={<CollectionDetail />} />
+      <Route
+        path="/aquarium"
+        element={<Aquarium onClose={handleBackToMenu} />}
+      />
     </Routes>
   );
 }

@@ -194,14 +194,12 @@
    Pulling (핵심)
 ================================ */
 .bobber-container.pulling .bobber {
-  animation:
-    pull-down 2s ease-in forwards;
+  animation: pull-down 2s ease-in forwards;
 }
 
 .bobber-container.pulling .pulling-whale {
   opacity: 1;
-  animation:
-    pull-down 2s ease-in forwards;
+  animation: pull-down 2s ease-in forwards;
 }
 
 /* ===============================
@@ -211,8 +209,8 @@
 /* 던질 때 */
 @keyframes cast-bobber {
   0% {
-    left: 30%; /* Desktop rod tip position (right edge of fisherman) */
-    top: 35%; /* Slightly higher */
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 30%; /* Rod tip height */
     transform: translate(-50%, -50%) scale(0.5);
   }
 
@@ -232,8 +230,8 @@
 @media (max-width: 1200px) {
   @keyframes cast-bobber {
     0% {
-      left: 39%; /* <1200px rod tip position */
-      top: 35%;
+      left: 40%; /* <1200px rod tip position */
+      top: 30%;
       transform: translate(-50%, -50%) scale(0.5);
     }
 
@@ -254,7 +252,7 @@
   @keyframes cast-bobber {
     0% {
       left: 44%; /* <768px rod tip position */
-      top: 35%;
+      top: 30%;
       transform: translate(-50%, -50%) scale(0.5);
     }
 
@@ -274,8 +272,8 @@
 @media (max-width: 480px) {
   @keyframes cast-bobber {
     0% {
-      left: 52%; /* <480px rod tip position */
-      top: 35%;
+      left: 50%; /* <480px rod tip position */
+      top: 30%;
       transform: translate(-50%, -50%) scale(0.5);
     }
 
@@ -308,15 +306,15 @@
 
   /* 🔥 빠르게 최종 위치 도착 */
   70% {
-    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
-    top: 35%; /* Slightly higher */
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 37%; /* Rod tip height */
     transform: translate(-50%, 0%) scale(0.42);
   }
 
   /* 최종 위치 고정 */
   100% {
-    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
-    top: 37%; /* Slightly higher */
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 39%; /* Slightly lower for visual comfort */
     transform: translate(-50%, 0%) scale(0.42);
     opacity: 1;
   }
@@ -338,14 +336,14 @@
     }
 
     70% {
-      left: 43%; /* <1200px rod tip position */
-      top: 35%;
+      left: 40%; /* <1200px rod tip position */
+      top: 30%;
       transform: translate(-50%, 0%) scale(0.42);
     }
 
     100% {
-      left: 43%; /* <1200px rod tip position */
-      top: 37%;
+      left: 40%; /* <1200px rod tip position */
+      top: 32%;
       transform: translate(-50%, 0%) scale(0.42);
       opacity: 1;
     }
@@ -367,14 +365,14 @@
     }
 
     70% {
-      left: 48%; /* <768px rod tip position */
-      top: 35%;
+      left: 44%; /* <768px rod tip position */
+      top: 30%;
       transform: translate(-50%, 0%) scale(0.42);
     }
 
     100% {
-      left: 48%; /* <768px rod tip position */
-      top: 37%;
+      left: 44%; /* <768px rod tip position */
+      top: 32%;
       transform: translate(-50%, 0%) scale(0.42);
       opacity: 1;
     }
@@ -396,14 +394,14 @@
     }
 
     70% {
-      left: 56%; /* <480px rod tip position */
-      top: 35%;
+      left: 50%; /* <480px rod tip position */
+      top: 30%;
       transform: translate(-50%, 0%) scale(0.42);
     }
 
     100% {
-      left: 56%; /* <480px rod tip position */
-      top: 37%;
+      left: 50%; /* <480px rod tip position */
+      top: 32%;
       transform: translate(-50%, 0%) scale(0.42);
       opacity: 1;
     }
@@ -454,15 +452,15 @@
 
   /* 🔥 빠르게 최종 위치 도착 */
   70% {
-    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
-    top: 35%; /* Slightly higher */
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 30%; /* Rod tip height */
     transform: translate(-50%, 0%) scale(0.42);
   }
 
   /* 최종 위치 고정 */
   100% {
-    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
-    top: 37%; /* Slightly higher */
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 32%; /* Slightly lower for visual comfort */
     transform: translate(-50%, 0%) scale(0.42);
     opacity: 1;
   }
@@ -484,14 +482,14 @@
     }
 
     70% {
-      left: 43%; /* <1200px rod tip position */
-      top: 35%;
+      left: 40%; /* <1200px rod tip position */
+      top: 30%;
       transform: translate(-50%, 0%) scale(0.42);
     }
 
     100% {
-      left: 43%; /* <1200px rod tip position */
-      top: 37%;
+      left: 40%; /* <1200px rod tip position */
+      top: 32%;
       transform: translate(-50%, 0%) scale(0.42);
       opacity: 1;
     }
@@ -513,14 +511,14 @@
     }
 
     70% {
-      left: 48%; /* <768px rod tip position */
-      top: 35%;
+      left: 44%; /* <768px rod tip position */
+      top: 30%;
       transform: translate(-50%, 0%) scale(0.42);
     }
 
     100% {
-      left: 48%; /* <768px rod tip position */
-      top: 37%;
+      left: 44%; /* <768px rod tip position */
+      top: 32%;
       transform: translate(-50%, 0%) scale(0.42);
       opacity: 1;
     }
@@ -542,14 +540,14 @@
     }
 
     70% {
-      left: 56%; /* <480px rod tip position */
-      top: 35%;
+      left: 50%; /* <480px rod tip position */
+      top: 30%;
       transform: translate(-50%, 0%) scale(0.42);
     }
 
     100% {
-      left: 56%; /* <480px rod tip position */
-      top: 37%;
+      left: 50%; /* <480px rod tip position */
+      top: 32%;
       transform: translate(-50%, 0%) scale(0.42);
       opacity: 1;
     }

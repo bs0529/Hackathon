@@ -1,20 +1,18 @@
 import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import "./App.css";
 import "./components/UserInterface.css";
-import "./components/Bobber.css"; 
+import "./components/Bobber.css";
 import Fisherman from "./components/Fisherman";
-import FishingLine from "./components/FishingLine";
 import Bobber from "./components/Bobber";
 import CatchingBar from "./components/CatchingBar";
 import ResultOverlay from "./components/ResultOverlay";
 import GameLogic from "./hooks/GameLogic";
 
-function App({
-  playerName,
-  userId,
-  selectedHabitat: initialHabitat,
-  onBackToMenu,
-}) {
+function App({ playerName, userId, onBackToMenu }) {
+  const { habitat } = useParams();
+  const navigate = useNavigate();
+  const [selectedHabitat, setSelectedHabitat] = useState(habitat || "연안");
   const [gamePhase, setGamePhase] = useState("ready");
   const [exclamation, setExclamation] = useState(false);
   const [gauge, setGauge] = useState(0);
@@ -38,11 +36,16 @@ function App({
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
   const [selectedRod, setSelectedRod] = useState(null);
   const [currentScore, setCurrentScore] = useState(0);
-  const [selectedHabitat, setSelectedHabitat] = useState(initialHabitat);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
 
   const bobberRef = useRef(null);
-  const lineRef = useRef(null);
+
+  // Update selectedHabitat when URL parameter changes
+  useEffect(() => {
+    if (habitat) {
+      setSelectedHabitat(decodeURIComponent(habitat));
+    }
+  }, [habitat]);
 
   // Use custom hook for game logic
   const { resetGame, handleBarStop } = GameLogic({
@@ -215,15 +218,12 @@ function App({
           </div>
         </div>
 
-        {/* Fisherman */}
-        <Fisherman rodAnimation={rodAnimation} />
-
-        {/* Fishing Line (SVG) - calculates line from rod tip to bobber */}
-        <FishingLine
-          lineRef={lineRef}
+        {/* Fisherman with Fishing Line */}
+        <Fisherman
+          rodAnimation={rodAnimation}
+          bobberRef={bobberRef}
           gamePhase={gamePhase}
           isCasting={isCasting}
-          bobberRef={bobberRef}
         />
 
         {/* Bobber - Active during fishing/catching OR during casting/pulling animations */}
@@ -233,18 +233,8 @@ function App({
           catchAnimation={catchAnimation}
           exclamation={exclamation}
           bobberRef={bobberRef}
+          caughtFish={caughtFish}
         />
-
-        {/* Catch Animation - Use specific 2D image if available, else fallback */}
-        {catchAnimation && (
-          <img
-            src={
-              caughtFish && caughtFish.image2d ? caughtFish.image2d : "/fs.png"
-            }
-            alt="Caught Fish"
-            className="pulling-whale"
-          />
-        )}
 
         {/* Current Habitat Display */}
         {selectedHabitat && (
@@ -287,7 +277,9 @@ function App({
           <div className="map-buttons">
             <button
               onClick={() => {
-                setSelectedHabitat("갯벌");
+                const newHabitat = "갯벌";
+                setSelectedHabitat(newHabitat);
+                navigate(`/game/${encodeURIComponent(newHabitat)}`);
                 setShowMap(false);
               }}
             >
@@ -295,7 +287,9 @@ function App({
             </button>
             <button
               onClick={() => {
-                setSelectedHabitat("바다");
+                const newHabitat = "바다";
+                setSelectedHabitat(newHabitat);
+                navigate(`/game/${encodeURIComponent(newHabitat)}`);
                 setShowMap(false);
               }}
             >
@@ -303,7 +297,9 @@ function App({
             </button>
             <button
               onClick={() => {
-                setSelectedHabitat("바다숲");
+                const newHabitat = "바다숲";
+                setSelectedHabitat(newHabitat);
+                navigate(`/game/${encodeURIComponent(newHabitat)}`);
                 setShowMap(false);
               }}
             >
@@ -311,7 +307,9 @@ function App({
             </button>
             <button
               onClick={() => {
-                setSelectedHabitat("바닷속암반");
+                const newHabitat = "바닷속암반";
+                setSelectedHabitat(newHabitat);
+                navigate(`/game/${encodeURIComponent(newHabitat)}`);
                 setShowMap(false);
               }}
             >
@@ -319,7 +317,9 @@ function App({
             </button>
             <button
               onClick={() => {
-                setSelectedHabitat("연안");
+                const newHabitat = "연안";
+                setSelectedHabitat(newHabitat);
+                navigate(`/game/${encodeURIComponent(newHabitat)}`);
                 setShowMap(false);
               }}
             >
@@ -327,7 +327,9 @@ function App({
             </button>
             <button
               onClick={() => {
-                setSelectedHabitat("하구역");
+                const newHabitat = "하구역";
+                setSelectedHabitat(newHabitat);
+                navigate(`/game/${encodeURIComponent(newHabitat)}`);
                 setShowMap(false);
               }}
             >
@@ -346,20 +348,26 @@ function App({
           <div className="shop-content">
             <h2>상점</h2>
             <div className="shop-items">
-            <div className="shop-item" onClick={() => {
-              setSelectedRod('머찐 낚싯대');
-              setShowPurchaseConfirm(true);
-            }}>
-              <img src="/cool_fishing_rod.png" alt="Fishing Rod 1" />
-              <p>머찐 낚싯대</p>
-            </div>
-            <div className="shop-item" onClick={() => {
-              setSelectedRod('메우 믓찐 낚싯대');
-              setShowPurchaseConfirm(true);
-            }}>
-              <img src="/hansome_fishing_rod.png" alt="Fishing Rod 2" />
-              <p>메우 믓찐 낚싯대</p>
-            </div>
+              <div
+                className="shop-item"
+                onClick={() => {
+                  setSelectedRod("머찐 낚싯대");
+                  setShowPurchaseConfirm(true);
+                }}
+              >
+                <img src="/cool_fishing_rod.png" alt="Fishing Rod 1" />
+                <p>머찐 낚싯대</p>
+              </div>
+              <div
+                className="shop-item"
+                onClick={() => {
+                  setSelectedRod("메우 믓찐 낚싯대");
+                  setShowPurchaseConfirm(true);
+                }}
+              >
+                <img src="/hansome_fishing_rod.png" alt="Fishing Rod 2" />
+                <p>메우 믓찐 낚싯대</p>
+              </div>
             </div>
           </div>
           <button onClick={() => setShowShop(false)}>닫기</button>
@@ -372,11 +380,17 @@ function App({
           <div className="modal-content">
             <p>{selectedRod}을 구매하시겠습니까?</p>
             <div className="modal-buttons">
-              <button onClick={() => {
-                setShowPurchaseConfirm(false);
-                setShowPurchaseSuccess(true);
-              }}>확인</button>
-              <button onClick={() => setShowPurchaseConfirm(false)}>취소</button>
+              <button
+                onClick={() => {
+                  setShowPurchaseConfirm(false);
+                  setShowPurchaseSuccess(true);
+                }}
+              >
+                확인
+              </button>
+              <button onClick={() => setShowPurchaseConfirm(false)}>
+                취소
+              </button>
             </div>
           </div>
         </div>
@@ -388,7 +402,9 @@ function App({
           <div className="modal-content">
             <p>구매 완료!</p>
             <div className="modal-buttons">
-              <button onClick={() => setShowPurchaseSuccess(false)}>확인</button>
+              <button onClick={() => setShowPurchaseSuccess(false)}>
+                확인
+              </button>
             </div>
           </div>
         </div>

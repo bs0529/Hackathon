@@ -1,6 +1,6 @@
 import "./Menu.css";
 
-function Menu({ onStartGame, playerName, onLogout, onShowCollection }) {
+function Menu({ onStartGame, playerName, onLogout, onShowCollection, onShowAquarium }) {
   return (
     <div className="menu-screen">
       <div className="menu-container">
@@ -15,7 +15,7 @@ function Menu({ onStartGame, playerName, onLogout, onShowCollection }) {
             <button className="menu-button" onClick={onShowCollection}>
               도감
             </button>
-            <button className="menu-button">아쿠아리움</button>
+            <button className="menu-button" onClick={onShowAquarium}>아쿠아리움</button>
             <button className="menu-button logout" onClick={onLogout}>
               로그아웃
             </button>
