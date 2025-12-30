@@ -50,7 +50,7 @@ function Menu({
         </div>
         {/* Pixel ocean */}
         <div className="pixel-ocean">
-          <img src="sea_ground.png" alt="" />
+          <img src="sea_ground.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
         </div>
       </div>
     </div>
