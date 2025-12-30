@@ -1,11 +1,7 @@
 .start-screen {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(to bottom,
-    #5DADE2 0%,
-    #85C1E9 40%,
-    #3498DB 100%
-  );
+  background: linear-gradient(to bottom, #5dade2 0%, #85c1e9 40%, #3498db 100%);
   position: relative;
   overflow: hidden;
   cursor: pointer;
@@ -13,7 +9,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;
@@ -35,10 +31,7 @@
   height: 60px;
   background: white;
   border-radius: 0;
-  box-shadow:
-    0 0 0 10px white,
-    0 0 0 20px white,
-    20px -10px 0 10px white,
+  box-shadow: 0 0 0 10px white, 0 0 0 20px white, 20px -10px 0 10px white,
     40px -10px 0 10px white;
   opacity: 0.9;
   animation: floatCloud linear infinite;
@@ -87,10 +80,8 @@
 
 .pixel-title {
   font-size: 48px;
-  color: #FF6B9D;
-  text-shadow:
-    4px 4px 0 #C44569,
-    8px 8px 0 rgba(0, 0, 0, 0.2);
+  color: #ff6b9d;
+  text-shadow: 4px 4px 0 #c44569, 8px 8px 0 rgba(0, 0, 0, 0.2);
   margin: 10px 0;
   letter-spacing: 4px;
   line-height: 1.5;
@@ -114,7 +105,8 @@
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0);
   }
   50% {
@@ -129,10 +121,8 @@
 
 .press-start-text {
   font-size: 32px;
-  color: #FFD93D;
-  text-shadow:
-    3px 3px 0 #FF6B6B,
-    6px 6px 0 rgba(0, 0, 0, 0.2);
+  color: #ffd93d;
+  text-shadow: 3px 3px 0 #ff6b6b, 6px 6px 0 rgba(0, 0, 0, 0.2);
   margin: 0 0 20px 0;
   letter-spacing: 2px;
 }
@@ -143,16 +133,18 @@
 
 .press-start-hint {
   font-size: 14px;
-  color: white;
+  color: black;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
   margin: 0;
 }
 
 @keyframes blink {
-  0%, 49% {
+  0%,
+  49% {
     opacity: 1;
   }
-  50%, 100% {
+  50%,
+  100% {
     opacity: 0;
   }
 }
@@ -173,11 +165,7 @@
   left: 0;
   width: 100%;
   height: 30%;
-  background: linear-gradient(to bottom,
-    #3498DB 0%,
-    #2874A6 50%,
-    #1B4F72 100%
-  );
+  background: linear-gradient(to bottom, #3498db 0%, #2874a6 50%, #1b4f72 100%);
   overflow: hidden;
 }
 
@@ -187,8 +175,8 @@
   height: 30px;
   background: repeating-linear-gradient(
     90deg,
-    #5DADE2 0px,
-    #5DADE2 20px,
+    #5dade2 0px,
+    #5dade2 20px,
     transparent 20px,
     transparent 40px
   );

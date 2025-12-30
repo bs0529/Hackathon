@@ -6,7 +6,8 @@
   margin: 0;
   padding: 0;
   overflow: hidden;
-  font-family: 'RoundedFixedsys', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  font-family: "RoundedFixedsys", "Segoe UI", Tahoma, Geneva, Verdana,
+    sans-serif;
   user-select: none;
 }
 
@@ -89,7 +90,7 @@
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   padding: 2rem;
   box-sizing: border-box;
 }
@@ -98,7 +99,7 @@
   max-width: 90%;
   max-height: 50%;
   object-fit: contain;
-  border: 4px solid #2C3E50;
+  border: 4px solid #2c3e50;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
   margin-bottom: 2rem;
 }
@@ -115,61 +116,49 @@
 .map-buttons button {
   padding: 16px 20px;
   font-size: 18px;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   color: white;
-  background: #3498DB;
-  border: 4px solid #2C3E50;
+  background: #3498db;
+  border: 4px solid #2c3e50;
   cursor: pointer;
   position: relative;
   transition: all 0.1s;
-  box-shadow:
-    4px 4px 0 #2C3E50,
-    4px 4px 0 2px #34495E;
+  box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e;
   letter-spacing: 1px;
 }
 
 .map-buttons button:hover {
-  background: #5DADE2;
+  background: #5dade2;
   transform: translate(-2px, -2px);
-  box-shadow:
-    6px 6px 0 #2C3E50,
-    6px 6px 0 2px #34495E;
+  box-shadow: 6px 6px 0 #2c3e50, 6px 6px 0 2px #34495e;
 }
 
 .map-buttons button:active {
   transform: translate(2px, 2px);
-  box-shadow:
-    2px 2px 0 #2C3E50,
-    2px 2px 0 1px #34495E;
+  box-shadow: 2px 2px 0 #2c3e50, 2px 2px 0 1px #34495e;
 }
 
 .close-map {
   padding: 14px 40px;
   font-size: 16px;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   color: white;
-  background: #E74C3C;
-  border: 4px solid #2C3E50;
+  background: #e74c3c;
+  border: 4px solid #2c3e50;
   cursor: pointer;
   transition: all 0.1s;
-  box-shadow:
-    4px 4px 0 #2C3E50,
-    4px 4px 0 2px #34495E;
+  box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e;
 }
 
 .close-map:hover {
-  background: #C0392B;
+  background: #c0392b;
   transform: translate(-2px, -2px);
-  box-shadow:
-    6px 6px 0 #2C3E50,
-    6px 6px 0 2px #34495E;
+  box-shadow: 6px 6px 0 #2c3e50, 6px 6px 0 2px #34495e;
 }
 
 .close-map:active {
   transform: translate(2px, 2px);
-  box-shadow:
-    2px 2px 0 #2C3E50,
-    2px 2px 0 1px #34495E;
+  box-shadow: 2px 2px 0 #2c3e50, 2px 2px 0 1px #34495e;
 }
 
 .shop-screen {
@@ -178,13 +167,13 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.5) url('/shop.png') center/cover no-repeat;
+  background: rgba(0, 0, 0, 0.5) url("/shop.png") center/cover no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   z-index: 2000;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   color: white;
 }
 
@@ -245,31 +234,25 @@
   right: 20px;
   padding: 14px 40px;
   font-size: 16px;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   color: white;
-  background: #E74C3C;
-  border: 4px solid #2C3E50;
+  background: #e74c3c;
+  border: 4px solid #2c3e50;
   cursor: pointer;
   transition: all 0.1s;
-  box-shadow:
-    4px 4px 0 #2C3E50,
-    4px 4px 0 2px #34495E;
+  box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e;
   z-index: 2002;
 }
 
 .shop-screen button:hover {
-  background: #C0392B;
+  background: #c0392b;
   transform: translate(-2px, -2px);
-  box-shadow:
-    6px 6px 0 #2C3E50,
-    6px 6px 0 2px #34495E;
+  box-shadow: 6px 6px 0 #2c3e50, 6px 6px 0 2px #34495e;
 }
 
 .shop-screen button:active {
   transform: translate(2px, 2px);
-  box-shadow:
-    2px 2px 0 #2C3E50,
-    2px 2px 0 1px #34495E;
+  box-shadow: 2px 2px 0 #2c3e50, 2px 2px 0 1px #34495e;
 }
 
 .purchase-confirm-modal {
@@ -289,10 +272,10 @@
   background: white;
   padding: 2rem;
   border-radius: 8px;
-  border: 4px solid #2C3E50;
+  border: 4px solid #2c3e50;
   box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
   text-align: center;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
 }
 
 .modal-content p {
@@ -309,31 +292,31 @@
 
 .modal-buttons button {
   padding: 10px 20px;
-  border: 2px solid #2C3E50;
+  border: 2px solid #2c3e50;
   border-radius: 4px;
   cursor: pointer;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   font-size: 1rem;
   transition: all 0.1s;
 }
 
 .modal-buttons button:first-child {
-  background: #3498DB;
+  background: #3498db;
   color: white;
 }
 
 .modal-buttons button:first-child:hover {
-  background: #5DADE2;
+  background: #5dade2;
   transform: translate(-1px, -1px);
 }
 
 .modal-buttons button:last-child {
-  background: #E74C3C;
+  background: #e74c3c;
   color: white;
 }
 
 .modal-buttons button:last-child:hover {
-  background: #C0392B;
+  background: #c0392b;
   transform: translate(-1px, -1px);
 }
 
@@ -369,4 +352,26 @@
   font-weight: bold;
   z-index: 150;
   pointer-events: none;
+  text-align: center;
+}
+
+/* Pollution Display */
+.pollution-display {
+  margin-top: 0.5rem;
+  padding-top: 0.5rem;
+  border-top: 2px solid rgba(255, 255, 255, 0.3);
+  color: white;
+  font-size: 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+
+.pollution-value {
+  color: #27ae60;
+  font-size: 1.2rem;
+  text-shadow: 2px 2px 0 #1e8449;
+  letter-spacing: 1px;
 }

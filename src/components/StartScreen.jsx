@@ -1,5 +1,4 @@
-import { useState } from 'react'
-import './StartScreen.css'
+import "./StartScreen.css";
 
 function StartScreen({ onPressStart }) {
   return (
@@ -12,10 +11,9 @@ function StartScreen({ onPressStart }) {
 
       <div className="start-content">
         <div className="game-logo">
-          <h1 className="pixel-title">바다를</h1>
-          <h1 className="pixel-title">되살리자</h1>
+          <h1 className="pixel-title">다나까</h1>
           <div className="pixel-fish-icon">
-            <img src="/assets/images/sticker_향고래.png" alt="" height={120}/>
+            <img src="/assets/images/sticker_향고래.png" alt="" height={120} />
           </div>
         </div>
 
@@ -33,7 +31,7 @@ function StartScreen({ onPressStart }) {
         <p>© 2024 OCEAN RESCUE TEAM</p>
       </div>
     </div>
-  )
+  );
 }
 
-export default StartScreen
+export default StartScreen;

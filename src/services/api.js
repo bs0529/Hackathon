@@ -1,8 +1,7 @@
 import axios from "axios";
 
 // API 베이스 URL - 환경에 따라 변경 필요
-const API_BASE_URL =
-  import.meta.env.VITE_BACKEND_URL || "http://localhost:8000";
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -36,6 +35,7 @@ export const getUser = async (userId) => {
 // 낚시하기
 export const fishing = async (userId, habitat) => {
   try {
+    console.log("DEBUG - fishing API 호출:", { userId, habitat });
     const response = await api.post("/game/fish", null, {
       params: {
         user_id: userId,

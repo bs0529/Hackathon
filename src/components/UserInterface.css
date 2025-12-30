@@ -6,7 +6,7 @@
   top: 10px;
   left: 10px;
   z-index: 200;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
 }
 
 .auth-buttons {
@@ -21,7 +21,7 @@
   border: none;
   border-radius: 0px;
   font-size: 0.9rem;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -46,16 +46,11 @@
 }
 
 .user-money {
-  color: #FFEB3B;
-  /* Bright Yellow */
+  color: #f39c12;
   font-weight: bold;
-  font-size: 1.5rem;
-  -webkit-text-stroke: 1px black;
-  text-shadow:
-    -1px -1px 0 #000,
-    1px -1px 0 #000,
-    -1px 1px 0 #000,
-    1px 1px 0 #000;
+  font-size: 20px;
+  text-shadow: 2px 2px 0 #d68910;
+  letter-spacing: 1px;
 }
 
 .user-stats span:first-child {
@@ -77,7 +72,7 @@
   border: 2px solid #1976d2;
   border-radius: 0px;
   font-size: 0.9rem;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -87,12 +82,12 @@
 }
 
 .user-actions .menu-btn {
-  background-color: #FF9800;
-  border-color: #F57C00;
+  background-color: #ff9800;
+  border-color: #f57c00;
 }
 
 .user-actions .menu-btn:hover {
-  background-color: #F57C00;
+  background-color: #f57c00;
 }
 
 .stats-display {
@@ -116,7 +111,7 @@
   border: none;
   border-radius: 0px;
   font-size: 0.8rem;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
   cursor: pointer;
   transition: background-color 0.2s;
   width: 100%;
@@ -162,7 +157,7 @@
   border: 2px solid #ddd;
   border-radius: 0px;
   font-size: 1rem;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
   box-sizing: border-box;
 }
 
@@ -183,7 +178,7 @@
   border: none;
   border-radius: 0px;
   font-size: 1rem;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
   cursor: pointer;
   transition: background-color 0.2s;
 }
@@ -229,7 +224,7 @@
   color: #2196f3;
   text-decoration: underline;
   cursor: pointer;
-  font-family: 'RoundedFixedsys', sans-serif;
+  font-family: "RoundedFixedsys", sans-serif;
 }
 
 .auth-switch button:hover {

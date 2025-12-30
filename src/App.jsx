@@ -8,7 +8,8 @@ import Bobber from "./components/Bobber";
 import CatchingBar from "./components/CatchingBar";
 import ResultOverlay from "./components/ResultOverlay";
 import GameLogic from "./hooks/GameLogic";
-import { handleAction, getUser } from "./services/api";
+import { handleAction, getUser, fishing } from "./services/api";
+import { fishData } from "./fishData_original";
 
 function App({ playerName, userId, onBackToMenu }) {
   const { habitat } = useParams();
@@ -36,14 +37,14 @@ function App({ playerName, userId, onBackToMenu }) {
   const [showPurchaseConfirm, setShowPurchaseConfirm] = useState(false);
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
   const [selectedRod, setSelectedRod] = useState(null);
-  const [currentScore, setCurrentScore] = useState(0);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
   const [actionResult, setActionResult] = useState(null);
   const [money, setMoney] = useState(0);
+  const [habitatPollution, setHabitatPollution] = useState({});
 
   const bobberRef = useRef(null);
 
-  // Fetch user info for money
+  // Fetch user info for money and pollution
   useEffect(() => {
     if (userId) {
       getUser(userId)
@@ -51,10 +52,105 @@ function App({ playerName, userId, onBackToMenu }) {
           if (userData && userData.money !== undefined) {
             setMoney(userData.money);
           }
+          if (userData && userData.habitat_pollutions) {
+            // habitat_pollutions 배열을 객체로 변환
+            const pollutionMap = {};
+            userData.habitat_pollutions.forEach((item) => {
+              pollutionMap[item.habitat_name] = item.pollution_level;
+            });
+            setHabitatPollution(pollutionMap);
+          }
         })
         .catch((err) => console.error("Failed to fetch user data:", err));
     }
   }, [userId]);
+
+  // 낚시 시작 함수 (클릭과 스페이스바 공통)
+  const startCasting = async () => {
+    setIsCasting(true);
+
+    // 낚시 시작할 때 API 호출하여 물고기 미리 가져오기
+    try {
+      console.log("DEBUG - fishing API 호출 전 userId:", userId);
+      console.log(
+        "DEBUG - fishing API 호출 전 selectedHabitat:",
+        selectedHabitat
+      );
+      const fishResponse = await fishing(userId, selectedHabitat);
+      console.log("Pre-fetched API Response:", fishResponse);
+      console.log(
+        "DEBUG - fishResponse 전체 구조:",
+        JSON.stringify(fishResponse, null, 2)
+      );
+
+      // 응답에서 물고기 정보 추출 (새로운 API 구조)
+      const apiFish = {
+        species_id: fishResponse.fish?.id, // fish.id가 species_id입니다
+        name: fishResponse.fish?.name,
+        type: fishResponse.fish?.type,
+        price: fishResponse.fish?.price,
+        image_url: fishResponse.fish?.image_url,
+        habitat: fishResponse.fish?.habitat,
+        is_new: fishResponse.is_new,
+        message: fishResponse.message,
+      };
+
+      console.log("DEBUG - apiFish 구조:", apiFish);
+
+      // fishData에서 매칭되는 물고기 찾기 (3D 모델 등 추가 정보)
+      const matchedFish = fishData.find((f) => f.name === apiFish.name);
+
+      // 백엔드 image_url에 베이스 URL 추가
+      const BACKEND_URL =
+        import.meta.env.VITE_BACKEND_URL || "http://10.129.57.149:8000";
+      const fullImageUrl = apiFish.image_url
+        ? `${BACKEND_URL}${apiFish.image_url}`
+        : null;
+
+      const preFetchedFishData = {
+        ...apiFish,
+        model: matchedFish?.model || "/assets/models/202201.glb",
+        image2d: fullImageUrl || matchedFish?.image2d,
+        description:
+          matchedFish?.description || `${apiFish.habitat}에서 잡은 물고기`,
+      };
+
+      // 이미지 미리 로드하기
+      if (fullImageUrl) {
+        const img = new Image();
+        img.onload = () => {
+          console.log("Image preloaded successfully:", fullImageUrl);
+          setPreFetchedFish(preFetchedFishData);
+        };
+        img.onerror = () => {
+          console.error("Failed to preload image:", fullImageUrl);
+          // 이미지 로드 실패해도 데이터는 저장
+          setPreFetchedFish(preFetchedFishData);
+        };
+        img.src = fullImageUrl;
+      } else {
+        setPreFetchedFish(preFetchedFishData);
+      }
+
+      console.log("Pre-fetched fish:", preFetchedFishData);
+    } catch (error) {
+      console.error("Error pre-fetching fish:", error);
+      // Fallback to local data
+      const filteredFish = selectedHabitat
+        ? fishData.filter((fish) => fish.ovrHbttNm === selectedHabitat)
+        : fishData;
+      if (filteredFish && filteredFish.length > 0) {
+        const randomFish =
+          filteredFish[Math.floor(Math.random() * filteredFish.length)];
+        setPreFetchedFish(randomFish);
+      }
+    }
+
+    setTimeout(() => {
+      setIsCasting(false);
+      setGamePhase("fishing");
+    }, 1000); // Casting duration
+  };
 
   // Update selectedHabitat when URL parameter changes
   useEffect(() => {
@@ -100,6 +196,7 @@ function App({ playerName, userId, onBackToMenu }) {
     userId,
     preFetchedFish,
     setPreFetchedFish,
+    startCasting,
   });
 
   const handleScreenClick = () => {
@@ -110,11 +207,7 @@ function App({ playerName, userId, onBackToMenu }) {
 
     // Prevent casting if result screen is visible (!result)
     if (gamePhase === "ready" && !isCasting && !result) {
-      setIsCasting(true);
-      setTimeout(() => {
-        setIsCasting(false);
-        setGamePhase("fishing");
-      }, 1000); // Casting duration
+      startCasting();
     } else if (gamePhase === "fishing" && exclamation) {
       const newGreenStart = Math.random() * 30 + 10;
       const newGreenWidth = Math.random() * 10 + 20; // 20% ~ 30%
@@ -168,28 +261,38 @@ function App({ playerName, userId, onBackToMenu }) {
 
     if (caughtFish?.species_id && userId) {
       try {
-        console.log("DEBUG - API 호출 시작:", { userId, species_id: caughtFish.species_id, action: "RELEASE", habitat: selectedHabitat });
-        const response = await handleAction(userId, caughtFish.species_id, "RELEASE", selectedHabitat);
+        console.log("DEBUG - API 호출 시작:", {
+          userId,
+          species_id: caughtFish.species_id,
+          action: "RELEASE",
+          habitat: selectedHabitat,
+        });
+        const response = await handleAction(
+          userId,
+          caughtFish.species_id,
+          "RELEASE",
+          selectedHabitat
+        );
         console.log("방생 처리 완료", response);
         setActionResult({
           type: "release",
           success: true,
           message: `${caughtFish.name}을(를) 방생했습니다!`,
-          data: response
+          data: response,
         });
       } catch (error) {
         console.error("방생 API 호출 실패:", error);
         setActionResult({
           type: "release",
           success: false,
-          message: "방생 처리에 실패했습니다."
+          message: "방생 처리에 실패했습니다.",
         });
       }
     } else {
       setActionResult({
         type: "release",
         success: true,
-        message: `${caughtFish?.name || '물고기'}을(를) 방생했습니다!`
+        message: `${caughtFish?.name || "물고기"}을(를) 방생했습니다!`,
       });
     }
 
@@ -207,35 +310,62 @@ function App({ playerName, userId, onBackToMenu }) {
 
     if (caughtFish?.species_id && userId) {
       try {
-        console.log("DEBUG - API 호출 시작:", { userId, species_id: caughtFish.species_id, action: "SELL", habitat: selectedHabitat });
-        const response = await handleAction(userId, caughtFish.species_id, "SELL", selectedHabitat);
+        console.log("DEBUG - API 호출 시작:", {
+          userId,
+          species_id: caughtFish.species_id,
+          action: "SELL",
+          habitat: selectedHabitat,
+        });
+        const response = await handleAction(
+          userId,
+          caughtFish.species_id,
+          "SELL",
+          selectedHabitat
+        );
         console.log("판매 처리 완료", response);
         setActionResult({
           type: "sell",
           success: true,
           message: `${caughtFish.name}을(를) 판매했습니다!`,
           money: caughtFish.price || response?.money_earned,
-          data: response
+          data: response,
         });
+        // 판매 후 최신 유저 정보 가져오기
         if (response && response.user_money !== undefined) {
           setMoney(response.user_money);
         } else if (response && response.money !== undefined) {
           setMoney(response.money);
         }
+        // 추가로 유저 정보 다시 fetch하여 확실하게 동기화
+        getUser(userId)
+          .then((userData) => {
+            if (userData && userData.money !== undefined) {
+              setMoney(userData.money);
+            }
+            if (userData && userData.habitat_pollutions) {
+              // habitat_pollutions 배열을 객체로 변환
+              const pollutionMap = {};
+              userData.habitat_pollutions.forEach((item) => {
+                pollutionMap[item.habitat_name] = item.pollution_level;
+              });
+              setHabitatPollution(pollutionMap);
+            }
+          })
+          .catch((err) => console.error("Failed to refresh user money:", err));
       } catch (error) {
         console.error("판매 API 호출 실패:", error);
         setActionResult({
           type: "sell",
           success: false,
-          message: "판매 처리에 실패했습니다."
+          message: "판매 처리에 실패했습니다.",
         });
       }
     } else {
       setActionResult({
         type: "sell",
         success: true,
-        message: `${caughtFish?.name || '물고기'}을(를) 판매했습니다!`,
-        money: caughtFish?.price
+        message: `${caughtFish?.name || "물고기"}을(를) 판매했습니다!`,
+        money: caughtFish?.price,
       });
     }
 
@@ -253,28 +383,40 @@ function App({ playerName, userId, onBackToMenu }) {
 
     if (caughtFish?.species_id && userId) {
       try {
-        console.log("DEBUG - API 호출 시작:", { userId, species_id: caughtFish.species_id, action: "AQUARIUM", habitat: selectedHabitat });
-        const response = await handleAction(userId, caughtFish.species_id, "AQUARIUM", selectedHabitat);
+        console.log("DEBUG - API 호출 시작:", {
+          userId,
+          species_id: caughtFish.species_id,
+          action: "AQUARIUM",
+          habitat: selectedHabitat,
+        });
+        const response = await handleAction(
+          userId,
+          caughtFish.species_id,
+          "AQUARIUM",
+          selectedHabitat
+        );
         console.log("아쿠아리움 수송 처리 완료", response);
         setActionResult({
           type: "aquarium",
           success: true,
           message: `${caughtFish.name}을(를) 아쿠아리움으로 보냈습니다!`,
-          data: response
+          data: response,
         });
       } catch (error) {
         console.error("아쿠아리움 수송 API 호출 실패:", error);
         setActionResult({
           type: "aquarium",
           success: false,
-          message: "아쿠아리움 수송에 실패했습니다."
+          message: "아쿠아리움 수송에 실패했습니다.",
         });
       }
     } else {
       setActionResult({
         type: "aquarium",
         success: true,
-        message: `${caughtFish?.name || '물고기'}을(를) 아쿠아리움으로 보냈습니다!`
+        message: `${
+          caughtFish?.name || "물고기"
+        }을(를) 아쿠아리움으로 보냈습니다!`,
       });
     }
 
@@ -376,7 +518,19 @@ function App({ playerName, userId, onBackToMenu }) {
 
         {/* Current Habitat Display */}
         {selectedHabitat && (
-          <div className="current-habitat">현재 위치: {selectedHabitat}</div>
+          <>
+            <div className="current-habitat">
+              현재 위치: {selectedHabitat}
+              <div className="pollution-display">
+                오염도:
+                <span className="pollution-value">
+                  {habitatPollution[selectedHabitat] !== undefined
+                    ? `${habitatPollution[selectedHabitat]}%`
+                    : "측정 중..."}
+                </span>
+              </div>
+            </div>
+          </>
         )}
 
         {/* UI Overlays */}

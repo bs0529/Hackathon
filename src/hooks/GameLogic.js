@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { fishing, invalidateLastFish } from "../services/api";
+import { invalidateLastFish } from "../services/api";
 import { fishData } from "../fishData_original";
 
 const GameLogic = ({
@@ -38,6 +38,7 @@ const GameLogic = ({
   userId,
   preFetchedFish,
   setPreFetchedFish,
+  startCasting,
 }) => {
   const timerRef = useRef(null);
   const moveRef = useRef(null);
@@ -124,91 +125,8 @@ const GameLogic = ({
     isCasting,
     result,
     showMap,
+    startCasting,
   ]);
-
-  const startCasting = () => {
-    setIsCasting(true);
-
-    // 낚시 시작할 때 API 호출하여 물고기 미리 가져오기
-    const preFetchFish = async () => {
-      try {
-        console.log("DEBUG - fishing API 호출 전 userId:", userId);
-        console.log("DEBUG - fishing API 호출 전 selectedHabitat:", selectedHabitat);
-        const fishResponse = await fishing(userId, selectedHabitat);
-        console.log("Pre-fetched API Response:", fishResponse);
-        console.log("DEBUG - fishResponse 전체 구조:", JSON.stringify(fishResponse, null, 2));
-
-        // 응답에서 물고기 정보 추출 (새로운 API 구조)
-        const apiFish = {
-          species_id: fishResponse.fish?.id, // fish.id가 species_id입니다
-          name: fishResponse.fish?.name,
-          type: fishResponse.fish?.type,
-          price: fishResponse.fish?.price,
-          image_url: fishResponse.fish?.image_url,
-          habitat: fishResponse.fish?.habitat,
-          is_new: fishResponse.is_new,
-          message: fishResponse.message,
-        };
-
-        console.log("DEBUG - apiFish 구조:", apiFish);
-
-        // fishData에서 매칭되는 물고기 찾기 (3D 모델 등 추가 정보)
-        const matchedFish = fishData.find((f) => f.name === apiFish.name);
-
-        // 백엔드 image_url에 베이스 URL 추가
-        const BACKEND_URL =
-          import.meta.env.VITE_BACKEND_URL || "http://10.129.57.149:8000";
-        const fullImageUrl = apiFish.image_url
-          ? `${BACKEND_URL}${apiFish.image_url}`
-          : null;
-
-        const preFetchedFishData = {
-          ...apiFish,
-          model: matchedFish?.model || "/assets/models/202201.glb",
-          image2d: fullImageUrl || matchedFish?.image2d,
-          description:
-            matchedFish?.description || `${apiFish.habitat}에서 잡은 물고기`,
-        };
-
-        // 이미지 미리 로드하기
-        if (fullImageUrl) {
-          const img = new Image();
-          img.onload = () => {
-            console.log("Image preloaded successfully:", fullImageUrl);
-            setPreFetchedFish(preFetchedFishData);
-          };
-          img.onerror = () => {
-            console.error("Failed to preload image:", fullImageUrl);
-            // 이미지 로드 실패해도 데이터는 저장
-            setPreFetchedFish(preFetchedFishData);
-          };
-          img.src = fullImageUrl;
-        } else {
-          setPreFetchedFish(preFetchedFishData);
-        }
-
-        console.log("Pre-fetched fish:", preFetchedFishData);
-      } catch (error) {
-        console.error("Error pre-fetching fish:", error);
-        // Fallback to local data
-        const filteredFish = selectedHabitat
-          ? fishData.filter((fish) => fish.ovrHbttNm === selectedHabitat)
-          : fishData;
-        if (filteredFish && filteredFish.length > 0) {
-          const randomFish =
-            filteredFish[Math.floor(Math.random() * filteredFish.length)];
-          setPreFetchedFish(randomFish);
-        }
-      }
-    };
-
-    preFetchFish();
-
-    setTimeout(() => {
-      setIsCasting(false);
-      setGamePhase("fishing");
-    }, 1000); // Casting duration
-  };
 
   const handleBarStop = () => {
     // Prevent bar interactions when map is open
