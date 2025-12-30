@@ -91,7 +91,7 @@ function GameFlow() {
 
   const handleSelectHabitat = (habitat) => {
     setSelectedHabitat(habitat);
-    navigate("/game");
+    navigate(`/game/${encodeURIComponent(habitat)}`);
   };
 
   const handleBackToMenu = () => {
@@ -166,12 +166,11 @@ function GameFlow() {
         }
       />
       <Route
-        path="/game"
+        path="/game/:habitat"
         element={
           <App
             playerName={playerName}
             userId={userId}
-            selectedHabitat={selectedHabitat}
             onBackToMenu={handleBackToMenu}
           />
         }
