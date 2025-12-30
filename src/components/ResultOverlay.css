@@ -1,24 +1,38 @@
 /* Result Overlay Styles */
 
+/* Result Overlay Backdrop */
+.result-overlay-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  pointer-events: auto;
+}
+
 /* Result Overlay */
 .result-overlay {
-  position: absolute;
-  bottom: 550px;
-  left: 15%;
-  transform: translateX(0);
   background: rgba(255, 255, 255, 0.95);
-  padding: 0.5rem;
+  padding: 2rem;
   border-radius: 0px;
   text-align: center;
-  border: 2px solid #333;
-  pointer-events: auto;
-  width: 300px;
-  height: 200px;
+  border: 4px solid #2C3E50;
+  box-shadow:
+    8px 8px 0 #2C3E50,
+    8px 8px 0 2px #34495E;
+  width: 450px;
+  min-height: 350px;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   box-sizing: border-box;
+  font-family: 'RoundedFixedsys', cursive;
 }
 
 .success-image {
@@ -30,19 +44,22 @@
 }
 
 .result-title {
-  font-size: 1.2rem;
-  margin: 0.2rem 0;
+  font-size: 1.8rem;
+  margin: 0.5rem 0 1rem 0;
   text-transform: uppercase;
   flex-shrink: 0;
+  letter-spacing: 2px;
 }
 
 .result-title.success {
-  color: black;
+  color: #2C3E50;
+  text-shadow: 2px 2px 0 #BDC3C7;
 }
 
 .result-title.fail {
-  color: #f44336;
-  font-size: 2rem;
+  color: #E74C3C;
+  font-size: 2.5rem;
+  text-shadow: 3px 3px 0 #C0392B;
 }
 
 .habitat-info {
@@ -55,15 +72,15 @@
 
 .model-wrapper {
   width: 100%;
-  max-width: 120px;
-  margin: 0 auto;
+  max-width: 200px;
+  margin: 1rem auto;
   border: 4px solid transparent;
   border-image: url('/—Pngtree—wood frame_1033387.png') 35 stretch;
   border-image-slice: 35;
-  padding: 2px;
+  padding: 4px;
   background-color: rgba(255, 255, 255, 0.95);
   border-radius: 0px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.12);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   position: relative;
   overflow: hidden;
   flex-shrink: 0;
@@ -82,12 +99,78 @@
 }
 
 .success-text {
-  font-size: 0.8rem;
-  margin: 0.2rem 0 0 0;
-  line-height: 1.2;
+  font-size: 1rem;
+  margin: 0.5rem 0 1.5rem 0;
+  line-height: 1.4;
   flex-shrink: 0;
   text-align: center;
-  color: black;
+  color: #2C3E50;
+}
+
+.fail-text {
+  font-size: 1.2rem;
+  margin: 1rem 0;
+  color: #E74C3C;
+}
+
+.result-buttons {
+  display: flex;
+  gap: 10px;
+  margin-top: 1rem;
+  width: 100%;
+  justify-content: center;
+}
+
+.result-btn {
+  padding: 12px 20px;
+  font-size: 14px;
+  font-family: 'RoundedFixedsys', cursive;
+  color: white;
+  border: 3px solid #2C3E50;
+  cursor: pointer;
+  transition: all 0.1s;
+  box-shadow:
+    3px 3px 0 #2C3E50,
+    3px 3px 0 1px #34495E;
+  letter-spacing: 1px;
+}
+
+.result-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow:
+    5px 5px 0 #2C3E50,
+    5px 5px 0 1px #34495E;
+}
+
+.result-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    1px 1px 0 #2C3E50,
+    1px 1px 0 1px #34495E;
+}
+
+.release-btn {
+  background: #95A5A6;
+}
+
+.release-btn:hover {
+  background: #7F8C8D;
+}
+
+.sell-btn {
+  background: #F39C12;
+}
+
+.sell-btn:hover {
+  background: #E67E22;
+}
+
+.aquarium-btn {
+  background: #3498DB;
+}
+
+.aquarium-btn:hover {
+  background: #2980B9;
 }
 
 .restart-btn {
@@ -103,4 +186,31 @@
 
 .restart-btn:hover {
   background-color: #1976d2;
+}
+
+/* Action Result Styles */
+.action-result-message {
+  font-size: 1.3rem;
+  margin: 1rem 0;
+  color: #2C3E50;
+  font-weight: bold;
+  text-align: center;
+}
+
+.action-result-money {
+  font-size: 1.5rem;
+  margin: 0.5rem 0;
+  color: #F39C12;
+  font-weight: bold;
+  text-shadow: 2px 2px 0 #E67E22;
+  animation: money-bounce 0.5s ease-in-out;
+}
+
+@keyframes money-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
