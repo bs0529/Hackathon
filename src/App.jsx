@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "./components/UserInterface.css";
-import "./components/Bobber.css";
+import "./components/Bobber.css"; 
 import { fishData } from "./fishData";
 import Fisherman from "./components/Fisherman";
 import FishingLine from "./components/FishingLine";
@@ -34,6 +34,10 @@ function App({
   const [isCasting, setIsCasting] = useState(false);
   const [caughtFish, setCaughtFish] = useState(null);
   const [showMap, setShowMap] = useState(false);
+  const [showShop, setShowShop] = useState(false);
+  const [showPurchaseConfirm, setShowPurchaseConfirm] = useState(false);
+  const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
+  const [selectedRod, setSelectedRod] = useState(null);
   const [currentScore, setCurrentScore] = useState(0);
   const [selectedHabitat, setSelectedHabitat] = useState(initialHabitat);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
@@ -81,8 +85,8 @@ function App({
   });
 
   const handleScreenClick = () => {
-    // Prevent any fishing interactions when map is open
-    if (showMap) {
+    // Prevent any fishing interactions when map or shop is open
+    if (showMap || showShop) {
       return;
     }
 
@@ -189,6 +193,15 @@ function App({
                 }}
               >
                 지도
+              </button>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  resetGame();
+                  setShowShop(true);
+                }}
+              >
+                상점
               </button>
               <button
                 className="menu-btn"
@@ -325,6 +338,58 @@ function App({
           <button className="close-map" onClick={() => setShowMap(false)}>
             닫기
           </button>
+        </div>
+      )}
+
+      {/* Shop Modal */}
+      {showShop && (
+        <div className="shop-screen">
+          <h2>상점</h2>
+          <div className="shop-items">
+            <div className="shop-item" onClick={() => {
+              setSelectedRod('낚싯대 1');
+              setShowPurchaseConfirm(true);
+            }}>
+              <img src="/fishing_rod.png" alt="Fishing Rod 1" />
+              <p>머찐 낚싯대</p>
+            </div>
+            <div className="shop-item" onClick={() => {
+              setSelectedRod('낚싯대 2');
+              setShowPurchaseConfirm(true);
+            }}>
+              <img src="/fishing_rod.png" alt="Fishing Rod 2" />
+              <p>메우 믓찐 낚싯대</p>
+            </div>
+          </div>
+          <button onClick={() => setShowShop(false)}>닫기</button>
+        </div>
+      )}
+
+      {/* Purchase Confirmation Modal */}
+      {showPurchaseConfirm && (
+        <div className="purchase-confirm-modal">
+          <div className="modal-content">
+            <p>{selectedRod}을 구매하시겠습니까?</p>
+            <div className="modal-buttons">
+              <button onClick={() => {
+                setShowPurchaseConfirm(false);
+                setShowPurchaseSuccess(true);
+              }}>확인</button>
+              <button onClick={() => setShowPurchaseConfirm(false)}>취소</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Purchase Success Modal */}
+      {showPurchaseSuccess && (
+        <div className="purchase-confirm-modal">
+          <div className="modal-content">
+            <p>구매 완료!</p>
+            <div className="modal-buttons">
+              <button onClick={() => setShowPurchaseSuccess(false)}>확인</button>
+            </div>
+          </div>
         </div>
       )}
     </div>
