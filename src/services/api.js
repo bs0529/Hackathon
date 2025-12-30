@@ -75,4 +75,19 @@ export const getCollection = async (userId) => {
   }
 };
 
+// 마지막 낚시 무효화 (실패 시)
+export const invalidateLastFish = async (userId) => {
+  try {
+    const response = await api.post("/game/invalidate-last-fish", null, {
+      params: {
+        user_id: userId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to invalidate last fish:", error);
+    throw error;
+  }
+};
+
 export default api;

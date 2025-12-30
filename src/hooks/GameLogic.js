@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { fishData } from "../fishData";
-import { fishing } from "../services/api";
+import { fishing, invalidateLastFish } from "../services/api";
 
 const GameLogic = ({
   gamePhase,
@@ -78,7 +78,7 @@ const GameLogic = ({
     if (result !== null) {
       const resetTimer = setTimeout(() => {
         resetGame();
-      }, 3000); // Reset after 3 seconds
+      }, 5000); // Reset after 5 seconds
       return () => clearTimeout(resetTimer);
     }
   }, [result]);
@@ -179,7 +179,23 @@ const GameLogic = ({
             matchedFish?.description || `${apiFish.habitat}에서 잡은 물고기`,
         };
 
-        setPreFetchedFish(preFetchedFishData);
+        // 이미지 미리 로드하기
+        if (fullImageUrl) {
+          const img = new Image();
+          img.onload = () => {
+            console.log("Image preloaded successfully:", fullImageUrl);
+            setPreFetchedFish(preFetchedFishData);
+          };
+          img.onerror = () => {
+            console.error("Failed to preload image:", fullImageUrl);
+            // 이미지 로드 실패해도 데이터는 저장
+            setPreFetchedFish(preFetchedFishData);
+          };
+          img.src = fullImageUrl;
+        } else {
+          setPreFetchedFish(preFetchedFishData);
+        }
+
         console.log("Pre-fetched fish:", preFetchedFishData);
       } catch (error) {
         console.error("Error pre-fetching fish:", error);
@@ -234,6 +250,16 @@ const GameLogic = ({
     }
 
     if (newFailures >= 3) {
+      // 낚시 실패 시 마지막 물고기 무효화
+      if (preFetchedFish) {
+        invalidateLastFish(userId)
+          .then(() => {
+            console.log("Successfully invalidated last fish");
+          })
+          .catch((error) => {
+            console.error("Failed to invalidate last fish:", error);
+          });
+      }
       setResult("fail");
       setGamePhase("ready");
       setIsMoving(false);
@@ -270,7 +296,7 @@ const GameLogic = ({
         setCatchAnimation(false);
         setResult("success");
         setGamePhase("ready");
-      }, 2000);
+      }, 3000);
     } else {
       const newGreenStart = Math.random() * 30 + 10;
       const newGreenWidth = Math.random() * 30 + 20;
