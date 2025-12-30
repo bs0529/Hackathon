@@ -362,6 +362,11 @@
   image-rendering: crisp-edges;
 }
 
+/* 아쿠아리움 배경 */
+.collection-detail-page.aquarium-background::before {
+  background-image: url("/aquarium.jpg");
+}
+
 /* 물결 애니메이션 레이어 */
 .collection-detail-page::after {
   content: "";

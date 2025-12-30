@@ -172,19 +172,22 @@ function CollectionDetail() {
 
   const handleBackClick = () => {
     // location.state에서 from 확인
-    if (location.state?.from === 'aquarium') {
-      navigate('/aquarium');
+    if (location.state?.from === "aquarium") {
+      navigate("/aquarium");
     } else {
-      navigate('/collection');
+      navigate("/collection");
     }
   };
 
+  // location.state에서 from 값 가져오기 (aquarium 또는 collection)
+  const backgroundClass =
+    location.state?.from === "aquarium"
+      ? "collection-detail-page aquarium-background"
+      : "collection-detail-page";
+
   return (
-    <div className="collection-detail-page">
-      <button
-        className="detail-back-btn"
-        onClick={handleBackClick}
-      >
+    <div className={backgroundClass}>
+      <button className="detail-back-btn" onClick={handleBackClick}>
         ← 뒤로
       </button>
 
