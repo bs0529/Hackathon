@@ -6,6 +6,7 @@ import Menu from "./Menu";
 import App from "../App";
 import Collection from "./collection/Collection";
 import CollectionDetail from "./collection/CollectionDetail";
+import Aquarium from "./Aquarium";
 import { createUser } from "../services/api";
 import "../App.css";
 
@@ -102,6 +103,10 @@ function GameFlow() {
     navigate("/collection");
   };
 
+  const handleShowAquarium = () => {
+    navigate("/aquarium");
+  };
+
   const handleLogout = () => {
     // 로컬스토리지에서 유저 정보 삭제
     localStorage.removeItem(USER_STORAGE_KEY);
@@ -137,6 +142,7 @@ function GameFlow() {
             userId={userId}
             onLogout={handleLogout}
             onShowCollection={handleShowCollection}
+            onShowAquarium={handleShowAquarium}
           />
         }
       />
@@ -180,6 +186,10 @@ function GameFlow() {
         element={<Collection onClose={handleBackToMenu} />}
       />
       <Route path="/collection/:fishId" element={<CollectionDetail />} />
+      <Route
+        path="/aquarium"
+        element={<Aquarium onClose={handleBackToMenu} />}
+      />
     </Routes>
   );
 }
