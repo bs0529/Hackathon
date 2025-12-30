@@ -24,7 +24,10 @@ export const createUser = async (nickname) => {
 // 유저 정보 조회
 export const getUser = async (userId) => {
   try {
-    const response = await api.get(`/users/${userId}`);
+    // 캐싱 방지를 위해 timestamp 추가
+    const response = await api.get(
+      `/users/${userId}?_t=${new Date().getTime()}`
+    );
     return response.data;
   } catch (error) {
     console.error("Failed to get user:", error);
@@ -75,7 +78,9 @@ export const handleAction = async (
 // 도감 조회
 export const getCollection = async (userId) => {
   try {
-    const response = await api.get(`/game/collection/${userId}`);
+    const response = await api.get(
+      `/game/collection/${userId}?_t=${new Date().getTime()}`
+    );
     return response.data;
   } catch (error) {
     console.error("Failed to get collection:", error);
@@ -100,7 +105,9 @@ export const invalidateLastFish = async (userId) => {
 
 export const getAquariumFish = async (userId) => {
   try {
-    const response = await api.get(`/aquarium/${userId}`);
+    const response = await api.get(
+      `/aquarium/${userId}?_t=${new Date().getTime()}`
+    );
     return response.data;
   } catch (error) {
     console.error("Failed to get aquarium fish:", error);
@@ -122,7 +129,7 @@ export const markLetterAsRead = async (letterId) => {
 // 상점 아이템 목록 조회
 export const getShopItems = async () => {
   try {
-    const response = await api.get("/shop/items");
+    const response = await api.get(`/shop/items?_t=${new Date().getTime()}`);
     return response.data;
   } catch (error) {
     console.error("Failed to get shop items:", error);

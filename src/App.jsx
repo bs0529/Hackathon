@@ -17,7 +17,7 @@ import {
 } from "./services/api";
 import { fishData } from "./fishData_original";
 
-function App({ playerName, userId, onBackToMenu }) {
+function App({ playerName, userId, onBackToMenu, onShowShop }) {
   const { habitat } = useParams();
   const navigate = useNavigate();
   const [selectedHabitat, setSelectedHabitat] = useState(habitat || "연안");
@@ -39,13 +39,6 @@ function App({ playerName, userId, onBackToMenu }) {
   const [isCasting, setIsCasting] = useState(false);
   const [caughtFish, setCaughtFish] = useState(null);
   const [showMap, setShowMap] = useState(false);
-  const [showShop, setShowShop] = useState(false);
-  const [shopItems, setShopItems] = useState([]);
-  const [shopLoading, setShopLoading] = useState(false);
-  const [showPurchaseConfirm, setShowPurchaseConfirm] = useState(false);
-  const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
-  const [purchaseMessage, setPurchaseMessage] = useState("");
-  const [selectedItem, setSelectedItem] = useState(null);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
   const [actionResult, setActionResult] = useState(null);
   const [money, setMoney] = useState(0);
@@ -215,8 +208,8 @@ function App({ playerName, userId, onBackToMenu }) {
   });
 
   const handleScreenClick = () => {
-    // Prevent any fishing interactions when map, shop, or result is open
-    if (showMap || showShop || result !== null) {
+    // Prevent any fishing interactions when map or result is open
+    if (showMap || result !== null) {
       return;
     }
 
@@ -532,19 +525,10 @@ function App({ playerName, userId, onBackToMenu }) {
                 지도
               </button>
               <button
-                onClick={async (e) => {
+                onClick={(e) => {
                   e.stopPropagation();
                   resetGame();
-                  setShowShop(true);
-                  setShopLoading(true);
-                  try {
-                    const items = await getShopItems();
-                    setShopItems(items || []);
-                  } catch (err) {
-                    console.error("Failed to fetch shop items:", err);
-                    setShopItems([]);
-                  }
-                  setShopLoading(false);
+                  if (onShowShop) onShowShop();
                 }}
               >
                 상점
@@ -725,137 +709,6 @@ function App({ playerName, userId, onBackToMenu }) {
           <button className="close-map" onClick={() => setShowMap(false)}>
             닫기
           </button>
-        </div>
-      )}
-
-      {/* Shop Modal */}
-      {showShop && (
-        <div className="shop-screen">
-          <div className="shop-content">
-            <div className="shop-header">
-              <h2>🎣 상점</h2>
-              <div className="shop-user-info">
-                <span className="shop-user-name">👤 {playerName}</span>
-                <span className="shop-user-money">
-                  💰 {money.toLocaleString()}원
-                </span>
-              </div>
-            </div>
-            {shopLoading ? (
-              <div className="shop-loading">로딩 중...</div>
-            ) : (
-              <div className="shop-items">
-                {shopItems.length > 0 ? (
-                  shopItems.map((item) => (
-                    <div
-                      className="shop-item"
-                      key={item.id}
-                      onClick={() => {
-                        setSelectedItem(item);
-                        setShowPurchaseConfirm(true);
-                      }}
-                    >
-                      <img
-                        src={item.image_url || "/fishing_rod.png"}
-                        alt={item.name}
-                      />
-                      <div className="shop-item-info">
-                        <p className="shop-item-name">{item.name}</p>
-                        <p className="shop-item-price">
-                          {item.price?.toLocaleString()}원
-                        </p>
-                        {item.effect && (
-                          <p className="shop-item-effect">{item.effect}</p>
-                        )}
-                        {item.trash_reduction && (
-                          <p className="shop-item-effect">
-                            🗑️ 쓰레기 감소: {item.trash_reduction}%
-                          </p>
-                        )}
-                        {item.good_fish_bonus && (
-                          <p className="shop-item-effect">
-                            🐟 좋은 물고기 확률: +{item.good_fish_bonus}%
-                          </p>
-                        )}
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="shop-empty">상점에 아이템이 없습니다.</p>
-                )}
-              </div>
-            )}
-          </div>
-          <button className="shop-close-btn" onClick={() => setShowShop(false)}>
-            닫기
-          </button>
-        </div>
-      )}
-
-      {/* Purchase Confirmation Modal */}
-      {showPurchaseConfirm && selectedItem && (
-        <div className="purchase-confirm-modal">
-          <div className="modal-content">
-            <h3>{selectedItem.name}</h3>
-            <p className="purchase-price">
-              가격: {selectedItem.price?.toLocaleString()}원
-            </p>
-            <p>구매하시겠습니까?</p>
-            <div className="modal-buttons">
-              <button
-                onClick={async () => {
-                  try {
-                    const response = await buyItem(userId, selectedItem.id);
-                    setPurchaseMessage(
-                      response?.message ||
-                        `${selectedItem.name}을(를) 구매했습니다!`
-                    );
-                    setShowPurchaseConfirm(false);
-                    setShowPurchaseSuccess(true);
-                    // 구매 후 유저 정보 갱신
-                    refreshUserData();
-                  } catch (error) {
-                    console.error("Purchase failed:", error);
-                    setPurchaseMessage(
-                      error.response?.data?.detail || "구매에 실패했습니다."
-                    );
-                    setShowPurchaseConfirm(false);
-                    setShowPurchaseSuccess(true);
-                  }
-                }}
-              >
-                확인
-              </button>
-              <button
-                onClick={() => {
-                  setShowPurchaseConfirm(false);
-                  setSelectedItem(null);
-                }}
-              >
-                취소
-              </button>
-            </div>
-          </div>
-        </div>
-      )}
-
-      {/* Purchase Result Modal */}
-      {showPurchaseSuccess && (
-        <div className="purchase-confirm-modal">
-          <div className="modal-content">
-            <p>{purchaseMessage}</p>
-            <div className="modal-buttons">
-              <button
-                onClick={() => {
-                  setShowPurchaseSuccess(false);
-                  setSelectedItem(null);
-                  setPurchaseMessage("");
-                }}
-              >
-                확인
-              </button>
-            </div>
-          </div>
         </div>
       )}
     </div>

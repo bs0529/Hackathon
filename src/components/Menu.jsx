@@ -9,19 +9,24 @@ function Menu({
   onLogout,
   onShowCollection,
   onShowAquarium,
+  onShowShop,
 }) {
   const [money, setMoney] = useState(0);
 
   useEffect(() => {
+    console.log("Menu: useEffect triggered. userId:", userId);
     if (userId) {
+      console.log("Menu: Fetching user data for userId:", userId);
       getUser(userId)
         .then((data) => {
-          console.log(data);
+          console.log("Menu: Fetched data:", data);
           setMoney(data.money);
         })
         .catch((error) => {
-          console.error("Failed to fetch user data:", error);
+          console.error("Menu: Failed to fetch user data:", error);
         });
+    } else {
+      console.warn("Menu: No userId provided, skipping API call.");
     }
   }, [userId]);
 
@@ -43,6 +48,9 @@ function Menu({
             <button className="menu-button" onClick={onShowAquarium}>
               아쿠아리움
             </button>
+            <button className="menu-button" onClick={onShowShop}>
+              상점
+            </button>
             <button className="menu-button logout" onClick={onLogout}>
               로그아웃
             </button>
@@ -50,7 +58,11 @@ function Menu({
         </div>
         {/* Pixel ocean */}
         <div className="pixel-ocean">
-          <img src="sea_ground.png" alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img
+            src="sea_ground.png"
+            alt=""
+            style={{ width: "100%", height: "100%", objectFit: "cover" }}
+          />
         </div>
       </div>
     </div>
