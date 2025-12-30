@@ -161,15 +161,7 @@ function App({
           }}
         />
         <img
-<<<<<<< Updated upstream
-          src={
-            selectedHabitat === "갯벌"
-              ? "/foreshore_ground.png"
-              : "/coast_ground.png"
-          }
-=======
           src={backgroundImages.ground}
->>>>>>> Stashed changes
           alt="Ground Background"
           style={{
             position: "absolute",
