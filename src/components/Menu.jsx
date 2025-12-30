@@ -5,7 +5,7 @@ function Menu({ onStartGame, playerName, onLogout, onShowCollection }) {
     <div className="menu-screen">
       <div className="menu-container">
         <div className="menu-content">
-          <h1 className="game-title">바다를 되살리자</h1>
+          <h1 className="game-title">다나까</h1>
           <p className="game-subtitle">플레이어: {playerName}</p>
 
           <div className="menu-buttons">
