@@ -14,7 +14,9 @@ function StartScreen({ onPressStart }) {
         <div className="game-logo">
           <h1 className="pixel-title">바다를</h1>
           <h1 className="pixel-title">되살리자</h1>
-          <div className="pixel-fish-icon">🐟</div>
+          <div className="pixel-fish-icon">
+            <img src="/assets/images/sticker_향고래.png" alt="" height={120}/>
+          </div>
         </div>
 
         <div className="press-start-container">
@@ -24,8 +26,7 @@ function StartScreen({ onPressStart }) {
       </div>
 
       <div className="pixel-ocean">
-        <div className="ocean-wave wave-1"></div>
-        <div className="ocean-wave wave-2"></div>
+        <img src="sea_sky.png" alt="" />
       </div>
 
       <div className="credits">

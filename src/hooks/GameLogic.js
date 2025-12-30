@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
-import { fishData } from "../fishData";
 import { fishing, invalidateLastFish } from "../services/api";
+import { fishData } from "../fishData_original";
 
 const GameLogic = ({
   gamePhase,

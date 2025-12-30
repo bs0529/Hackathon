@@ -21,26 +21,9 @@ function Menu({ onStartGame, playerName, onLogout, onShowCollection }) {
             </button>
           </div>
         </div>
-
         {/* Pixel ocean */}
         <div className="pixel-ocean">
-          <div className="ocean-wave wave-1"></div>
-          <div className="ocean-wave wave-2"></div>
-          <div className="ocean-wave wave-3"></div>
-
-          {/* Underwater effects */}
-          <div className="underwater-effects">
-            <div className="bubble bubble-1"></div>
-            <div className="bubble bubble-2"></div>
-            <div className="bubble bubble-3"></div>
-            <div className="bubble bubble-4"></div>
-            <div className="bubble bubble-5"></div>
-            <div className="particle particle-1"></div>
-            <div className="particle particle-2"></div>
-            <div className="particle particle-3"></div>
-            <div className="seaweed seaweed-1"></div>
-            <div className="seaweed seaweed-2"></div>
-          </div>
+          <img src="sea_ground.png" alt="" />
         </div>
       </div>
     </div>

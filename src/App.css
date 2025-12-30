@@ -190,16 +190,16 @@
 
 .shop-content {
   background: rgba(0, 0, 0, 0.8);
-  padding: 2rem;
+  padding: 3rem;
   border-radius: 10px;
   border: 2px solid #fff;
-  min-width: 600px;
+  min-width: 800px;
   margin-top: -100px;
 }
 
 .shop-screen h2 {
   margin-bottom: 2rem;
-  font-size: 2rem;
+  font-size: 2.5rem;
   color: white;
   text-align: center;
 }
@@ -216,7 +216,7 @@
   flex-direction: column;
   align-items: center;
   cursor: pointer;
-  padding: 1rem;
+  padding: 1.5rem;
   background: rgba(255, 255, 255, 0.6);
   border-radius: 8px;
   transition: background 0.2s;
@@ -227,15 +227,15 @@
 }
 
 .shop-item img {
-  width: 100px;
-  height: 100px;
+  width: 200px;
+  height: 200px;
   object-fit: contain;
   margin-bottom: 0.5rem;
 }
 
 .shop-item p {
   margin: 0;
-  font-size: 1.2rem;
+  font-size: 1.5rem;
   color: black;
 }
 
