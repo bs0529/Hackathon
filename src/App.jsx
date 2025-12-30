@@ -134,7 +134,7 @@ function AppContent() {
       <div className="game-container">
         {/* Background Images */}
         <img
-          src="/sky.png"
+          src={selectedHabitat === '갯벌' ? '/foreshore_sky.png' : '/coast_sky.png'}
           alt="Sky Background"
           style={{
             position: 'absolute',
@@ -148,7 +148,7 @@ function AppContent() {
           }}
         />
         <img
-          src="/ground.png"
+          src={selectedHabitat === '갯벌' ? '/foreshore_ground.png' : '/coast_ground.png'}
           alt="Ground Background"
           style={{
             position: 'absolute',
