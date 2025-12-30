@@ -8,6 +8,7 @@ import Bobber from "./components/Bobber";
 import CatchingBar from "./components/CatchingBar";
 import ResultOverlay from "./components/ResultOverlay";
 import GameLogic from "./hooks/GameLogic";
+import { handleAction } from "./services/api";
 
 function App({ playerName, userId, onBackToMenu }) {
   const { habitat } = useParams();
@@ -37,6 +38,7 @@ function App({ playerName, userId, onBackToMenu }) {
   const [selectedRod, setSelectedRod] = useState(null);
   const [currentScore, setCurrentScore] = useState(0);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
+  const [actionResult, setActionResult] = useState(null);
 
   const bobberRef = useRef(null);
 
@@ -144,21 +146,111 @@ function App({ playerName, userId, onBackToMenu }) {
   const backgroundImages = getBackgroundImages(selectedHabitat);
 
   // Result overlay button handlers
-  const handleRelease = () => {
+  const handleRelease = async () => {
     console.log("물고기를 방생했습니다:", caughtFish?.name);
-    resetGame();
+
+    if (caughtFish?.species_id && userId) {
+      try {
+        const response = await handleAction(userId, caughtFish.species_id, "RELEASE");
+        console.log("방생 처리 완료", response);
+        setActionResult({
+          type: "release",
+          success: true,
+          message: `${caughtFish.name}을(를) 방생했습니다!`,
+          data: response
+        });
+      } catch (error) {
+        console.error("방생 API 호출 실패:", error);
+        setActionResult({
+          type: "release",
+          success: false,
+          message: "방생 처리에 실패했습니다."
+        });
+      }
+    } else {
+      setActionResult({
+        type: "release",
+        success: true,
+        message: `${caughtFish?.name || '물고기'}을(를) 방생했습니다!`
+      });
+    }
+
+    setTimeout(() => {
+      setActionResult(null);
+      resetGame();
+    }, 2000);
   };
 
-  const handleSell = () => {
+  const handleSell = async () => {
     console.log("물고기를 판매했습니다:", caughtFish?.name);
-    // TODO: API 호출하여 판매 처리
-    resetGame();
+
+    if (caughtFish?.species_id && userId) {
+      try {
+        const response = await handleAction(userId, caughtFish.species_id, "SELL");
+        console.log("판매 처리 완료", response);
+        setActionResult({
+          type: "sell",
+          success: true,
+          message: `${caughtFish.name}을(를) 판매했습니다!`,
+          money: caughtFish.price || response?.money_earned,
+          data: response
+        });
+      } catch (error) {
+        console.error("판매 API 호출 실패:", error);
+        setActionResult({
+          type: "sell",
+          success: false,
+          message: "판매 처리에 실패했습니다."
+        });
+      }
+    } else {
+      setActionResult({
+        type: "sell",
+        success: true,
+        message: `${caughtFish?.name || '물고기'}을(를) 판매했습니다!`,
+        money: caughtFish?.price
+      });
+    }
+
+    setTimeout(() => {
+      setActionResult(null);
+      resetGame();
+    }, 2000);
   };
 
-  const handleSendToAquarium = () => {
+  const handleSendToAquarium = async () => {
     console.log("물고기를 아쿠아리움으로 보냈습니다:", caughtFish?.name);
-    // TODO: API 호출하여 아쿠아리움에 추가
-    resetGame();
+
+    if (caughtFish?.species_id && userId) {
+      try {
+        const response = await handleAction(userId, caughtFish.species_id, "AQUARIUM");
+        console.log("아쿠아리움 수송 처리 완료", response);
+        setActionResult({
+          type: "aquarium",
+          success: true,
+          message: `${caughtFish.name}을(를) 아쿠아리움으로 보냈습니다!`,
+          data: response
+        });
+      } catch (error) {
+        console.error("아쿠아리움 수송 API 호출 실패:", error);
+        setActionResult({
+          type: "aquarium",
+          success: false,
+          message: "아쿠아리움 수송에 실패했습니다."
+        });
+      }
+    } else {
+      setActionResult({
+        type: "aquarium",
+        success: true,
+        message: `${caughtFish?.name || '물고기'}을(를) 아쿠아리움으로 보냈습니다!`
+      });
+    }
+
+    setTimeout(() => {
+      setActionResult(null);
+      resetGame();
+    }, 2000);
   };
 
   return (
@@ -284,6 +376,7 @@ function App({ playerName, userId, onBackToMenu }) {
               onRelease={handleRelease}
               onSell={handleSell}
               onSendToAquarium={handleSendToAquarium}
+              actionResult={actionResult}
             />
           )}
         </div>

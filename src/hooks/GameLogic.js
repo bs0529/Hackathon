@@ -137,6 +137,7 @@ const GameLogic = ({
 
         // 응답에서 물고기 정보 추출
         const apiFish = {
+          species_id: fishResponse.fish.species_id,
           name: fishResponse.fish.name,
           type: fishResponse.fish.type,
           price: fishResponse.fish.price,
