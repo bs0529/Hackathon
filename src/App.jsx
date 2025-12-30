@@ -2,7 +2,6 @@ import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "./components/UserInterface.css";
 import "./components/Bobber.css"; 
-import { fishData } from "./fishData";
 import Fisherman from "./components/Fisherman";
 import FishingLine from "./components/FishingLine";
 import Bobber from "./components/Bobber";

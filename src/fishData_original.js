@@ -70,13 +70,6 @@ export const fishData = [
     "ovrHbttNm": "바닷속암반"
   },
   {
-    "name": "저어새",
-    "model": "/assets/models/201724.glb",
-    "image2d": "/fs.png",
-    "description": "몸은 흰색이며 주걱 모양의 주름이 많고 긴 검은 부리가 특징입니다. 몸길이는 60~78.5cm입니다. 눈 주변에 노란 선이 있거나 부리 끝이 노란 저어새도 있습니다. 머리는 길고 검은색이며, 몸은 전체적으로 흰색이나 번식기에는 노란색 가슴 띠와 머리 뒤에 긴 갈기(장식깃)가 생깁니다. 어린 저어새는 날개 끝이 검고 줄무늬가 있습니다.",
-    "ovrHbttNm": "갯벌"
-  },
-  {
     "name": "혹등고래",
     "model": "/assets/models/201733.glb",
     "image2d": "/assets/images/sticker_혹등고래.png",
@@ -147,13 +140,6 @@ export const fishData = [
     "ovrHbttNm": "바다숲"
   },
   {
-    "name": "알락꼬리마도요",
-    "model": "/assets/models/201722.glb",
-    "image2d": "/fs.png",
-    "description": "몸길이는 53~66cm이며, 부리는 길고 아래로 휘어져 있고, 수컷이 암컷보다 부기가 짧습니다. 날 때 등과 허리에 흰색은 전혀 보이지 않으며, 날개의 아랫면에는 갈색 가는 줄무늬가 빽빽하게 있습니다.",
-    "ovrHbttNm": "갯벌"
-  },
-  {
     "name": "칠면초",
     "model": "/assets/models/201730.glb",
     "image2d": "/assets/images/sticker_칠면초.png",
@@ -166,13 +152,6 @@ export const fishData = [
     "image2d": "/assets/images/sticker_점해마.png",
     "description": "몸길이는 약 18cm 정도로, 연한 노란색, 연합 녹색, 연합 빨간색 등 다양한 몸색깔을 가집니다. 아가미 뒤부터 등지느러미까지 등쪽부분에 갈색, 검정색 반점이 있습니다.",
     "ovrHbttNm": "바다숲"
-  },
-  {
-    "name": "홍살귀상어",
-    "model": "/assets/models/201734.glb",
-    "image2d": "/fs.png",
-    "description": "머리가 망치처럼 양옆으로 확장되어 있고, 머리 전면 가장자리의 중앙에 오목한 홈이 있습니다. 머리의 너비는 머리 길이의 약 2배이고, 머리 가장자리의 홈은 자랄수록 뚜렷해집니다. 눈은 좌우로 확장된 머리의 양 끝에 위치합니다. 홍살귀상어의 수컷은 140~150cm, 암컷은 212cm정도 자라면 생식이 가능한 어른 개체가 됩니다.",
-    "ovrHbttNm": "바다"
   },
   {
     "name": "망둥어",
@@ -224,13 +203,6 @@ export const fishData = [
     "ovrHbttNm": "연안"
   },
   {
-    "name": "검은머리물떼새",
-    "model": "/assets/models/201703.glb",
-    "image2d": "/fs.png",
-    "description": "여름에는 암컷과 수컷 모두 등 아래, 허리, 꼬리 위를 덮는 깃털, 가슴 아래, 배가 흰색이며, 나머지 몸 깃털은 검은색입니다. 날 때 날개 윗면에 큰 흰색 줄무늬가 보입니다. 부리와 다리는 붉은색이며, 부리 끝이 검은색을 띱니다.",
-    "ovrHbttNm": "갯벌"
-  },
-  {
     "name": "남방방게",
     "model": "/assets/models/201805.glb",
     "image2d": "/assets/images/sticker_남방방게.png",
@@ -280,13 +252,6 @@ export const fishData = [
     "ovrHbttNm": "바닷속암반"
   },
   {
-    "name": "선침거미불가사리",
-    "model": "/assets/models/201812.glb",
-    "image2d": "/fs.png",
-    "description": "가운데 몸통의 지름은 5cm, 팔의 길이는 15cm 정도로, 가운데 몸통의 등 쪽은 오각형이며, 끝이 여러 갈래로 갈라진 투명한 가시들로 덮여 있습니다. 팔에 나 있는 가시의 길이는 팔 굵기의 거의 4배에 달합니다.",
-    "ovrHbttNm": "바닷속암반"
-  },
-  {
     "name": "연수지맨드라미",
     "model": "/assets/models/201813.glb",
     "image2d": "/assets/images/sticker_연수지맨드라미.png",
@@ -299,13 +264,6 @@ export const fishData = [
     "image2d": "/assets/images/sticker_유착나무돌산호.png",
     "description": "몸통은 돌처럼 단단하며 나무 모양으로 불규칙하게 가지를 뻗습니다.가지는 굵고 원통형이며 서로 유착하여 덤불과 같이 자랍니다. 가지와 촉수는 대부분 선명한 주황색을 띠지만 진한 노란색이 나타나기도 합니다. 크기는 독립 개체의 경우 높이와 폭이 20cm 내외이지만, 덩어리를 이루는 경우에는 폭이 30~50cm(또는 3m 이상)으로 다양하답니다.",
     "ovrHbttNm": "바닷속암반"
-  },
-  {
-    "name": "아비",
-    "model": "/assets/models/201721.glb",
-    "image2d": "/fs.png",
-    "description": "몸 길이는 약 61~67cm 정도로 암컷과 수컷이 같은 색깔입니다. 가늘고 위로 약간 휜 부리를 가지고 있습니다. 여름에는 등이 갈색, 목 부분은 고동색이며 겨울에는 등이 흰색의 반점이 있는 갈색입니다. 목 부분과 배가 흰색을 나타냅니다. 알은 반점이 있는 올리브색에서 갈색까지 다양합니다. 흔하지 않은 겨울철새로 항만이나 연안에서 가끔 관찰됩니다.",
-    "ovrHbttNm": "갯벌"
   },
   {
     "name": "의염통성게",
@@ -326,13 +284,6 @@ export const fishData = [
     "model": "/assets/models/201817.glb",
     "image2d": "/assets/images/sticker_포기거머리말.png",
     "description": "땅속줄기의 길이가 짧아 덩어리로 자라는 것처럼 보이며, 키가 50~170cm, 잎의 쪽은 0.5~1cm, 잎맥의 수는 5~7개로 나타납니다. 꽃이 피는 가지는 50~170cm의 키를 가집니다.",
-    "ovrHbttNm": "바다숲"
-  },
-  {
-    "name": "수거머리말",
-    "model": "/assets/models/201818.glb",
-    "image2d": "/fs.png",
-    "description": "키가 90~200cm, 잎쪽은 1.5cm, 잎맥수는 9~11개로 나타나며, 꽃이 피는 가지는 150~800cm의 키를 가집니다. 잘피류 중 가장 키가 큰 종이랍니다. 땅속을 기는 0.5cm 지름의 땅속줄기가 있으며, 마디는 약 2cm입니다.",
     "ovrHbttNm": "바다숲"
   },
   {
@@ -364,13 +315,6 @@ export const fishData = [
     "ovrHbttNm": "바다"
   },
   {
-    "name": "가시해마",
-    "model": "/assets/models/201823.glb",
-    "image2d": "/fs.png",
-    "description": "우리나라에 서식하는 해마 중 가장 두드러진 가시를 가지며, 가시의 끝은 갈라져 있습니다. 주둥이는 비교적 길며, 띠를 가집니다. 해외에서 관찰되는 가시해마에 비해 크기가 작은편입니다.",
-    "ovrHbttNm": "바다숲"
-  },
-  {
     "name": "복해마",
     "model": "/assets/models/201824.glb",
     "image2d": "/assets/images/sticker_복해마.png",
@@ -399,13 +343,6 @@ export const fishData = [
     "ovrHbttNm": "연안"
   },
   {
-    "name": "슴새",
-    "model": "/assets/models/201827.glb",
-    "image2d": "/fs.png",
-    "description": "암컷과 수컷은 생김새가 비슷하여 이마에서 뒷머리까지 검은 갈색이며, 각 깃털 끝은 흰색입니다. 목과 어깨깃은 어두운 갈색입니다. 등, 허리, 위꽁지덮깃은 어두운 갈색이며, 등 중앙의 각 깃털과 위꽁지덮깃의 각 깃털은 가장자리가 흰색입니다. 꽁지는 어두운 갈색입니다. 알은 흰색입니다.",
-    "ovrHbttNm": "연안"
-  },
-  {
     "name": "바다쇠오리",
     "model": "/assets/models/201828.glb",
     "image2d": "/assets/images/sticker_바다쇠오리.png",
@@ -417,13 +354,6 @@ export const fishData = [
     "model": "/assets/models/201829.glb",
     "image2d": "/assets/images/sticker_흰수염바다오리.png",
     "description": "기러기목 오리과의 여름철새로 몸의 각 부위 길이는 날개 172~182mm, 꽁지 45~62mm, 발목 28~32mm, 부리 32~39mm입니다. 몸 색은 암수가 같은 빛깔입니다. 등 쪽은 검은 갈색이며, 배 쪽은 흰색에 약간의 어두운 회색의 무늬가 있습니다. 옆얼굴에는 두 줄의 흰 깃이 있습니다. 턱 밑과 목, 윗가슴 및 겨드랑이는 갈색을 띤 어두운 회색입니다. 겨울에는 가슴과 배가 흰색이며 무늬가 없습니다. 알은 광택이 없는 회백색 바탕에 연한 갈색이나 어두운 회색의 줄무늬와 점이 약간 흩어져 있습니다.",
-    "ovrHbttNm": "연안"
-  },
-  {
-    "name": "바다오리",
-    "model": "/assets/models/201830.glb",
-    "image2d": "/fs.png",
-    "description": "여름에는 머리와 뒷목과 등 쪽이 어두운 회색이고, 목은 갈색입니다. 둘째 날개깃의 끝부분과 가슴 및 배는 흰색이며, 날개의 안쪽도 흰색입니다. 겨울에는 옆머리와 목과 뺨 그리고 옆목이 흰색이고, 부리는 길며 곧고 검은색을 띱니다. 어린 새는 어미 새의 겨울 깃과 비슷합니다.",
     "ovrHbttNm": "연안"
   },
   {
@@ -476,13 +406,6 @@ export const fishData = [
     "ovrHbttNm": "바닷속암반"
   },
   {
-    "name": "기수갈고둥",
-    "model": "/assets/models/201907.glb",
-    "image2d": "/fs.png",
-    "description": "껍질(패각)의 높이와 폭이 약 10~15mm 정도인 작은 복족류입니다. 몸은 모두 4층으로 되어 있으며, 일반적으로 갈색 바탕에 삼각형 모양의 노란색과 검은색 반점이 있습니다. 몸의 층에는 2열의 백색 띠가 나타납니다. 큰 개체는 대부분 껍질의 모서리(각정)가 마모되어 탈락되어 있습니다. 껍질 입구는 반달 모양이고 입구 안쪽 입술(내순) 가운데에 작은 치상돌기의 흔적이 나타납니다. 입구의 입술에는 잘 발달된 백색의 활층이 덮여있습니다. 뚜껑은 석회질이며 뚜껑의 입구 바깥 모서리(외순연)를 따라 황색 선이 나타납니다.",
-    "ovrHbttNm": "하구역"
-  },
-  {
     "name": "금빛나팔돌산호",
     "model": "/assets/models/201908.glb",
     "image2d": "/assets/images/sticker_금빛나팔돌산호.png",
@@ -532,13 +455,6 @@ export const fishData = [
     "ovrHbttNm": "바닷속암반"
   },
   {
-    "name": "나팔고둥",
-    "model": "/assets/models/201705.glb",
-    "image2d": "/fs.png",
-    "description": "껍질의 길이가 20cm 이상 대형 고둥으로 원추형으로 옅은 주홍색을 띱니다. 아래쪽은 굵은 자갈색의 구름 모양 또는 황백색 무늬가 있습니다.",
-    "ovrHbttNm": "바닷속암반"
-  },
-  {
     "name": "긴가지해송",
     "model": "/assets/models/201915.glb",
     "image2d": "/assets/images/sticker_긴가지해송.png",
@@ -546,31 +462,10 @@ export const fishData = [
     "ovrHbttNm": "바닷속암반"
   },
   {
-    "name": "빗자루해송",
-    "model": "/assets/models/201916.glb",
-    "image2d": "/fs.png",
-    "description": "몸통은 빗자루 모양으로 긴 가지들이 풍성하게 뻗어있습니다.몸통은 진한 갈색이며, 촉수는 흰색이거나 연한 연두색 또는 회색이며,몸통의 높이는 약 40cm 정도고 폭이 높이보다 다소 좁습니다.",
-    "ovrHbttNm": "바닷속암반"
-  },
-  {
     "name": "넓적부리도요",
     "model": "/assets/models/201917.glb",
     "image2d": "/assets/images/sticker_넓적부리도요.png",
     "description": "검은색의 스푼처럼 생긴 부리와 다리를 가졌으며, 여름 깃과 겨울 것이 다르다. 여름에는 이마에서 뒷목까지 붉은 갈색이며, 목 가장자리 끝과 허리 양쪽은 흰색입니다. 머리 옆, 얼굴, 귀깃, 앞 목, 목 옆, 가슴은 붉은 갈색으로 검은색의 작은 얼룩무늬가 있습니다. 배와 아래 꼬리 덮깃은 흰색입니다. 겨울에는 이마와 눈앞이 흰색이며, 눈 위에는 흰색의 얼룩무늬가 있습니다. 턱밑과 턱 아래 부위는 흰색이고, 목 옆에는 어두운 갈색의 작은 얼룩무늬가 있습니다. 몸 면은 잿빛 갈색으로 가장자리가 흰색이고, 검은 갈색의 축이 되는 반점이 있습니다.",
-    "ovrHbttNm": "연안"
-  },
-  {
-    "name": "바다제비",
-    "model": "/assets/models/201918.glb",
-    "image2d": "/fs.png",
-    "description": "몸 전체는 흑갈색이며, 날개 덮깃은 밝은 갈색을 띱니다. 날개는 가늘고 길며 꼬리는 약간 안으로 오목하게 들어간 형태이고 부리와 다리는 검정색입니다.",
-    "ovrHbttNm": "연안"
-  },
-  {
-    "name": "쇠가마우지",
-    "model": "/assets/models/201919.glb",
-    "image2d": "/fs.png",
-    "description": "암컷과 수컷 모두 몸 전체가 검은색이며, 녹색의 금속광택이 있습니다. 머리 꼭대기와 뒷머리의 깃털은 관 모양의 깃을 이루며 부리 주위에는 붉은색의 피부가 드러나 있습니다. 목의 중앙부에는 보라색의 금속광택이 있으며, 번식기에는 목에 가는 끈 모양의 흰색 장식깃이 생깁니다. 등 양쪽은 강한 붉은 구릿빛 금속광택을 띠고, 번식기에는 등, 허리에 가는 끈 모양의 장식깃이 생기며, 허리 양쪽에는 크고 흰 얼룩무늬가 생깁니다. 꼬리는 검은색입니다.",
     "ovrHbttNm": "연안"
   },
   {
@@ -607,13 +502,6 @@ export const fishData = [
     "image2d": "/assets/images/sticker_흑범고래.png",
     "description": "범고래와 비슷하나 전신이 흑색이며 몸체는 가늘고 깁니다. 가슴지느러미 사이의 복부는 약간 밝은 흑색이고, 머리는 작고 이마가 둥글며 뾰족합니다. 부리는 완전히 없고 입은 후방으로 치켜 올라가 있으며, 위턱이 아래턱보다 깁니다. 좌우 측에 흑색 반점이 있는 개체들이 있으며 아래위턱 좌우에 각각 8～11개의 날카로운 이빨을 가지고 있습니다. 등지느러미는 넓은 낫 모양으로 끝부분은 가늘고 약간 아래로 쳐져 있는 것이 특징이며, 몸길이는 약 3.9～6.0m, 무게는 약 2톤가량으로 수컷이 암컷보다 다소 큽니다.",
     "ovrHbttNm": "바다"
-  },
-  {
-    "name": "대추귀고둥",
-    "model": "/assets/models/201709.glb",
-    "image2d": "/fs.png",
-    "description": "세로 길이 3.5cm, 가로 길이 1.7cm 정도의 껍질을 가지며, 긴 달걀모양으로 전체적으로 대추 모양을 하고 있습니다. 껍질의 바깥쪽은 황색이며 오래된 개체에서는 흑갈색을 보이기도 합니다. 껍질은 매우 딱딱하며, 껍질이 자라는 선이 굵고 세로로 나 있습니다. 껍질 입구의 안쪽은 흰색이고 이빨 모양의 돌기가 1개 있습니다.",
-    "ovrHbttNm": "하구역"
   },
   {
     "name": "밤수지맨드라미",
