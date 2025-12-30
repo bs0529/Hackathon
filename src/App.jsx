@@ -148,31 +148,6 @@ function App({ playerName, userId, onBackToMenu }) {
 
   const backgroundImages = getBackgroundImages(selectedHabitat);
 
-  // Function to get background images based on habitat
-  const getBackgroundImages = (habitat) => {
-    switch (habitat) {
-      case "바다":
-        return { sky: "/sea_sky.png", ground: "/sea_ground.png" };
-      case "하구역":
-        return { sky: "/estuary_sky.png", ground: "/estuary_ground.png" };
-      case "바닷속암반":
-        return {
-          sky: "/Undersea_rocks_sky.png",
-          ground: "/Undersea_rocks_ground.png",
-        };
-      case "바다숲":
-        return { sky: "/sea_forest_sky.png", ground: "/sea_forest_ground.png" };
-      case "갯벌":
-        return { sky: "/foreshore_sky.png", ground: "/foreshore_ground.png" };
-      case "연안":
-        return { sky: "/coast_sky.png", ground: "/coast_ground.png" };
-      default:
-        return { sky: "/coast_sky.png", ground: "/coast_ground.png" };
-    }
-  };
-
-  const backgroundImages = getBackgroundImages(selectedHabitat);
-
   return (
     <div className="fishing-game" onClick={handleScreenClick}>
       <div className="game-container">

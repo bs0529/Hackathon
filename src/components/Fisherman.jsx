@@ -59,7 +59,7 @@ const Fisherman = ({ rodAnimation, bobberRef, gamePhase, isCasting }) => {
           zIndex: 10,
         }}
       >
-        {gamePhase !== "ready" && (
+        {(isCasting || gamePhase === "fishing" || gamePhase === "catching") && (
           <line
             x1={lineCoords.x1}
             y1={lineCoords.y1}
