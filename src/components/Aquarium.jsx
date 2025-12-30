@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Aquarium.css";
 import { getCollection } from "../services/api";
 
@@ -96,9 +97,11 @@ const nameToGlbMap = {
 };
 
 function Aquarium({ onClose }) {
+  const navigate = useNavigate();
   const [fishData, setFishData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [fishPositions, setFishPositions] = useState([]);
+  const fishPositionsRef = useRef([]);
+  const fishElementsRef = useRef([]);
   const animationFrameRef = useRef(null);
 
   // 유리 사각형의 경계 (화면 비율 기준)
@@ -143,18 +146,17 @@ function Aquarium({ onClose }) {
         setFishData(caughtFish);
 
         // 각 물고기의 초기 위치와 속도 설정
-        const initialPositions = caughtFish.map(() => ({
+        fishPositionsRef.current = caughtFish.map(() => ({
           x:
             Math.random() * (TANK_BOUNDS.right - TANK_BOUNDS.left) +
             TANK_BOUNDS.left,
           y:
             Math.random() * (TANK_BOUNDS.bottom - TANK_BOUNDS.top) +
             TANK_BOUNDS.top,
-          vx: (Math.random() - 0.5) * 0.3, // 속도: -0.15 ~ 0.15
-          vy: (Math.random() - 0.5) * 0.3,
+          vx: (Math.random() - 0.2) * 0.25, // 속도: -0.15 ~ 0.15
+          vy: (Math.random() - 0.2) * 0.25,
           size: Math.random() * 60 + 80, // 80px ~ 140px
         }));
-        setFishPositions(initialPositions);
       } catch (err) {
         console.error("아쿠아리움 데이터 로딩 실패:", err);
       } finally {
@@ -165,39 +167,47 @@ function Aquarium({ onClose }) {
     fetchCollection();
   }, []);
 
-  // 물고기 움직임 애니메이션
+  // 물고기 움직임 애니메이션 (DOM 직접 조작으로 최적화)
   useEffect(() => {
-    if (fishPositions.length === 0) return;
+    if (
+      fishPositionsRef.current.length === 0 ||
+      fishElementsRef.current.length === 0
+    )
+      return;
 
     const animate = () => {
-      setFishPositions((prevPositions) =>
-        prevPositions.map((pos) => {
-          let newX = pos.x + pos.vx;
-          let newY = pos.y + pos.vy;
-          let newVx = pos.vx;
-          let newVy = pos.vy;
+      fishPositionsRef.current.forEach((pos, index) => {
+        const element = fishElementsRef.current[index];
+        if (!element) return;
 
-          // 좌우 경계 체크 및 반사
-          if (newX <= TANK_BOUNDS.left || newX >= TANK_BOUNDS.right) {
-            newVx = -pos.vx;
-            newX = pos.x + newVx;
-          }
+        let newX = pos.x + pos.vx;
+        let newY = pos.y + pos.vy;
+        let newVx = pos.vx;
+        let newVy = pos.vy;
 
-          // 상하 경계 체크 및 반사
-          if (newY <= TANK_BOUNDS.top || newY >= TANK_BOUNDS.bottom) {
-            newVy = -pos.vy;
-            newY = pos.y + newVy;
-          }
+        // 좌우 경계 체크 및 반사
+        if (newX <= TANK_BOUNDS.left || newX >= TANK_BOUNDS.right) {
+          newVx = -pos.vx;
+          newX = pos.x + newVx;
+        }
 
-          return {
-            ...pos,
-            x: newX,
-            y: newY,
-            vx: newVx,
-            vy: newVy,
-          };
-        })
-      );
+        // 상하 경계 체크 및 반사
+        if (newY <= TANK_BOUNDS.top || newY >= TANK_BOUNDS.bottom) {
+          newVy = -pos.vy;
+          newY = pos.y + newVy;
+        }
+
+        // 위치 업데이트
+        pos.x = newX;
+        pos.y = newY;
+        pos.vx = newVx;
+        pos.vy = newVy;
+
+        // DOM 직접 업데이트 (리렌더링 없음)
+        element.style.left = `${newX}%`;
+        element.style.top = `${newY}%`;
+        element.style.transform = newVx < 0 ? "scaleX(-1)" : "scaleX(1)";
+      });
 
       animationFrameRef.current = requestAnimationFrame(animate);
     };
@@ -209,7 +219,11 @@ function Aquarium({ onClose }) {
         cancelAnimationFrame(animationFrameRef.current);
       }
     };
-  }, [fishPositions.length]);
+  }, [fishData.length]);
+
+  const handleFishClick = (fishId) => {
+    navigate(`/collection/${fishId}`, { state: { from: 'aquarium' } });
+  };
 
   return (
     <div className="aquarium-screen">
@@ -224,12 +238,13 @@ function Aquarium({ onClose }) {
       ) : (
         <div className="aquarium-fish-swimming">
           {fishData.map((fish, index) => {
-            const pos = fishPositions[index];
+            const pos = fishPositionsRef.current[index];
             if (!pos) return null;
 
             return (
               <div
                 key={fish.species_id}
+                ref={(el) => (fishElementsRef.current[index] = el)}
                 className="swimming-fish"
                 style={{
                   left: `${pos.x}%`,
@@ -239,6 +254,7 @@ function Aquarium({ onClose }) {
                   transform: pos.vx < 0 ? "scaleX(-1)" : "scaleX(1)",
                 }}
                 title={fish.name}
+                onClick={() => handleFishClick(fish.species_id)}
               >
                 <img src={fish.image_url} alt={fish.name} />
               </div>
