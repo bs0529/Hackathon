@@ -4,13 +4,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(to bottom,
-    #5DADE2 0%,
-    #3498DB 50%,
-    #2874A6 100%
-  );
+  background: linear-gradient(to bottom, #5dade2 0%, #3498db 50%, #2874a6 100%);
   overflow: hidden;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   image-rendering: pixelated;
 }
 
@@ -21,7 +17,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('/side_view_bg.png');
+  background-image: url("/side_view_bg.png");
   background-size: cover;
   background-position: center top;
 }
@@ -32,10 +28,8 @@
   text-align: center;
   background: white;
   padding: 50px 60px;
-  border: 8px solid #2C3E50;
-  box-shadow:
-    8px 8px 0 rgba(0, 0, 0, 0.3),
-    inset 0 0 0 4px #ECF0F1;
+  border: 8px solid #2c3e50;
+  box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3), inset 0 0 0 4px #ecf0f1;
   animation: menuAppear 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
 }
 
@@ -51,33 +45,40 @@
 }
 
 .menu-content::before {
-  content: '';
+  content: "";
   position: absolute;
   top: -4px;
   left: -4px;
   right: -4px;
   bottom: -4px;
-  border: 4px solid #34495E;
+  border: 4px solid #34495e;
   pointer-events: none;
 }
 
 .game-title {
   font-size: 48px;
-  color: #FF6B9D;
+  color: #ff6b9d;
   margin: 0 0 10px 0;
-  text-shadow:
-    4px 4px 0 #C44569,
-    8px 8px 0 rgba(0, 0, 0, 0.1);
+  text-shadow: 4px 4px 0 #c44569, 8px 8px 0 rgba(0, 0, 0, 0.1);
   letter-spacing: 3px;
   line-height: 1.3;
 }
 
 .game-subtitle {
   font-size: 16px;
-  color: #2C3E50;
-  margin: 0 0 40px 0;
-  text-shadow: 2px 2px 0 #BDC3C7;
+  color: #2c3e50;
+  margin: 0 0 10px 0;
+  text-shadow: 2px 2px 0 #bdc3c7;
   letter-spacing: 1px;
+}
+
+.game-money {
+  font-size: 20px;
+  color: #f39c12;
+  margin: 0 0 40px 0;
+  text-shadow: 2px 2px 0 #d68910;
+  letter-spacing: 1px;
+  font-weight: bold;
 }
 
 .menu-buttons {
@@ -91,65 +92,56 @@
   width: 350px;
   padding: 16px 30px;
   font-size: 18px;
-  font-family: 'RoundedFixedsys', cursive;
+  font-family: "RoundedFixedsys", cursive;
   color: white;
-  background: #3498DB;
-  border: 4px solid #2C3E50;
+  background: #3498db;
+  border: 4px solid #2c3e50;
   cursor: pointer;
   position: relative;
   transition: all 0.1s;
-  box-shadow:
-    4px 4px 0 #2C3E50,
-    4px 4px 0 2px #34495E;
+  box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e;
   letter-spacing: 1px;
   text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
 }
 
 .menu-button:hover {
-  background: #5DADE2;
+  background: #5dade2;
   transform: translate(-2px, -2px);
-  box-shadow:
-    6px 6px 0 #2C3E50,
-    6px 6px 0 2px #34495E;
+  box-shadow: 6px 6px 0 #2c3e50, 6px 6px 0 2px #34495e;
 }
 
 .menu-button:active {
   transform: translate(2px, 2px);
-  box-shadow:
-    2px 2px 0 #2C3E50,
-    2px 2px 0 1px #34495E;
+  box-shadow: 2px 2px 0 #2c3e50, 2px 2px 0 1px #34495e;
 }
 
 .menu-button.primary {
-  background: #E67E22;
+  background: #e67e22;
   animation: buttonPulse 1.5s ease-in-out infinite;
   font-size: 20px;
   padding: 18px 35px;
 }
 
 .menu-button.primary:hover {
-  background: #F39C12;
+  background: #f39c12;
 }
 
 .menu-button.logout {
-  background: #E74C3C;
+  background: #e74c3c;
   margin-top: 10px;
 }
 
 .menu-button.logout:hover {
-  background: #C0392B;
+  background: #c0392b;
 }
 
 @keyframes buttonPulse {
-  0%, 100% {
-    box-shadow:
-      4px 4px 0 #2C3E50,
-      4px 4px 0 2px #34495E;
+  0%,
+  100% {
+    box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e;
   }
   50% {
-    box-shadow:
-      4px 4px 0 #2C3E50,
-      4px 4px 0 2px #34495E,
+    box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e,
       0 0 20px rgba(230, 126, 34, 0.6);
   }
 }
@@ -161,10 +153,11 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background: linear-gradient(to bottom,
+  background: linear-gradient(
+    to bottom,
     rgba(52, 152, 219, 0.8) 0%,
-    #2874A6 40%,
-    #1B4F72 100%
+    #2874a6 40%,
+    #1b4f72 100%
   );
   overflow: hidden;
 }
@@ -179,8 +172,8 @@
   top: 0;
   background: repeating-linear-gradient(
     90deg,
-    #5DADE2 0px,
-    #5DADE2 30px,
+    #5dade2 0px,
+    #5dade2 30px,
     transparent 30px,
     transparent 60px
   );
@@ -192,8 +185,8 @@
   top: 20px;
   background: repeating-linear-gradient(
     90deg,
-    #4A9FD8 0px,
-    #4A9FD8 25px,
+    #4a9fd8 0px,
+    #4a9fd8 25px,
     transparent 25px,
     transparent 50px
   );
@@ -205,8 +198,8 @@
   top: 35px;
   background: repeating-linear-gradient(
     90deg,
-    #3D8BC7 0px,
-    #3D8BC7 35px,
+    #3d8bc7 0px,
+    #3d8bc7 35px,
     transparent 35px,
     transparent 70px
   );
@@ -390,10 +383,10 @@
   height: 60px;
   background: repeating-linear-gradient(
     to top,
-    #27AE60 0px,
-    #27AE60 8px,
-    #2ECC71 8px,
-    #2ECC71 16px
+    #27ae60 0px,
+    #27ae60 8px,
+    #2ecc71 8px,
+    #2ecc71 16px
   );
   opacity: 0.6;
   transform-origin: bottom center;
@@ -414,7 +407,8 @@
 }
 
 @keyframes seaweedSway {
-  0%, 100% {
+  0%,
+  100% {
     transform: rotate(0deg);
   }
   25% {
