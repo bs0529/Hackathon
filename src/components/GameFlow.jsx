@@ -68,19 +68,7 @@ function GameFlow() {
       navigate("/menu");
     } catch (error) {
       console.error("Failed to create user:", error);
-      // 에러 발생 시에도 로컬에서 진행 (오프라인 모드)
-      const tempUserId = Date.now();
-      const userInfo = {
-        id: tempUserId,
-        nickname: name,
-      };
-
-      // 로컬스토리지에 저장
-      saveUserToLocalStorage(userInfo);
-
-      setPlayerName(name);
-      setUserId(tempUserId);
-      navigate("/menu");
+      throw error;
     } finally {
       setIsLoading(false);
     }

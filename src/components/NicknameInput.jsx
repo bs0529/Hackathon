@@ -23,7 +23,11 @@ function NicknameInput({ onSubmit, isLoading }) {
       return
     }
 
-    await onSubmit(nickname.trim())
+    try {
+      await onSubmit(nickname.trim())
+    } catch (err) {
+      setError(err.message || '로그인 중 오류가 발생했습니다.')
+    }
   }
 
   const handleChange = (e) => {
