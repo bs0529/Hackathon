@@ -32,6 +32,8 @@ const GameLogic = ({
   setCaughtFish,
   setIsCasting,
   isCasting,
+  selectedHabitat,
+  showAuth,
 }) => {
   const timerRef = useRef(null)
   const moveRef = useRef(null)
@@ -81,6 +83,12 @@ const GameLogic = ({
     const handleKeyDown = (event) => {
       if (event.code === 'Space') {
         event.preventDefault()
+
+        // Prevent any fishing interactions when modals are open
+        if (showAuth !== null) {
+          return
+        }
+
         // Allow immediate restart if result screen is visible
         if (result !== null) {
           resetGame()
@@ -113,7 +121,7 @@ const GameLogic = ({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [gamePhase, exclamation, isMoving, barPosition, greenStart, greenWidth, redStart, redWidth, gauge, failures, isCasting, result])
+  }, [gamePhase, exclamation, isMoving, barPosition, greenStart, greenWidth, redStart, redWidth, gauge, failures, isCasting, result, showAuth])
 
   const startCasting = () => {
     setIsCasting(true)
@@ -124,6 +132,11 @@ const GameLogic = ({
   }
 
   const handleBarStop = () => {
+    // Prevent bar interactions when modals are open
+    if (showAuth !== null) {
+      return
+    }
+
     let points = 0
     const greenEnd = greenStart + greenWidth
     const redEnd = redStart + redWidth
@@ -158,12 +171,13 @@ const GameLogic = ({
 
       // Randomly select a fish with error handling
       try {
-        if (fishData && fishData.length > 0) {
-          const randomFish = fishData[Math.floor(Math.random() * fishData.length)]
+        const filteredFish = selectedHabitat ? fishData.filter(fish => fish.ovrHbttNm === selectedHabitat) : fishData
+        if (filteredFish && filteredFish.length > 0) {
+          const randomFish = filteredFish[Math.floor(Math.random() * filteredFish.length)]
           setCaughtFish(randomFish)
-          console.log("Caught fish:", randomFish.name);
+          console.log("Caught fish:", randomFish.name, "from habitat:", selectedHabitat);
         } else {
-          console.error("Fish data is empty or missing");
+          console.error("No fish available for selected habitat or fish data is empty");
           // Fallback
           setCaughtFish({
             name: "범고래 (Fallback)",
