@@ -41,7 +41,7 @@
   top: 20%;
   left: 50%;
   transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.4);
   color: white;
   padding: 1rem 2rem;
   border-radius: 0px;
@@ -178,7 +178,7 @@
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.9) url('/shop.png') center/cover no-repeat;
+  background: rgba(0, 0, 0, 0.5) url('/shop.png') center/cover no-repeat;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -188,15 +188,27 @@
   color: white;
 }
 
+.shop-content {
+  background: rgba(0, 0, 0, 0.8);
+  padding: 2rem;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  min-width: 600px;
+  margin-top: -100px;
+}
+
 .shop-screen h2 {
   margin-bottom: 2rem;
   font-size: 2rem;
+  color: white;
+  text-align: center;
 }
 
 .shop-items {
   display: flex;
-  gap: 2rem;
+  gap: 6rem;
   margin-bottom: 2rem;
+  justify-content: center;
 }
 
 .shop-item {
@@ -205,7 +217,7 @@
   align-items: center;
   cursor: pointer;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.6);
   border-radius: 8px;
   transition: background 0.2s;
 }
@@ -224,7 +236,7 @@
 .shop-item p {
   margin: 0;
   font-size: 1.2rem;
-  color: white;
+  color: black;
 }
 
 .shop-screen button {
