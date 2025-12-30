@@ -414,9 +414,8 @@ function App({ playerName, userId, onBackToMenu }) {
       setActionResult({
         type: "aquarium",
         success: true,
-        message: `${
-          caughtFish?.name || "물고기"
-        }을(를) 아쿠아리움으로 보냈습니다!`,
+        message: `${caughtFish?.name || "물고기"
+          }을(를) 아쿠아리움으로 보냈습니다!`,
       });
     }
 
@@ -564,6 +563,7 @@ function App({ playerName, userId, onBackToMenu }) {
               onSell={handleSell}
               onSendToAquarium={handleSendToAquarium}
               actionResult={actionResult}
+              onClose={resetGame}
             />
           )}
         </div>
