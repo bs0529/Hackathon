@@ -151,7 +151,7 @@ function App({ playerName, userId, onBackToMenu }) {
 
     if (caughtFish?.species_id && userId) {
       try {
-        const response = await handleAction(userId, caughtFish.species_id, "RELEASE");
+        const response = await handleAction(userId, caughtFish.species_id, "RELEASE", selectedHabitat);
         console.log("방생 처리 완료", response);
         setActionResult({
           type: "release",
@@ -186,7 +186,7 @@ function App({ playerName, userId, onBackToMenu }) {
 
     if (caughtFish?.species_id && userId) {
       try {
-        const response = await handleAction(userId, caughtFish.species_id, "SELL");
+        const response = await handleAction(userId, caughtFish.species_id, "SELL", selectedHabitat);
         console.log("판매 처리 완료", response);
         setActionResult({
           type: "sell",
@@ -223,7 +223,7 @@ function App({ playerName, userId, onBackToMenu }) {
 
     if (caughtFish?.species_id && userId) {
       try {
-        const response = await handleAction(userId, caughtFish.species_id, "AQUARIUM");
+        const response = await handleAction(userId, caughtFish.species_id, "AQUARIUM", selectedHabitat);
         console.log("아쿠아리움 수송 처리 완료", response);
         setActionResult({
           type: "aquarium",
