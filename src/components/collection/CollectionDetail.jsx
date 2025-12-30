@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useParams, useNavigate, useLocation } from "react-router-dom";
 import "./Collection.css";
 import { getCollection } from "../../services/api";
 
@@ -99,6 +99,7 @@ const nameToGlbMap = {
 function CollectionDetail() {
   const { fishId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [fish, setFish] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -169,11 +170,20 @@ function CollectionDetail() {
     return null;
   }
 
+  const handleBackClick = () => {
+    // location.state에서 from 확인
+    if (location.state?.from === 'aquarium') {
+      navigate('/aquarium');
+    } else {
+      navigate('/collection');
+    }
+  };
+
   return (
     <div className="collection-detail-page">
       <button
         className="detail-back-btn"
-        onClick={() => navigate("/collection")}
+        onClick={handleBackClick}
       >
         ← 뒤로
       </button>
