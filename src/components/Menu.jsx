@@ -1,6 +1,6 @@
-import './Menu.css'
+import "./Menu.css";
 
-function Menu({ onStartGame, playerName, onLogout }) {
+function Menu({ onStartGame, playerName, onLogout, onShowCollection }) {
   return (
     <div className="menu-screen">
       <div className="menu-container">
@@ -12,12 +12,10 @@ function Menu({ onStartGame, playerName, onLogout }) {
             <button className="menu-button primary" onClick={onStartGame}>
               게임 시작
             </button>
-            <button className="menu-button">
+            <button className="menu-button" onClick={onShowCollection}>
               도감
             </button>
-            <button className="menu-button">
-              아쿠아리움
-            </button>
+            <button className="menu-button">아쿠아리움</button>
             <button className="menu-button logout" onClick={onLogout}>
               로그아웃
             </button>
@@ -46,7 +44,7 @@ function Menu({ onStartGame, playerName, onLogout }) {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default Menu
+export default Menu;

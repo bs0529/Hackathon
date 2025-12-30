@@ -1,439 +1,171 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Collection.css";
+import { getCollection } from "../../services/api";
 
-// Mock data - meis_data 폴더의 실제 JSON 데이터 기반 (33개)
-const mockFishData = [
-  {
-    species_id: 1,
-    name: "저어새",
-    type: "바닷새",
-    image_url: "/assets/images/sticker_저어새.png",
-    model_url: "/assets/models/201724.glb",
-    caught_count: 3,
-    is_caught: true,
-    habitat: "갯벌",
-    description:
-      "몸은 흰색이며 주걱 모양의 주름이 많고 긴 검은 부리가 특징입니다. 몸길이는 60~78.5cm입니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 2,
-    name: "알락꼬리마도요",
-    type: "바닷새",
-    image_url: "/assets/images/sticker_알락꼬리마도요.png",
-    model_url: "/assets/models/201725.glb",
-    caught_count: 2,
-    is_caught: true,
-    habitat: "갯벌",
-    description:
-      "긴 부리로 갯벌의 먹이를 찾는 철새입니다. 긴 다리가 특징입니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 3,
-    name: "검은머리물떼새",
-    type: "바닷새",
-    image_url: "/assets/images/sticker_검은머리물떼새.png",
-    model_url: "/assets/models/201726.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "연안",
-    description:
-      "검은 머리가 특징인 물떼새입니다. 빠르게 달리며 먹이를 찾습니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 4,
-    name: "아비",
-    type: "바닷새",
-    image_url: "/assets/images/sticker_아비.png",
-    model_url: "/assets/models/201727.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다",
-    description: "잠수를 잘하는 대형 물새입니다. 물고기를 잡아먹고 살아갑니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 5,
-    name: "청다리도요사촌",
-    type: "바닷새",
-    image_url: "/assets/images/sticker_청다리도요사촌.png",
-    model_url: "/assets/models/201728.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "갯벌",
-    description: "긴 다리와 부리로 갯벌에서 먹이를 찾는 철새입니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 6,
-    name: "노랑부리백로",
-    type: "바닷새",
-    image_url: "/assets/images/sticker_노랑부리백로.png",
-    model_url: "/assets/models/201729.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "연안",
-    description:
-      "노란 부리가 특징인 백로입니다. 얕은 물가에서 물고기를 잡습니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 7,
-    name: "나팔고둥",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_나팔고동.png",
-    model_url: "/assets/models/201705.glb",
-    caught_count: 2,
-    is_caught: true,
-    habitat: "바닷속 암반",
-    description:
-      "껍질의 길이가 20cm 이상 대형 고둥으로 원추형이며 옅은 주홍색을 띱니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 8,
-    name: "대추귀고둥",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_대추귀고동.png",
-    model_url: "/assets/models/201706.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바닷속 암반",
-    description: "대추 모양의 독특한 형태를 가진 고둥입니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 9,
-    name: "밤수지맨드라미",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_밤수지맨드라미.png",
-    model_url: "/assets/models/201713.glb",
-    caught_count: 3,
-    is_caught: true,
-    habitat: "바닷속 암반",
-    description:
-      "몸통은 촉수 덩어리 부분에서 주황색, 촉수는 붉은색을 띱니다. 높이 약 30cm입니다.",
-    rarity: "전설",
-  },
-  {
-    species_id: 10,
-    name: "장수삿갓조개",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_장수삿갓조개.png",
-    model_url: "/assets/models/201711.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바닷속 암반",
-    description: "삿갓 모양의 독특한 조개입니다. 바위에 붙어 살아갑니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 11,
-    name: "측맵시산호",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_측맵시산호.png",
-    model_url: "/assets/models/201712.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "바닷속 암반",
-    description: "아름다운 형태의 산호입니다. 암반에 군집을 이룹니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 12,
-    name: "달랑게",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_달랑게.png",
-    model_url: "/assets/models/201714.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "갯벌",
-    description: "갯벌에 사는 작은 게입니다. 구멍을 파고 살아갑니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 13,
-    name: "흰발농게",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_흰발농게.png",
-    model_url: "/assets/models/201715.glb",
-    caught_count: 2,
-    is_caught: true,
-    habitat: "갯벌",
-    description:
-      "흰색 집게발이 특징인 농게입니다. 갯벌 생태계의 중요한 구성원입니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 14,
-    name: "분홍접시조개",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_분홍접시조개.png",
-    model_url: "/assets/models/201716.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바닷속 암반",
-    description: "분홍색 접시 모양의 아름다운 조개입니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 15,
-    name: "피뿔고둥",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_피뿔고둥.png",
-    model_url: "/assets/models/201717.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "바닷속 암반",
-    description: "뿔 모양의 돌기가 있는 고둥입니다. 독특한 외형이 특징입니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 16,
-    name: "붉은발말똥게",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_붉은발말똥게.png",
-    model_url: "/assets/models/201718.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "갯벌",
-    description:
-      "붉은색 발이 특징인 게입니다. 갯벌의 유기물을 먹고 살아갑니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 17,
-    name: "밤게",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_밤게.png",
-    model_url: "/assets/models/201701.glb",
-    caught_count: 3,
-    is_caught: true,
-    habitat: "갯벌",
-    description: "밤색의 작은 게입니다. 갯벌에서 흔히 볼 수 있습니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 18,
-    name: "칠게",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_칠게.png",
-    model_url: "/assets/models/201702.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "갯벌",
-    description: "일곱 개의 다리를 가진 것처럼 보이는 게입니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 19,
-    name: "가시닻해삼",
-    type: "무척추동물",
-    image_url: "/assets/images/sticker_가시닻해삼.png",
-    model_url: "/assets/models/201703.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "바닷속 암반",
-    description: "가시가 있는 해삼입니다. 바다 밑바닥을 기어 다닙니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 20,
-    name: "혹등고래",
-    type: "포유류",
-    image_url: "/assets/images/sticker_혹등고래.png",
-    model_url: "/assets/models/201720.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다",
-    description:
-      "등에 혹이 있는 대형 고래입니다. 아름다운 노랫소리로 유명합니다.",
-    rarity: "전설",
-  },
-  {
-    species_id: 21,
-    name: "브라이드고래",
-    type: "포유류",
-    image_url: "/assets/images/sticker_브라이드고래.png",
-    model_url: "/assets/models/201722.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다",
-    description: "온대 해역에 서식하는 중형 수염고래입니다.",
-    rarity: "전설",
-  },
-  {
-    species_id: 22,
-    name: "물개",
-    type: "포유류",
-    image_url: "/assets/images/sticker_물개.png",
-    model_url: "/assets/models/201723.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "연안",
-    description: "귀가 있는 물범과 동물입니다. 뛰어난 수영 실력을 자랑합니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 23,
-    name: "고리무늬물범",
-    type: "포유류",
-    image_url: "/assets/images/sticker_고리무늬물범.png",
-    model_url: "/assets/models/201730.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "연안",
-    description: "몸에 고리 모양의 무늬가 있는 물범입니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 24,
-    name: "상괭이",
-    type: "포유류",
-    image_url: "/assets/images/sticker_상괭이.png",
-    model_url: "/assets/models/201719.glb",
-    caught_count: 5,
-    is_caught: true,
-    habitat: "바다",
-    description:
-      "한국 연안에 서식하는 작은 돌고래입니다. 귀여운 외모를 가지고 있습니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 25,
-    name: "남방큰돌고래",
-    type: "포유류",
-    image_url: "/assets/images/sticker_남방큰돌고래.png",
-    model_url: "/assets/models/201731.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다",
-    description: "큰 몸집의 돌고래입니다. 무리를 지어 생활합니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 26,
-    name: "점박이물범",
-    type: "포유류",
-    image_url: "/assets/images/sticker_점박이물범.png",
-    model_url: "/assets/models/201721.glb",
-    caught_count: 2,
-    is_caught: true,
-    habitat: "연안",
-    description:
-      "점무늬가 특징인 물범입니다. 얼음 위에서 쉬는 것을 좋아합니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 27,
-    name: "삼나무말",
-    type: "해조류",
-    image_url: "/assets/images/sticker_삼나무말.png",
-    model_url: "/assets/models/201707.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다숲",
-    description: "삼나무처럼 생긴 해조류입니다. 바다숲을 형성합니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 28,
-    name: "새우말",
-    type: "해조류",
-    image_url: "/assets/images/sticker_새우말.png",
-    model_url: "/assets/models/201708.glb",
-    caught_count: 1,
-    is_caught: true,
-    habitat: "바다숲",
-    description: "새우가 좋아하는 해조류입니다. 작은 생물들의 서식처가 됩니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 29,
-    name: "거머리말",
-    type: "해조류",
-    image_url: "/assets/images/sticker_거머리말.png",
-    model_url: "/assets/models/201709.glb",
-    caught_count: 3,
-    is_caught: true,
-    habitat: "바다숲",
-    description: "바다 밑에서 자라는 해초입니다. 많은 생물의 서식처가 됩니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 30,
-    name: "칠면초",
-    type: "해조류",
-    image_url: "/assets/images/sticker_칠면초.png",
-    model_url: "/assets/models/201704.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "갯벌",
-    description: "염생식물로 갯벌에서 자랍니다. 가을이 되면 붉게 물듭니다.",
-    rarity: "일반",
-  },
-  {
-    species_id: 31,
-    name: "점해마",
-    type: "어류",
-    image_url: "/assets/images/sticker_점해마.png",
-    model_url: "/assets/models/201732.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다숲",
-    description: "점무늬가 있는 해마입니다. 꼬리로 해조류를 감고 생활합니다.",
-    rarity: "희귀",
-  },
-  {
-    species_id: 32,
-    name: "홍살귀상어",
-    type: "어류",
-    image_url: "/assets/images/sticker_홍살귀상어.png",
-    model_url: "/assets/models/201733.glb",
-    caught_count: 0,
-    is_caught: false,
-    habitat: "바다",
-    description:
-      "붉은 지느러미가 특징인 상어입니다. 온순한 성격을 가지고 있습니다.",
-    rarity: "전설",
-  },
-  {
-    species_id: 33,
-    name: "망둥어",
-    type: "어류",
-    image_url: "/assets/images/sticker_망둥어.png",
-    model_url: "/assets/models/201710.glb",
-    caught_count: 7,
-    is_caught: true,
-    habitat: "갯벌",
-    description:
-      "몸길이는 10~20cm 정도입니다. 배지느러미는 맞붙어 흡반을 이룹니다.",
-    rarity: "일반",
-  },
-];
-
-const HABITATS = [
-  "전체",
-  "갯벌",
-  "바다",
-  "바다숲",
-  "바닷속 암반",
-  "연안",
-  "하구역",
-];
+// meis_data의 JSON 파일명과 생물 이름을 매칭하는 맵 (전체 89종)
+const nameToGlbMap = {
+  가시닻해삼: "201701.glb",
+  가시해마: "201823.glb",
+  갯게: "201806.glb",
+  거머리말: "201702.glb",
+  검붉은수지맨드라미: "201808.glb",
+  검은머리물떼새: "201703.glb",
+  게바다말: "201820.glb",
+  고래상어: "201825.glb",
+  고리무늬물범: "201704.glb",
+  귀신고래: "201902.glb",
+  금빛나팔돌산호: "201908.glb",
+  기수갈고둥: "201907.glb",
+  긴가지해송: "201915.glb",
+  깃산호: "201809.glb",
+  나팔고둥: "201705.glb",
+  남방방게: "201805.glb",
+  남방큰돌고래: "201706.glb",
+  넓적부리도요: "201917.glb",
+  노랑부리백로: "201707.glb",
+  눈콩게: "201912.glb",
+  달랑게: "201708.glb",
+  대왕고래: "201802.glb",
+  대추귀고둥: "201709.glb",
+  두이빨사각게: "201913.glb",
+  둔한진총산호: "201807.glb",
+  띠무늬물범: "201804.glb",
+  망둥어: "201710.glb",
+  망상맵시산호: "201810.glb",
+  망해송: "202002.glb",
+  매부리바다거북: "201821.glb",
+  물개: "201711.glb",
+  미립이분지돌산호: "201914.glb",
+  바다사자: "201905.glb",
+  바다쇠오리: "201828.glb",
+  바다오리: "201830.glb",
+  바다제비: "201918.glb",
+  밤게: "201712.glb",
+  밤수지맨드라미: "201713.glb",
+  범고래: "202201.glb",
+  별혹산호: "201811.glb",
+  보리고래: "201903.glb",
+  복해마: "201824.glb",
+  북방긴수염고래: "201901.glb",
+  분홍접시조개: "201714.glb",
+  붉은바다거북: "201715.glb",
+  붉은발말똥게: "201716.glb",
+  브라이드고래: "201717.glb",
+  빗자루해송: "201916.glb",
+  뿔쇠오리: "201826.glb",
+  삼나무말: "201718.glb",
+  상괭이: "201719.glb",
+  새우말: "201720.glb",
+  선침거미불가사리: "201812.glb",
+  쇠가마우지: "201919.glb",
+  수거머리말: "201818.glb",
+  슴새: "201827.glb",
+  실해송: "202001.glb",
+  아비: "201721.glb",
+  알락꼬리마도요: "201722.glb",
+  연수지맨드라미: "201813.glb",
+  올리브바다거북: "202202.glb",
+  왕거머리말: "201819.glb",
+  유착나무돌산호: "201814.glb",
+  의염통성게: "201815.glb",
+  자색수지맨드라미: "201816.glb",
+  잔가지나무돌산호: "201906.glb",
+  장수거북: "201822.glb",
+  장수삿갓조개: "201723.glb",
+  저어새: "201724.glb",
+  점박이물범: "201725.glb",
+  점해마: "201726.glb",
+  착생깃산호: "201909.glb",
+  참고래: "201801.glb",
+  청다리도요사촌: "201727.glb",
+  측맵시산호: "201728.glb",
+  칠게: "201729.glb",
+  칠면초: "201730.glb",
+  큰바다사자: "201803.glb",
+  포기거머리말: "201817.glb",
+  푸른바다거북: "201731.glb",
+  피뿔고둥: "201732.glb",
+  해송: "201910.glb",
+  향고래: "201904.glb",
+  혹등고래: "201733.glb",
+  홍살귀상어: "201734.glb",
+  흑범고래: "202203.glb",
+  흰발농게: "201735.glb",
+  흰수염바다오리: "201829.glb",
+  흰수지맨드라미: "201911.glb",
+};
 
 function Collection({ onClose }) {
+  const HABITATS = [
+    "전체",
+    "갯벌",
+    "바다",
+    "바다숲",
+    "바닷속암반",
+    "연안",
+    "하구역",
+  ];
+
   const [selectedHabitat, setSelectedHabitat] = useState("전체");
   const [selectedFish, setSelectedFish] = useState(null);
   const [viewMode, setViewMode] = useState("list"); // "list" or "detail"
+  const [fishData, setFishData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Filter fish by habitat
+  // API에서 도감 데이터 가져오기
+  useEffect(() => {
+    const fetchCollection = async () => {
+      try {
+        setIsLoading(true);
+        // 로컬 스토리지에서 userId 가져오기
+        const savedUser = localStorage.getItem("ocean_rescue_user");
+        if (!savedUser) {
+          throw new Error("로그인 정보를 찾을 수 없습니다.");
+        }
+
+        const userData = JSON.parse(savedUser);
+        const userId = userData.id;
+
+        // API 호출
+        const data = await getCollection(userId);
+
+        // 백엔드 URL
+        const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
+        // API 데이터를 프론트엔드 형식으로 변환
+        const formattedData = data.map((item) => {
+          const glbFileName = nameToGlbMap[item.name];
+          return {
+            species_id: item.species_id,
+            name: item.name,
+            type: item.type,
+            image_url: `${BACKEND_URL}${item.image_url}`,
+            model_url: glbFileName ? `/assets/models/${glbFileName}` : null,
+            caught_count: item.caught_count,
+            is_caught: item.is_caught,
+            habitat: item.habitat,
+            description: item.DstcftCn || "특징 정보가 없습니다.",
+          };
+        });
+
+        setFishData(formattedData);
+        setError(null);
+      } catch (err) {
+        console.error("도감 데이터 로딩 실패:", err);
+        setError(err.message);
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchCollection();
+  }, []);
+
   const filteredFish =
     selectedHabitat === "전체"
-      ? mockFishData
-      : mockFishData.filter((fish) => fish.habitat === selectedHabitat);
+      ? fishData
+      : fishData.filter((fish) => fish.habitat === selectedHabitat);
 
   const handleFishClick = (fish) => {
     if (fish.is_caught) {
@@ -470,7 +202,7 @@ function Collection({ onClose }) {
               style={{
                 width: "100%",
                 height: "100%",
-                background: "rgba(255, 255, 255, 0.95)",
+                background: "transparent",
               }}
             ></model-viewer>
           </div>
@@ -487,12 +219,6 @@ function Collection({ onClose }) {
               <div className="detail-stat-item">
                 <span className="stat-label">종류</span>
                 <span className="stat-value">{selectedFish.type}</span>
-              </div>
-              <div className="detail-stat-item">
-                <span className="stat-label">등급</span>
-                <span className={`stat-value rarity-${selectedFish.rarity}`}>
-                  {selectedFish.rarity}
-                </span>
               </div>
               <div className="detail-stat-item">
                 <span className="stat-label">서식지</span>
@@ -517,65 +243,82 @@ function Collection({ onClose }) {
   // List View
   return (
     <div className="collection-list-page">
-      <button className="collection-close-btn" onClick={onClose}>
-        ✕
-      </button>
-
-      <div className="collection-header">
-        <h1 className="collection-title">다나까 도감</h1>
-        <div className="collection-stats">
-          <span className="stat-badge">
-            {mockFishData.filter((f) => f.is_caught).length}/
-            {mockFishData.length}
-          </span>
-        </div>
-      </div>
-
-      {/* Habitat Filter */}
-      <div className="habitat-filter">
-        {HABITATS.map((habitat) => (
-          <button
-            key={habitat}
-            className={`habitat-btn ${
-              selectedHabitat === habitat ? "active" : ""
-            }`}
-            onClick={() => setSelectedHabitat(habitat)}
-          >
-            {habitat}
+      <div className="sticky-header">
+        <div className="collection-header">
+          <button className="back-to-menu" onClick={onClose}>
+            ← 메뉴로
           </button>
-        ))}
+          <h1 className="collection-title">다나까 도감</h1>
+          {!isLoading && (
+            <div className="collection-stats">
+              <span className="stat-badge">
+                {fishData.filter((f) => f.is_caught).length}/{fishData.length}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Habitat Filter */}
+        {!isLoading && !error && (
+          <div className="habitat-filter">
+            {HABITATS.map((habitat) => (
+              <button
+                key={habitat}
+                className={`habitat-btn ${
+                  selectedHabitat === habitat ? "active" : ""
+                }`}
+                onClick={() => setSelectedHabitat(habitat)}
+              >
+                {habitat}
+              </button>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Fish Grid - 6 per row */}
-      <div className="fish-grid">
-        {filteredFish.map((fish) => (
-          <div
-            key={fish.species_id}
-            className={`fish-card ${fish.is_caught ? "caught" : "locked"}`}
-            onClick={() => handleFishClick(fish)}
-          >
-            <div className="fish-image-container">
-              {fish.is_caught ? (
-                <img
-                  src={fish.image_url}
-                  alt={fish.name}
-                  className="fish-sticker-image"
-                />
-              ) : (
-                <div className="fish-silhouette">❓</div>
-              )}
-            </div>
-            <div className="fish-info">
-              <div className="fish-id">
-                No.{String(fish.species_id).padStart(3, "0")}
+      {/* 로딩 상태 */}
+      {isLoading && (
+        <div className="loading-message">
+          <p>도감 데이터를 불러오는 중...</p>
+        </div>
+      )}
+
+      {/* 에러 상태 */}
+      {error && (
+        <div className="error-message">
+          <p>데이터를 불러오는데 실패했습니다: {error}</p>
+        </div>
+      )}
+
+      {/* 정상 로드 */}
+      {!isLoading && !error && (
+        <>
+          {/* Fish Grid - 6 per row */}
+          <div className="fish-grid">
+            {filteredFish.map((fish) => (
+              <div
+                key={fish.species_id}
+                className={`fish-card ${fish.is_caught ? "caught" : "locked"}`}
+                onClick={() => handleFishClick(fish)}
+              >
+                <div className="fish-image-container">
+                  <img
+                    src={fish.image_url}
+                    alt={fish.name}
+                    className="fish-sticker-image"
+                  />
+                </div>
+                <div className="fish-info">
+                  <div className="fish-id">
+                    No.{String(fish.species_id).padStart(3, "0")}
+                  </div>
+                  <div className="fish-name">{fish.name}</div>
+                </div>
               </div>
-              <div className="fish-name">
-                {fish.is_caught ? fish.name : "???"}
-              </div>
-            </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </>
+      )}
     </div>
   );
 }

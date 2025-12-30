@@ -10,6 +10,16 @@
   position: relative;
 }
 
+/* 스크롤바 숨기기 */
+.collection-list-page::-webkit-scrollbar {
+  display: none;
+}
+
+.collection-list-page {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 .collection-list-page::before {
   content: "";
   position: fixed;
@@ -17,7 +27,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/assets/images/ocean-background.png");
+  background-image: url("/assets/images/album.jpg");
   background-size: 100% 100%;
   background-position: center center;
   background-repeat: no-repeat;
@@ -60,48 +70,48 @@
   }
 }
 
-/* Close Button */
-.collection-close-btn {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  background: #ff6b6b;
-  border: 4px solid #000;
-  color: #fff;
-  width: 50px;
-  height: 50px;
-  font-size: 1.5rem;
-  cursor: pointer;
-  font-family: "RoundedFixedsys", monospace;
-  z-index: 1001;
-  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
-  transition: all 0.1s;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.collection-close-btn:hover {
-  background: #ee5a6f;
-  transform: translate(2px, 2px);
-  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
-}
-
-.collection-close-btn:active {
-  transform: translate(4px, 4px);
-  box-shadow: none;
+/* Sticky Header Wrapper */
+.sticky-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
 }
 
 /* Header */
 .collection-header {
   text-align: center;
-  margin-bottom: 20px;
+  margin-bottom: 15px;
   padding: 15px;
   background: linear-gradient(180deg, #ffd700 0%, #ffa500 100%);
   border: 4px solid #000;
   box-shadow: 6px 6px 0 rgba(0, 0, 0, 0.3);
   position: relative;
-  z-index: 1;
+  z-index: 100;
+}
+
+.back-to-menu {
+  position: absolute;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  color: #000;
+  font-size: 1.1rem;
+  font-family: "RoundedFixedsys", monospace;
+  cursor: pointer;
+  padding: 5px 10px;
+  transition: all 0.1s;
+  font-weight: bold;
+}
+
+.back-to-menu:hover {
+  color: #333;
+  transform: translateY(-50%) scale(1.05);
+}
+
+.back-to-menu:active {
+  transform: translateY(-50%) scale(0.95);
 }
 
 .collection-title {
@@ -128,6 +138,35 @@
   box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.3);
 }
 
+/* Loading and Error Messages */
+.loading-message,
+.error-message {
+  text-align: center;
+  padding: 40px 20px;
+  position: relative;
+  z-index: 1;
+}
+
+.loading-message p {
+  font-size: 1.5rem;
+  color: #000;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 20px 40px;
+  border: 4px solid #000;
+  display: inline-block;
+  box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
+}
+
+.error-message p {
+  font-size: 1.2rem;
+  color: #ff0000;
+  background: rgba(255, 255, 255, 0.95);
+  padding: 20px 40px;
+  border: 4px solid #ff0000;
+  display: inline-block;
+  box-shadow: 4px 4px 0 rgba(255, 0, 0, 0.3);
+}
+
 /* Habitat Filter */
 .habitat-filter {
   display: flex;
@@ -135,7 +174,9 @@
   gap: 10px;
   margin-bottom: 25px;
   flex-wrap: wrap;
-  padding: 0 10px;
+  padding: 10px;
+  position: relative;
+  z-index: 99;
 }
 
 .habitat-btn {
@@ -150,6 +191,8 @@
   transition: all 0.1s;
   box-shadow: 4px 4px 0 rgba(0, 0, 0, 0.3);
   min-width: 100px;
+  position: relative;
+  z-index: 10;
 }
 
 .habitat-btn:hover {
@@ -177,7 +220,7 @@
   padding: 20px;
   max-width: 1400px;
   margin: 0 auto;
-  justify-content: flex-start;
+  justify-content: center;
   position: relative;
   z-index: 1;
 }
@@ -308,7 +351,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-image: url("/assets/images/ocean-background.png");
+  background-image: url("/assets/images/album.jpg");
   background-size: 100% 100%;
   background-position: center center;
   background-repeat: no-repeat;
@@ -347,11 +390,11 @@
   position: fixed;
   top: 15px;
   left: 15px;
-  background: #ff6b6b;
+  background: linear-gradient(180deg, #ffd700 0%, #ffa500 100%);
   border: 4px solid #000;
-  color: #fff;
+  color: #000;
   padding: 10px 20px;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   cursor: pointer;
   font-family: "RoundedFixedsys", monospace;
   z-index: 1001;
@@ -364,7 +407,6 @@
 }
 
 .detail-back-btn:hover {
-  background: #ee5a6f;
   transform: translate(2px, 2px);
   box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
 }
@@ -398,7 +440,7 @@
   justify-content: center;
   align-items: center;
   box-shadow: 8px 8px 0 rgba(0, 0, 0, 0.3);
-  background: rgba(255, 255, 255, 0.95);
+  background: transparent;
   border-radius: 10px;
   overflow: hidden;
 }

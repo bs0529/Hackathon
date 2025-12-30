@@ -1,39 +1,44 @@
-import { useState, useEffect, useRef } from 'react'
-import './App.css'
-import './components/UserInterface.css'
-import './components/Bobber.css'
-import { fishData } from './fishData'
-import Fisherman from './components/Fisherman'
-import FishingLine from './components/FishingLine'
-import Bobber from './components/Bobber'
-import CatchingBar from './components/CatchingBar'
-import ResultOverlay from './components/ResultOverlay'
-import GameLogic from './hooks/GameLogic'
+import { useState, useEffect, useRef } from "react";
+import "./App.css";
+import "./components/UserInterface.css";
+import "./components/Bobber.css";
+import { fishData } from "./fishData";
+import Fisherman from "./components/Fisherman";
+import FishingLine from "./components/FishingLine";
+import Bobber from "./components/Bobber";
+import CatchingBar from "./components/CatchingBar";
+import ResultOverlay from "./components/ResultOverlay";
+import GameLogic from "./hooks/GameLogic";
 
-function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu }) {
-  const [gamePhase, setGamePhase] = useState('ready')
-  const [exclamation, setExclamation] = useState(false)
-  const [gauge, setGauge] = useState(0)
-  const [attempts, setAttempts] = useState(0)
-  const [failures, setFailures] = useState(0)
-  const [barPosition, setBarPosition] = useState(0)
-  const [isMoving, setIsMoving] = useState(false)
-  const [direction, setDirection] = useState(1)
-  const [greenStart, setGreenStart] = useState(20)
-  const [greenWidth, setGreenWidth] = useState(60)
-  const [redStart, setRedStart] = useState(40)
-  const [redWidth, setRedWidth] = useState(20)
-  const [result, setResult] = useState(null)
-  const [rodAnimation, setRodAnimation] = useState('')
-  const [catchAnimation, setCatchAnimation] = useState(false)
-  const [isCasting, setIsCasting] = useState(false)
-  const [caughtFish, setCaughtFish] = useState(null)
-  const [showMap, setShowMap] = useState(false)
-  const [currentScore, setCurrentScore] = useState(0)
-  const [selectedHabitat, setSelectedHabitat] = useState(initialHabitat)
+function App({
+  playerName,
+  userId,
+  selectedHabitat: initialHabitat,
+  onBackToMenu,
+}) {
+  const [gamePhase, setGamePhase] = useState("ready");
+  const [exclamation, setExclamation] = useState(false);
+  const [gauge, setGauge] = useState(0);
+  const [attempts, setAttempts] = useState(0);
+  const [failures, setFailures] = useState(0);
+  const [barPosition, setBarPosition] = useState(0);
+  const [isMoving, setIsMoving] = useState(false);
+  const [direction, setDirection] = useState(1);
+  const [greenStart, setGreenStart] = useState(20);
+  const [greenWidth, setGreenWidth] = useState(60);
+  const [redStart, setRedStart] = useState(40);
+  const [redWidth, setRedWidth] = useState(20);
+  const [result, setResult] = useState(null);
+  const [rodAnimation, setRodAnimation] = useState("");
+  const [catchAnimation, setCatchAnimation] = useState(false);
+  const [isCasting, setIsCasting] = useState(false);
+  const [caughtFish, setCaughtFish] = useState(null);
+  const [showMap, setShowMap] = useState(false);
+  const [currentScore, setCurrentScore] = useState(0);
+  const [selectedHabitat, setSelectedHabitat] = useState(initialHabitat);
 
-  const bobberRef = useRef(null)
-  const lineRef = useRef(null)
+  const bobberRef = useRef(null);
+  const lineRef = useRef(null);
 
   // Use custom hook for game logic
   const { resetGame, handleBarStop } = GameLogic({
@@ -69,75 +74,82 @@ function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu
     isCasting,
     selectedHabitat,
     showMap,
-  })
+    userId,
+  });
 
   const handleScreenClick = () => {
     // Prevent any fishing interactions when map is open
     if (showMap) {
-      return
+      return;
     }
 
     // Allow immediate restart if result screen is visible
     if (result !== null) {
-      resetGame()
-      return
+      resetGame();
+      return;
     }
     // Prevent casting if result screen is visible (!result)
-    if (gamePhase === 'ready' && !isCasting && !result) {
-      setIsCasting(true)
+    if (gamePhase === "ready" && !isCasting && !result) {
+      setIsCasting(true);
       setTimeout(() => {
-        setIsCasting(false)
-        setGamePhase('fishing')
-      }, 1000) // Casting duration
-    } else if (gamePhase === 'fishing' && exclamation) {
-      const newGreenStart = Math.random() * 30 + 10
-      const newGreenWidth = Math.random() * 10 + 20 // 20% ~ 30%
-      const newRedWidth = Math.random() * 5 + 5 // 5% ~ 10%
-      const newRedStart = newGreenStart + (newGreenWidth - newRedWidth) / 2 // 가운데
+        setIsCasting(false);
+        setGamePhase("fishing");
+      }, 1000); // Casting duration
+    } else if (gamePhase === "fishing" && exclamation) {
+      const newGreenStart = Math.random() * 30 + 10;
+      const newGreenWidth = Math.random() * 10 + 20; // 20% ~ 30%
+      const newRedWidth = Math.random() * 5 + 5; // 5% ~ 10%
+      const newRedStart = newGreenStart + (newGreenWidth - newRedWidth) / 2; // 가운데
 
-      setGreenStart(newGreenStart)
-      setGreenWidth(newGreenWidth)
-      setRedStart(newRedStart)
-      setRedWidth(newRedWidth)
+      setGreenStart(newGreenStart);
+      setGreenWidth(newGreenWidth);
+      setRedStart(newRedStart);
+      setRedWidth(newRedWidth);
 
-      setGamePhase('catching')
-      setIsMoving(true)
-      setExclamation(false)
-      setBarPosition(0)
-      setDirection(1)
+      setGamePhase("catching");
+      setIsMoving(true);
+      setExclamation(false);
+      setBarPosition(0);
+      setDirection(1);
     }
-  }
+  };
 
   return (
     <div className="fishing-game" onClick={handleScreenClick}>
       <div className="game-container">
         {/* Background Images */}
         <img
-          src={selectedHabitat === '갯벌' ? '/foreshore_sky.png' : '/coast_sky.png'}
+          src={
+            selectedHabitat === "갯벌" ? "/foreshore_sky.png" : "/coast_sky.png"
+          }
           alt="Sky Background"
           style={{
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
-            width: '100%',
-            height: '50%',
-            objectFit: 'fill',
+            width: "100%",
+            height: "50%",
+            objectFit: "fill",
             zIndex: 1,
-            pointerEvents: 'none'
+            pointerEvents: "none",
           }}
         />
         <img
-          src={selectedHabitat === '갯벌' ? '/foreshore_ground.png' : '/coast_ground.png'}
+          src={
+            selectedHabitat === "갯벌"
+              ? "/foreshore_ground.png"
+              : "/coast_ground.png"
+          }
           alt="Ground Background"
           style={{
-            position: 'absolute',
-            top: '50%',
+            position: "absolute",
+            top: "50%",
             left: 0,
-            width: '100%',
-            height: '70%',
-            objectFit: 'fill',
+            width: "100%",
+            height: "70%",
+            objectFit: "fill",
             zIndex: 2,
-            pointerEvents: 'none'
+            pointerEvents: "none",
           }}
         />
 
@@ -148,10 +160,21 @@ function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu
               <span>플레이어: {playerName}</span>
             </div>
             <div className="user-actions">
-              <button onClick={(e) => { e.stopPropagation(); setShowMap(true); }}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  setShowMap(true);
+                }}
+              >
                 지도
               </button>
-              <button className="menu-btn" onClick={(e) => { e.stopPropagation(); onBackToMenu(); }}>
+              <button
+                className="menu-btn"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onBackToMenu();
+                }}
+              >
                 메뉴로
               </button>
             </div>
@@ -181,7 +204,9 @@ function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu
         {/* Catch Animation - Use specific 2D image if available, else fallback */}
         {catchAnimation && (
           <img
-            src={caughtFish && caughtFish.image2d ? caughtFish.image2d : "/fs.png"}
+            src={
+              caughtFish && caughtFish.image2d ? caughtFish.image2d : "/fs.png"
+            }
             alt="Caught Fish"
             className="pulling-whale"
           />
@@ -189,18 +214,20 @@ function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu
 
         {/* Current Habitat Display */}
         {selectedHabitat && (
-          <div className="current-habitat">
-            현재 위치: {selectedHabitat}
-          </div>
+          <div className="current-habitat">현재 위치: {selectedHabitat}</div>
         )}
 
         {/* UI Overlays */}
         <div className="ui-layer">
           {result === null ? (
             <>
-              {gamePhase === 'ready' && !isCasting && <div className="start-prompt"><p>클릭, 스페이스바로 낚시하기</p></div>}
+              {gamePhase === "ready" && !isCasting && (
+                <div className="start-prompt">
+                  <p>클릭, 스페이스바로 낚시하기</p>
+                </div>
+              )}
 
-              {gamePhase === 'catching' && !catchAnimation && (
+              {gamePhase === "catching" && !catchAnimation && (
                 <CatchingBar
                   greenStart={greenStart}
                   greenWidth={greenWidth}
@@ -224,18 +251,62 @@ function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu
         <div className="map-screen">
           <img src="/map.png" alt="Map" className="map-image" />
           <div className="map-buttons">
-            <button onClick={() => { setSelectedHabitat('갯벌'); setShowMap(false); }}>갯벌</button>
-            <button onClick={() => { setSelectedHabitat('바다'); setShowMap(false); }}>바다</button>
-            <button onClick={() => { setSelectedHabitat('바다숲'); setShowMap(false); }}>바다숲</button>
-            <button onClick={() => { setSelectedHabitat('바닷속암반'); setShowMap(false); }}>바닷속암반</button>
-            <button onClick={() => { setSelectedHabitat('연안'); setShowMap(false); }}>연안</button>
-            <button onClick={() => { setSelectedHabitat('하구역'); setShowMap(false); }}>하구역</button>
+            <button
+              onClick={() => {
+                setSelectedHabitat("갯벌");
+                setShowMap(false);
+              }}
+            >
+              갯벌
+            </button>
+            <button
+              onClick={() => {
+                setSelectedHabitat("바다");
+                setShowMap(false);
+              }}
+            >
+              바다
+            </button>
+            <button
+              onClick={() => {
+                setSelectedHabitat("바다숲");
+                setShowMap(false);
+              }}
+            >
+              바다숲
+            </button>
+            <button
+              onClick={() => {
+                setSelectedHabitat("바닷속암반");
+                setShowMap(false);
+              }}
+            >
+              바닷속암반
+            </button>
+            <button
+              onClick={() => {
+                setSelectedHabitat("연안");
+                setShowMap(false);
+              }}
+            >
+              연안
+            </button>
+            <button
+              onClick={() => {
+                setSelectedHabitat("하구역");
+                setShowMap(false);
+              }}
+            >
+              하구역
+            </button>
           </div>
-          <button className="close-map" onClick={() => setShowMap(false)}>닫기</button>
+          <button className="close-map" onClick={() => setShowMap(false)}>
+            닫기
+          </button>
         </div>
       )}
     </div>
-  )
+  );
 }
 
-export default App
+export default App;
