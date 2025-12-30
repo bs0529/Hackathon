@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 .start-screen {
   width: 100vw;
   height: 100vh;
@@ -15,7 +13,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'RoundedFixedsys', cursive;
   image-rendering: pixelated;
   image-rendering: -moz-crisp-edges;
   image-rendering: crisp-edges;

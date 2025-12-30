@@ -1,5 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
-
 .menu-screen {
   width: 100vw;
   height: 100vh;
@@ -12,7 +10,7 @@
     #2874A6 100%
   );
   overflow: hidden;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'RoundedFixedsys', cursive;
   image-rendering: pixelated;
 }
 
@@ -93,7 +91,7 @@
   width: 350px;
   padding: 16px 30px;
   font-size: 18px;
-  font-family: 'Press Start 2P', cursive;
+  font-family: 'RoundedFixedsys', cursive;
   color: white;
   background: #3498DB;
   border: 4px solid #2C3E50;

@@ -8,13 +8,9 @@ import FishingLine from './components/FishingLine'
 import Bobber from './components/Bobber'
 import CatchingBar from './components/CatchingBar'
 import ResultOverlay from './components/ResultOverlay'
-import Login from './components/Login'
-import Register from './components/Register'
-import Leaderboard from './components/Leaderboard'
 import GameLogic from './hooks/GameLogic'
-import { useUser, UserProvider } from './contexts/UserContext'
 
-function AppContent() {
+function App({ playerName, userId, selectedHabitat: initialHabitat, onBackToMenu }) {
   const [gamePhase, setGamePhase] = useState('ready')
   const [exclamation, setExclamation] = useState(false)
   const [gauge, setGauge] = useState(0)
@@ -32,11 +28,9 @@ function AppContent() {
   const [catchAnimation, setCatchAnimation] = useState(false)
   const [isCasting, setIsCasting] = useState(false)
   const [caughtFish, setCaughtFish] = useState(null)
-  const [showAuth, setShowAuth] = useState('map') // 'login' or 'register' or 'leaderboard' or 'map'
+  const [showMap, setShowMap] = useState(false)
   const [currentScore, setCurrentScore] = useState(0)
-  const [selectedHabitat, setSelectedHabitat] = useState(null)
-
-  const { user, stats, logout, updateStats } = useUser()
+  const [selectedHabitat, setSelectedHabitat] = useState(initialHabitat)
 
   const bobberRef = useRef(null)
   const lineRef = useRef(null)
@@ -74,27 +68,12 @@ function AppContent() {
     setIsCasting,
     isCasting,
     selectedHabitat,
-    showAuth,
+    showMap,
   })
 
-  // Update user stats when game ends
-  useEffect(() => {
-    if (result !== null && user) {
-      const gameStats = {
-        result: result,
-        fishCaught: result === 'success' ? 1 : 0,
-        rareFish: result === 'success' && caughtFish && caughtFish.rarity === 'rare' ? 1 : 0,
-        score: currentScore,
-        attempts: attempts,
-        failures: failures
-      }
-      updateStats(gameStats)
-    }
-  }, [result, user, caughtFish, currentScore, attempts, failures, updateStats])
-
   const handleScreenClick = () => {
-    // Prevent any fishing interactions when modals are open
-    if (showAuth !== null) {
+    // Prevent any fishing interactions when map is open
+    if (showMap) {
       return
     }
 
@@ -153,35 +132,19 @@ function AppContent() {
 
         {/* User Interface */}
         <div className="user-interface">
-          {user ? (
-            <div className="user-info">
-              <div className="user-stats">
-                <span>환영합니다, {user.username}!</span>
-                <div className="stats-display">
-                  <span>총 물고기: {stats.totalFish}</span>
-                  <span>희귀 물고기: {stats.rareFish}</span>
-                  <span>최고 점수: {stats.highScore}</span>
-                </div>
-              </div>
-              <div className="user-actions">
-                <button onClick={(e) => { e.stopPropagation(); setShowAuth('map'); }}>
-                  지도
-                </button>
-                <button onClick={(e) => { e.stopPropagation(); setShowAuth('leaderboard'); }}>
-                  리더보드
-                </button>
-                <button className="logout-btn" onClick={(e) => { e.stopPropagation(); logout(); }}>
-                  로그아웃
-                </button>
-              </div>
+          <div className="user-info">
+            <div className="user-stats">
+              <span>플레이어: {playerName}</span>
             </div>
-          ) : (
-            <div className="auth-buttons">
-              <button onClick={(e) => { e.stopPropagation(); setShowAuth('leaderboard'); }}>리더보드</button>
-              <button onClick={(e) => { e.stopPropagation(); setShowAuth('login'); }}>로그인</button>
-              <button onClick={(e) => { e.stopPropagation(); setShowAuth('register'); }}>회원가입</button>
+            <div className="user-actions">
+              <button onClick={(e) => { e.stopPropagation(); setShowMap(true); }}>
+                지도
+              </button>
+              <button className="menu-btn" onClick={(e) => { e.stopPropagation(); onBackToMenu(); }}>
+                메뉴로
+              </button>
             </div>
-          )}
+          </div>
         </div>
 
         {/* Fisherman */}
@@ -220,14 +183,6 @@ function AppContent() {
           </div>
         )}
 
-        {/* Map Button */}
-        <button
-          className="map-button"
-          onClick={(e) => { e.stopPropagation(); setShowAuth('map'); }}
-        >
-          지도
-        </button>
-
         {/* UI Overlays */}
         <div className="ui-layer">
           {result === null ? (
@@ -253,45 +208,22 @@ function AppContent() {
         </div>
       </div>
 
-      {/* Modals */}
-      {showAuth === 'login' && (
-        <Login
-          onSwitchToRegister={() => setShowAuth('register')}
-          onClose={() => setShowAuth(null)}
-        />
-      )}
-      {showAuth === 'register' && (
-        <Register
-          onSwitchToLogin={() => setShowAuth('login')}
-          onClose={() => setShowAuth(null)}
-        />
-      )}
-      {showAuth === 'leaderboard' && (
-        <Leaderboard onClose={() => setShowAuth(null)} />
-      )}
-      {showAuth === 'map' && (
+      {/* Map Modal */}
+      {showMap && (
         <div className="map-screen">
           <img src="/map.png" alt="Map" className="map-image" />
           <div className="map-buttons">
-            <button onClick={() => { setSelectedHabitat('갯벌'); setShowAuth(null); }}>갯벌</button>
-            <button onClick={() => { setSelectedHabitat('바다'); setShowAuth(null); }}>바다</button>
-            <button onClick={() => { setSelectedHabitat('바다숲'); setShowAuth(null); }}>바다숲</button>
-            <button onClick={() => { setSelectedHabitat('바닷속암반'); setShowAuth(null); }}>바닷속암반</button>
-            <button onClick={() => { setSelectedHabitat('연안'); setShowAuth(null); }}>연안</button>
-            <button onClick={() => { setSelectedHabitat('하구역'); setShowAuth(null); }}>하구역</button>
+            <button onClick={() => { setSelectedHabitat('갯벌'); setShowMap(false); }}>갯벌</button>
+            <button onClick={() => { setSelectedHabitat('바다'); setShowMap(false); }}>바다</button>
+            <button onClick={() => { setSelectedHabitat('바다숲'); setShowMap(false); }}>바다숲</button>
+            <button onClick={() => { setSelectedHabitat('바닷속암반'); setShowMap(false); }}>바닷속암반</button>
+            <button onClick={() => { setSelectedHabitat('연안'); setShowMap(false); }}>연안</button>
+            <button onClick={() => { setSelectedHabitat('하구역'); setShowMap(false); }}>하구역</button>
           </div>
-          <button className="close-map" onClick={() => setShowAuth(null)}>닫기</button>
+          <button className="close-map" onClick={() => setShowMap(false)}>닫기</button>
         </div>
       )}
     </div>
-  )
-}
-
-function App() {
-  return (
-    <UserProvider>
-      <AppContent />
-    </UserProvider>
   )
 }
 
