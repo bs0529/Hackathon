@@ -347,20 +347,20 @@ function App({
           <div className="shop-content">
             <h2>상점</h2>
             <div className="shop-items">
-              <div className="shop-item" onClick={() => {
-                setSelectedRod('낚싯대 1');
-                setShowPurchaseConfirm(true);
-              }}>
-                <img src="/fishing_rod.png" alt="Fishing Rod 1" />
-                <p>낚싯대 1</p>
-              </div>
-              <div className="shop-item" onClick={() => {
-                setSelectedRod('낚싯대 2');
-                setShowPurchaseConfirm(true);
-              }}>
-                <img src="/fishing_rod.png" alt="Fishing Rod 2" />
-                <p>낚싯대 2</p>
-              </div>
+            <div className="shop-item" onClick={() => {
+              setSelectedRod('낚싯대 1');
+              setShowPurchaseConfirm(true);
+            }}>
+              <img src="/cool_fishing_rod.png" alt="Fishing Rod 1" />
+              <p>머찐 낚싯대</p>
+            </div>
+            <div className="shop-item" onClick={() => {
+              setSelectedRod('낚싯대 2');
+              setShowPurchaseConfirm(true);
+            }}>
+              <img src="/hansome_fishing_rod.png" alt="Fishing Rod 2" />
+              <p>메우 믓찐 낚싯대</p>
+            </div>
             </div>
           </div>
           <button onClick={() => setShowShop(false)}>닫기</button>
