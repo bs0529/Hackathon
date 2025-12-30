@@ -33,7 +33,7 @@ const GameLogic = ({
   setIsCasting,
   isCasting,
   selectedHabitat,
-  showAuth,
+  showMap,
 }) => {
   const timerRef = useRef(null)
   const moveRef = useRef(null)
@@ -84,8 +84,8 @@ const GameLogic = ({
       if (event.code === 'Space') {
         event.preventDefault()
 
-        // Prevent any fishing interactions when modals are open
-        if (showAuth !== null) {
+        // Prevent any fishing interactions when map is open
+        if (showMap) {
           return
         }
 
@@ -121,7 +121,7 @@ const GameLogic = ({
 
     window.addEventListener('keydown', handleKeyDown)
     return () => window.removeEventListener('keydown', handleKeyDown)
-  }, [gamePhase, exclamation, isMoving, barPosition, greenStart, greenWidth, redStart, redWidth, gauge, failures, isCasting, result, showAuth])
+  }, [gamePhase, exclamation, isMoving, barPosition, greenStart, greenWidth, redStart, redWidth, gauge, failures, isCasting, result, showMap])
 
   const startCasting = () => {
     setIsCasting(true)
@@ -132,8 +132,8 @@ const GameLogic = ({
   }
 
   const handleBarStop = () => {
-    // Prevent bar interactions when modals are open
-    if (showAuth !== null) {
+    // Prevent bar interactions when map is open
+    if (showMap) {
       return
     }
 
