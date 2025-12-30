@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>해양생물 3D 도감</title>
+    <script
+      type="module"
+      src="https://ajax.googleapis.com/ajax/libs/model-viewer/3.3.0/model-viewer.min.js"
+    ></script>
+    <style>
+      :root {
+        --primary: #006994;
+        --bg: #f4f7f6;
+        --text: #333;
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        display: flex;
+        height: 100vh;
+        font-family: "Pretendard", sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        overflow: hidden;
+      }
+
+      /* 사이드바 */
+      .sidebar {
+        width: 300px;
+        background: white;
+        border-right: 1px solid #ddd;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+      }
+      .sidebar-header {
+        padding: 20px;
+        background: var(--primary);
+        color: white;
+        font-weight: bold;
+        font-size: 1.2rem;
+      }
+      .list-item {
+        padding: 15px 20px;
+        border-bottom: 1px solid #eee;
+        cursor: pointer;
+        transition: background 0.2s;
+      }
+      .list-item:hover {
+        background: #f0f8ff;
+      }
+      .list-item.active {
+        background: #e0f0ff;
+        border-left: 5px solid var(--primary);
+        font-weight: bold;
+      }
+
+      /* 메인 콘텐츠 */
+      .main-content {
+        flex: 1;
+        display: flex;
+        flex-direction: column;
+        overflow-y: auto;
+      }
+      .viewer-container {
+        height: 60vh;
+        background: radial-gradient(circle, #eef2f3, #dbe4e8);
+        position: relative;
+      }
+      /* model-viewer 스타일은 CSS로 처리하는 것이 깔끔합니다 */
+      model-viewer {
+        width: 100%;
+        height: 100%;
+      }
+
+      /* 정보 영역 */
+      .info-container {
+        padding: 30px;
+        background: white;
+        flex: 1;
+      }
+      .badge {
+        background: var(--primary);
+        color: white;
+        padding: 4px 10px;
+        border-radius: 12px;
+        font-size: 0.8rem;
+        margin-right: 5px;
+      }
+      h1 {
+        margin: 0 0 5px 0;
+      }
+      h2 {
+        margin: 0 0 20px 0;
+        color: #666;
+        font-style: italic;
+        font-weight: normal;
+        font-size: 1rem;
+      }
+      .desc-box h3 {
+        border-bottom: 2px solid var(--primary);
+        display: inline-block;
+        margin-bottom: 10px;
+        font-size: 1.1rem;
+      }
+      .desc-box p {
+        line-height: 1.6;
+        color: #555;
+      }
+      .placeholder {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        color: #888;
+        font-size: 1.2rem;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="sidebar-header">해양생물 목록</div>
+      <div id="file-list"></div>
+    </div>
+
+    <div class="main-content">
+      <div class="viewer-container">
+        <model-viewer
+          id="viewer"
+          camera-controls
+          auto-rotate
+          autoplay
+          shadow-intensity="1"
+          ar
+          alt="3D Model"
+        >
+        </model-viewer>
+
+        <div
+          id="loading-text"
+          class="placeholder"
+          style="position: absolute; top: 0; width: 100%; z-index: -1"
+        >
+          목록을 불러오는 중...
+        </div>
+      </div>
+
+      <div class="info-container" id="info-box" style="display: none">
+        <div>
+          <span class="badge" id="cls-nm"></span>
+          <span class="badge" style="background: #e63946" id="mrp-knd"></span>
+        </div>
+        <h1 id="kr-nm"></h1>
+        <h2 id="en-nm"></h2>
+        <div class="desc-box">
+          <h3>특징</h3>
+          <p id="desc-txt"></p>
+        </div>
+        <div class="desc-box">
+          <h3>서식지</h3>
+          <p id="habitat-txt"></p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      const DATA_DIR = "./meis_data/";
+      const LIST_FILE = "file_list.json";
+
+      async function init() {
+        try {
+          const res = await fetch(DATA_DIR + LIST_FILE);
+          if (!res.ok)
+            throw new Error("목록 파일을 찾을 수 없습니다. (1단계 스크립트를 실행했나요?)");
+
+          const files = await res.json();
+          const listContainer = document.getElementById("file-list");
+          const loadingText = document.getElementById("loading-text");
+
+          if (files.length === 0) {
+            loadingText.textContent = "데이터가 없습니다.";
+            return;
+          }
+
+          loadingText.textContent = "좌측 목록에서 생물을 선택하세요";
+
+          files.forEach((file, index) => {
+            const div = document.createElement("div");
+            div.className = "list-item";
+            div.textContent = file.name;
+            div.onclick = () => loadItem(file.filename, div);
+            listContainer.appendChild(div);
+
+            if (index === 0) loadItem(file.filename, div);
+          });
+        } catch (e) {
+          console.error(e);
+          document.getElementById("loading-text").textContent =
+            "오류: 목록 파일을 불러오지 못했습니다.";
+        }
+      }
+
+      async function loadItem(jsonFilename, element) {
+        document.querySelectorAll(".list-item").forEach((el) => el.classList.remove("active"));
+        if (element) element.classList.add("active");
+
+        try {
+          const res = await fetch(DATA_DIR + jsonFilename);
+          const data = await res.json();
+
+          document.getElementById("info-box").style.display = "block";
+          document.getElementById("loading-text").style.display = "none";
+
+          document.getElementById("kr-nm").textContent = data.ovrLvbNm;
+          document.getElementById("en-nm").textContent = data.ovrLvbEngNm;
+          document.getElementById("cls-nm").textContent = data.ovrClassNm;
+          document.getElementById("mrp-knd").textContent = data.ovrMrpoKnd;
+          document.getElementById("desc-txt").textContent =
+            data.ovrStleDstcftCn || data.ovrEcgyDstcftCn;
+          document.getElementById(
+            "habitat-txt"
+          ).textContent = `${data.ovrHbttNm} (${data.ovrDsrbCn})`;
+
+          const viewer = document.getElementById("viewer");
+          // 모델을 바꿀 때마다 애니메이션을 처음부터 재생하도록 설정
+          viewer.currentTime = 0;
+          viewer.src = DATA_DIR + data.ovrGlbFileNm;
+          viewer.alt = data.ovrLvbNm;
+        } catch (e) {
+          console.error("데이터 로딩 실패:", e);
+        }
+      }
+
+      init();
+    </script>
+  </body>
+</html>
