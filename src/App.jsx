@@ -134,7 +134,7 @@ function App() {
         <div className="ui-layer">
           {result === null ? (
             <>
-              {gamePhase === 'ready' && !isCasting && <div className="start-prompt"><p>Click to cast the line!</p></div>}
+              {gamePhase === 'ready' && !isCasting && <div className="start-prompt"><p>클릭, 스페이스바로 낚시하기</p></div>}
 
               {gamePhase === 'catching' && !catchAnimation && (
                 <CatchingBar
