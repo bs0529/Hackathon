@@ -41,6 +41,7 @@ function App({ playerName, userId, onBackToMenu }) {
   const [actionResult, setActionResult] = useState(null);
   const [money, setMoney] = useState(0);
   const [habitatPollution, setHabitatPollution] = useState({});
+  const [notification, setNotification] = useState(null);
 
   const bobberRef = useRef(null);
 
@@ -84,14 +85,19 @@ function App({ playerName, userId, onBackToMenu }) {
       );
 
       // 응답에서 물고기 정보 추출 (새로운 API 구조)
+      const isSick = fishResponse.fish?.is_sick || false;
       const apiFish = {
         species_id: fishResponse.fish?.id, // fish.id가 species_id입니다
-        name: fishResponse.fish?.name,
+        name: isSick
+          ? `병든 ${fishResponse.fish?.name}`
+          : fishResponse.fish?.name,
+        originalName: fishResponse.fish?.name,
         type: fishResponse.fish?.type,
         price: fishResponse.fish?.price,
         image_url: fishResponse.fish?.image_url,
         habitat: fishResponse.fish?.habitat,
         is_new: fishResponse.is_new,
+        is_sick: isSick,
         message: fishResponse.message,
       };
 
@@ -289,13 +295,20 @@ function App({ playerName, userId, onBackToMenu }) {
           species_id: caughtFish.species_id,
           action: "RELEASE",
           habitat: selectedHabitat,
+          is_sick: caughtFish.is_sick,
         });
         const response = await handleAction(
           userId,
           caughtFish.species_id,
           "RELEASE",
-          selectedHabitat
+          selectedHabitat,
+          caughtFish.is_sick
         );
+        // 서버 메시지가 있으면 알림에 표시
+        if (response?.message) {
+          setNotification({ message: response.message, type: "release" });
+          setTimeout(() => setNotification(null), 5000);
+        }
         console.log("방생 처리 완료", response);
         setActionResult({
           type: "release",
@@ -340,19 +353,27 @@ function App({ playerName, userId, onBackToMenu }) {
           species_id: caughtFish.species_id,
           action: "SELL",
           habitat: selectedHabitat,
+          is_sick: caughtFish.is_sick,
         });
         const response = await handleAction(
           userId,
           caughtFish.species_id,
           "SELL",
-          selectedHabitat
+          selectedHabitat,
+          caughtFish.is_sick
         );
+        // 서버 메시지가 있으면 알림에 표시
+        if (response?.message) {
+          setNotification({ message: response.message, type: "sell" });
+          setTimeout(() => setNotification(null), 5000);
+        }
         console.log("판매 처리 완료", response);
         setActionResult({
           type: "sell",
           success: true,
           message: `${caughtFish.name}을(를) 판매했습니다!`,
-          money: caughtFish.price || response?.money_earned,
+          money:
+            response?.money_earned || response?.earned_money || response?.price,
           data: response,
         });
         // 판매 후 최신 유저 정보 가져오기
@@ -399,20 +420,30 @@ function App({ playerName, userId, onBackToMenu }) {
           species_id: caughtFish.species_id,
           action: "AQUARIUM",
           habitat: selectedHabitat,
+          is_sick: caughtFish.is_sick,
         });
         const response = await handleAction(
           userId,
           caughtFish.species_id,
           "AQUARIUM",
-          selectedHabitat
+          selectedHabitat,
+          caughtFish.is_sick
         );
+        // 서버 메시지가 있으면 알림에 표시
+        if (response?.message) {
+          setNotification({ message: response.message, type: "aquarium" });
+          setTimeout(() => setNotification(null), 5000);
+        }
         console.log("아쿠아리움 수송 처리 완료", response);
         setActionResult({
           type: "aquarium",
           success: true,
           message: `${caughtFish.name}을(를) 아쿠아리움으로 보냈습니다!`,
+          money: response?.money_change || response?.cost,
           data: response,
         });
+        // 아쿠아리움 수송 후 유저 데이터 갱신
+        refreshUserData();
       } catch (error) {
         console.error("아쿠아리움 수송 API 호출 실패:", error);
         setActionResult({
@@ -425,8 +456,9 @@ function App({ playerName, userId, onBackToMenu }) {
       setActionResult({
         type: "aquarium",
         success: true,
-        message: `${caughtFish?.name || "물고기"
-          }을(를) 아쿠아리움으로 보냈습니다!`,
+        message: `${
+          caughtFish?.name || "물고기"
+        }을(를) 아쿠아리움으로 보냈습니다!`,
       });
     }
 
@@ -452,8 +484,7 @@ function App({ playerName, userId, onBackToMenu }) {
             objectFit: "fill",
             zIndex: 1,
             pointerEvents: "none",
-            filter:
-              selectedHabitat === "바닷속암반" ? pollutionFilter : "none",
+            filter: selectedHabitat === "바닷속암반" ? pollutionFilter : "none",
           }}
         />
         <img
@@ -555,6 +586,17 @@ function App({ playerName, userId, onBackToMenu }) {
                     : "측정 중..."}
                 </span>
               </div>
+              {notification && (
+                <div
+                  className={`notification-area notification-${
+                    notification.type || "default"
+                  }`}
+                >
+                  <span className="notification-message">
+                    {notification.message}
+                  </span>
+                </div>
+              )}
             </div>
           </>
         )}

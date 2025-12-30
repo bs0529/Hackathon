@@ -50,13 +50,20 @@ export const fishing = async (userId, habitat) => {
 };
 
 // 행동 처리 (판매/방생/수족관)
-export const handleAction = async (userId, speciesId, action, habitat) => {
+export const handleAction = async (
+  userId,
+  speciesId,
+  action,
+  habitat,
+  isSick = false
+) => {
   try {
     const response = await api.post("/game/action", {
       user_id: userId,
       species_id: speciesId,
       action: action, // "SELL", "RELEASE", "AQUARIUM"
       habitat: habitat, // "바다", "갯벌", etc.
+      is_sick: isSick,
     });
     return response.data;
   } catch (error) {
