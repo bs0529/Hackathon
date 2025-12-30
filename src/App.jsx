@@ -87,16 +87,11 @@ function App({ playerName, userId, onBackToMenu }) {
   });
 
   const handleScreenClick = () => {
-    // Prevent any fishing interactions when map or shop is open
-    if (showMap || showShop) {
+    // Prevent any fishing interactions when map, shop, or result is open
+    if (showMap || showShop || result !== null) {
       return;
     }
 
-    // Allow immediate restart if result screen is visible
-    if (result !== null) {
-      resetGame();
-      return;
-    }
     // Prevent casting if result screen is visible (!result)
     if (gamePhase === "ready" && !isCasting && !result) {
       setIsCasting(true);
@@ -147,6 +142,24 @@ function App({ playerName, userId, onBackToMenu }) {
   };
 
   const backgroundImages = getBackgroundImages(selectedHabitat);
+
+  // Result overlay button handlers
+  const handleRelease = () => {
+    console.log("물고기를 방생했습니다:", caughtFish?.name);
+    resetGame();
+  };
+
+  const handleSell = () => {
+    console.log("물고기를 판매했습니다:", caughtFish?.name);
+    // TODO: API 호출하여 판매 처리
+    resetGame();
+  };
+
+  const handleSendToAquarium = () => {
+    console.log("물고기를 아쿠아리움으로 보냈습니다:", caughtFish?.name);
+    // TODO: API 호출하여 아쿠아리움에 추가
+    resetGame();
+  };
 
   return (
     <div className="fishing-game" onClick={handleScreenClick}>
@@ -265,7 +278,13 @@ function App({ playerName, userId, onBackToMenu }) {
               )}
             </>
           ) : (
-            <ResultOverlay result={result} caughtFish={caughtFish} />
+            <ResultOverlay
+              result={result}
+              caughtFish={caughtFish}
+              onRelease={handleRelease}
+              onSell={handleSell}
+              onSendToAquarium={handleSendToAquarium}
+            />
           )}
         </div>
       </div>

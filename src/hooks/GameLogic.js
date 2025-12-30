@@ -73,31 +73,16 @@ const GameLogic = ({
     return () => clearInterval(moveRef.current);
   }, [isMoving, direction, setBarPosition, setDirection]);
 
-  // Auto-reset game after showing result
-  useEffect(() => {
-    if (result !== null) {
-      const resetTimer = setTimeout(() => {
-        resetGame();
-      }, 5000); // Reset after 5 seconds
-      return () => clearTimeout(resetTimer);
-    }
-  }, [result]);
-
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.code === "Space") {
         event.preventDefault();
 
-        // Prevent any fishing interactions when map is open
-        if (showMap) {
+        // Prevent any fishing interactions when map or result is open
+        if (showMap || result !== null) {
           return;
         }
 
-        // Allow immediate restart if result screen is visible
-        if (result !== null) {
-          resetGame();
-          return;
-        }
         // Prevent casting if result screen is visible (!result)
         if (gamePhase === "ready" && !isCasting && !result) {
           startCasting();
