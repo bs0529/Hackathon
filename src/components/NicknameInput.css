@@ -1,11 +1,8 @@
 .nickname-screen {
   width: 100vw;
   height: 100vh;
-  background: linear-gradient(to bottom,
-    #5DADE2 0%,
-    #3498DB 50%,
-    #2874A6 100%
-  );
+  background-image: url("/sea_sky.png");
+  background-size: cover;
   display: flex;
   align-items: center;
   justify-content: center;
