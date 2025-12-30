@@ -161,7 +161,11 @@ function App({
           }}
         />
         <img
-          src={backgroundImages.ground}
+          src={
+            selectedHabitat === "갯벌"
+              ? "/foreshore_ground.png"
+              : "/coast_ground.png"
+          }
           alt="Ground Background"
           style={{
             position: "absolute",
