@@ -36,6 +36,8 @@ const GameLogic = ({
   selectedHabitat,
   showMap,
   userId,
+  preFetchedFish,
+  setPreFetchedFish,
 }) => {
   const timerRef = useRef(null);
   const moveRef = useRef(null);
@@ -141,6 +143,60 @@ const GameLogic = ({
 
   const startCasting = () => {
     setIsCasting(true);
+
+    // 낚시 시작할 때 API 호출하여 물고기 미리 가져오기
+    const preFetchFish = async () => {
+      try {
+        const fishResponse = await fishing(userId, selectedHabitat);
+        console.log("Pre-fetched API Response:", fishResponse);
+
+        // 응답에서 물고기 정보 추출
+        const apiFish = {
+          name: fishResponse.fish.name,
+          type: fishResponse.fish.type,
+          price: fishResponse.fish.price,
+          image_url: fishResponse.fish.image_url,
+          habitat: fishResponse.fish.habitat,
+          is_new: fishResponse.is_new,
+          message: fishResponse.message,
+        };
+
+        // fishData에서 매칭되는 물고기 찾기 (3D 모델 등 추가 정보)
+        const matchedFish = fishData.find((f) => f.name === apiFish.name);
+
+        // 백엔드 image_url에 베이스 URL 추가
+        const BACKEND_URL =
+          import.meta.env.VITE_BACKEND_URL || "http://10.129.57.149:8000";
+        const fullImageUrl = apiFish.image_url
+          ? `${BACKEND_URL}${apiFish.image_url}`
+          : null;
+
+        const preFetchedFishData = {
+          ...apiFish,
+          model: matchedFish?.model || "/assets/models/202201.glb",
+          image2d: fullImageUrl || matchedFish?.image2d,
+          description:
+            matchedFish?.description || `${apiFish.habitat}에서 잡은 물고기`,
+        };
+
+        setPreFetchedFish(preFetchedFishData);
+        console.log("Pre-fetched fish:", preFetchedFishData);
+      } catch (error) {
+        console.error("Error pre-fetching fish:", error);
+        // Fallback to local data
+        const filteredFish = selectedHabitat
+          ? fishData.filter((fish) => fish.ovrHbttNm === selectedHabitat)
+          : fishData;
+        if (filteredFish && filteredFish.length > 0) {
+          const randomFish =
+            filteredFish[Math.floor(Math.random() * filteredFish.length)];
+          setPreFetchedFish(randomFish);
+        }
+      }
+    };
+
+    preFetchFish();
+
     setTimeout(() => {
       setIsCasting(false);
       setGamePhase("fishing");
@@ -184,68 +240,31 @@ const GameLogic = ({
     } else if (newGauge >= 100) {
       setIsMoving(false);
 
-      // Call fishing API
-      const fetchFish = async () => {
-        try {
-          const fishResponse = await fishing(userId, selectedHabitat);
-          console.log("API Response:", fishResponse);
-
-          // 응답에서 물고기 정보 추출
-          const apiFish = {
-            name: fishResponse.fish.name,
-            type: fishResponse.fish.type,
-            price: fishResponse.fish.price,
-            image_url: fishResponse.fish.image_url,
-            habitat: fishResponse.fish.habitat,
-            is_new: fishResponse.is_new,
-            message: fishResponse.message,
-          };
-
-          // fishData에서 매칭되는 물고기 찾기 (3D 모델 등 추가 정보)
-          const matchedFish = fishData.find((f) => f.name === apiFish.name);
-
-          // 백엔드 image_url에 베이스 URL 추가
-          const fullImageUrl = apiFish.image_url
-            ? `http://10.129.57.149:8000${apiFish.image_url}`
-            : null;
-
-          const caughtFishData = {
-            ...apiFish,
-            model: matchedFish?.model || "/assets/models/202201.glb",
-            image2d: fullImageUrl || matchedFish?.image2d,
-            description:
-              matchedFish?.description || `${apiFish.habitat}에서 잡은 물고기`,
-          };
-
-          setCaughtFish(caughtFishData);
-          console.log("Caught fish:", caughtFishData);
-
-          // 물고기 데이터 설정 후 애니메이션 시작
-          setCatchAnimation(true);
-        } catch (error) {
-          console.error("Error calling fishing API:", error);
-          // Fallback to local data
-          const filteredFish = selectedHabitat
-            ? fishData.filter((fish) => fish.ovrHbttNm === selectedHabitat)
-            : fishData;
-          if (filteredFish && filteredFish.length > 0) {
-            const randomFish =
-              filteredFish[Math.floor(Math.random() * filteredFish.length)];
-            setCaughtFish(randomFish);
-          } else {
-            setCaughtFish({
-              name: "범고래 (Fallback)",
-              model: "/assets/models/202201.glb",
-              description: "데이터를 불러오지 못해 기본 범고래가 표시됩니다.",
-            });
-          }
-
-          // Fallback인 경우에도 애니메이션 시작
-          setCatchAnimation(true);
+      // 프리페치된 물고기 데이터 사용 (이미 이미지도 로드되어 있음)
+      if (preFetchedFish) {
+        setCaughtFish(preFetchedFish);
+        console.log("Using pre-fetched fish:", preFetchedFish);
+      } else {
+        // 프리페치 실패 시 fallback
+        console.warn("No pre-fetched fish available, using fallback");
+        const filteredFish = selectedHabitat
+          ? fishData.filter((fish) => fish.ovrHbttNm === selectedHabitat)
+          : fishData;
+        if (filteredFish && filteredFish.length > 0) {
+          const randomFish =
+            filteredFish[Math.floor(Math.random() * filteredFish.length)];
+          setCaughtFish(randomFish);
+        } else {
+          setCaughtFish({
+            name: "범고래 (Fallback)",
+            model: "/assets/models/202201.glb",
+            description: "데이터를 불러오지 못해 기본 범고래가 표시됩니다.",
+          });
         }
-      };
+      }
 
-      fetchFish();
+      // 물고기 데이터 설정 후 애니메이션 시작
+      setCatchAnimation(true);
 
       setTimeout(() => {
         setCatchAnimation(false);
@@ -276,6 +295,7 @@ const GameLogic = ({
     setResult(null);
     setIsCasting(false); // Reset casting state
     setCaughtFish(null); // Reset fish
+    setPreFetchedFish(null); // Reset pre-fetched fish
     clearTimeout(timerRef.current);
     clearInterval(moveRef.current);
   };

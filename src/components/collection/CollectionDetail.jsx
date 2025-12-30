@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import "./Collection.css";
 import { getCollection } from "../../services/api";
 
@@ -96,34 +96,21 @@ const nameToGlbMap = {
   흰수지맨드라미: "201911.glb",
 };
 
-function Collection({ onClose }) {
+function CollectionDetail() {
+  const { fishId } = useParams();
   const navigate = useNavigate();
-  const HABITATS = [
-    "전체",
-    "갯벌",
-    "바다",
-    "바다숲",
-    "바닷속암반",
-    "연안",
-    "하구역",
-  ];
-
-  const [selectedHabitat, setSelectedHabitat] = useState("전체");
-  const [fishData, setFishData] = useState([]);
+  const [fish, setFish] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState(null);
 
   // 컴포넌트 마운트 시 스크롤을 최상단으로
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
-  // API에서 도감 데이터 가져오기
   useEffect(() => {
-    const fetchCollection = async () => {
+    const fetchFish = async () => {
       try {
         setIsLoading(true);
-        // 로컬 스토리지에서 userId 가져오기
         const savedUser = localStorage.getItem("ocean_rescue_user");
         if (!savedUser) {
           throw new Error("로그인 정보를 찾을 수 없습니다.");
@@ -132,13 +119,9 @@ function Collection({ onClose }) {
         const userData = JSON.parse(savedUser);
         const userId = userData.id;
 
-        // API 호출
         const data = await getCollection(userId);
-
-        // 백엔드 URL
         const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-        // API 데이터를 프론트엔드 형식으로 변환
         const formattedData = data.map((item) => {
           const glbFileName = nameToGlbMap[item.name];
           return {
@@ -154,111 +137,98 @@ function Collection({ onClose }) {
           };
         });
 
-        setFishData(formattedData);
-        setError(null);
+        const selectedFish = formattedData.find(
+          (f) => f.species_id === parseInt(fishId)
+        );
+
+        if (selectedFish && selectedFish.is_caught) {
+          setFish(selectedFish);
+        } else {
+          navigate("/collection");
+        }
       } catch (err) {
-        console.error("도감 데이터 로딩 실패:", err);
-        setError(err.message);
+        console.error("물고기 데이터 로딩 실패:", err);
+        navigate("/collection");
       } finally {
         setIsLoading(false);
       }
     };
 
-    fetchCollection();
-  }, []);
+    fetchFish();
+  }, [fishId, navigate]);
 
-  const filteredFish =
-    selectedHabitat === "전체"
-      ? fishData
-      : fishData.filter((fish) => fish.habitat === selectedHabitat);
-
-  const handleFishClick = (fish) => {
-    if (fish.is_caught) {
-      navigate(`/collection/${fish.species_id}`);
-    }
-  };
-
-  // List View
-  return (
-    <div className="collection-list-page">
-      <div className="sticky-header">
-        <div className="collection-header">
-          <button className="back-to-menu" onClick={onClose}>
-            ← 메뉴로
-          </button>
-          <h1 className="collection-title">다나까 도감</h1>
-          {!isLoading && (
-            <div className="collection-stats">
-              <span className="stat-badge">
-                {fishData.filter((f) => f.is_caught).length}/{fishData.length}
-              </span>
-            </div>
-          )}
-        </div>
-
-        {/* Habitat Filter */}
-        {!isLoading && !error && (
-          <div className="habitat-filter">
-            {HABITATS.map((habitat) => (
-              <button
-                key={habitat}
-                className={`habitat-btn ${
-                  selectedHabitat === habitat ? "active" : ""
-                }`}
-                onClick={() => setSelectedHabitat(habitat)}
-              >
-                {habitat}
-              </button>
-            ))}
-          </div>
-        )}
+  if (isLoading) {
+    return (
+      <div className="collection-detail-page">
+        <p>로딩 중...</p>
       </div>
+    );
+  }
 
-      {/* 로딩 상태 */}
-      {isLoading && (
-        <div className="loading-message">
-          <p>도감 데이터를 불러오는 중...</p>
+  if (!fish) {
+    return null;
+  }
+
+  return (
+    <div className="collection-detail-page">
+      <button
+        className="detail-back-btn"
+        onClick={() => navigate("/collection")}
+      >
+        ← 뒤로
+      </button>
+
+      <div className="detail-content">
+        {/* 3D Model Section - model-viewer */}
+        <div className="detail-image-section">
+          <model-viewer
+            src={fish.model_url}
+            alt={fish.name}
+            camera-controls
+            auto-rotate
+            autoplay
+            auto-rotate-delay="0"
+            rotation-per-second="30deg"
+            shadow-intensity="1"
+            style={{
+              width: "100%",
+              height: "100%",
+              background: "transparent",
+            }}
+          ></model-viewer>
         </div>
-      )}
 
-      {/* 에러 상태 */}
-      {error && (
-        <div className="error-message">
-          <p>데이터를 불러오는데 실패했습니다: {error}</p>
-        </div>
-      )}
-
-      {/* 정상 로드 */}
-      {!isLoading && !error && (
-        <>
-          {/* Fish Grid - 6 per row */}
-          <div className="fish-grid">
-            {filteredFish.map((fish) => (
-              <div
-                key={fish.species_id}
-                className={`fish-card ${fish.is_caught ? "caught" : "locked"}`}
-                onClick={() => handleFishClick(fish)}
-              >
-                <div className="fish-image-container">
-                  <img
-                    src={fish.image_url}
-                    alt={fish.name}
-                    className="fish-sticker-image"
-                  />
-                </div>
-                <div className="fish-info">
-                  <div className="fish-id">
-                    No.{String(fish.species_id).padStart(3, "0")}
-                  </div>
-                  <div className="fish-name">{fish.name}</div>
-                </div>
-              </div>
-            ))}
+        <div className="detail-info-box">
+          <div className="detail-name-section">
+            <h2 className="detail-fish-name">{fish.name}</h2>
+            <span className="detail-fish-id">
+              No.{String(fish.species_id).padStart(3, "0")}
+            </span>
           </div>
-        </>
-      )}
+
+          <div className="detail-stats-grid">
+            <div className="detail-stat-item">
+              <span className="stat-label">종류</span>
+              <span className="stat-value">{fish.type}</span>
+            </div>
+            <div className="detail-stat-item">
+              <span className="stat-label">서식지</span>
+              <span className="stat-value">{fish.habitat}</span>
+            </div>
+            <div className="detail-stat-item">
+              <span className="stat-label">획득</span>
+              <span className="stat-value">×{fish.caught_count}</span>
+            </div>
+          </div>
+
+          <div className="detail-description">
+            <h3 className="description-title">설명</h3>
+            <p className="description-text">{fish.description}</p>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
 
-export default Collection;
+export default CollectionDetail;

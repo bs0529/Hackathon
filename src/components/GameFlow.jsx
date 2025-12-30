@@ -1,16 +1,19 @@
 import { useState, useEffect } from "react";
+import { Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import StartScreen from "./StartScreen";
 import NicknameInput from "./NicknameInput";
 import Menu from "./Menu";
 import App from "../App";
 import Collection from "./collection/Collection";
+import CollectionDetail from "./collection/CollectionDetail";
 import { createUser } from "../services/api";
 import "../App.css";
 
 const USER_STORAGE_KEY = "ocean_rescue_user";
 
 function GameFlow() {
-  const [screen, setScreen] = useState("start"); // 'start', 'nickname', 'menu', 'map', 'game', 'collection'
+  const navigate = useNavigate();
+  const location = useLocation();
   const [playerName, setPlayerName] = useState("");
   const [userId, setUserId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -25,20 +28,22 @@ function GameFlow() {
         console.log("Restored user from localStorage:", userData);
         setPlayerName(userData.nickname);
         setUserId(userData.id);
-        setScreen("menu");
+        if (location.pathname === "/") {
+          navigate("/menu");
+        }
       } catch (error) {
         console.error("Failed to restore user data:", error);
         localStorage.removeItem(USER_STORAGE_KEY);
       }
     }
-  }, []);
+  }, [location.pathname, navigate]);
 
   const saveUserToLocalStorage = (userData) => {
     localStorage.setItem(USER_STORAGE_KEY, JSON.stringify(userData));
   };
 
   const handlePressStart = () => {
-    setScreen("nickname");
+    navigate("/nickname");
   };
 
   const handleNicknameSubmit = async (name) => {
@@ -59,7 +64,7 @@ function GameFlow() {
 
       setPlayerName(userData.nickname);
       setUserId(userData.id);
-      setScreen("menu");
+      navigate("/menu");
     } catch (error) {
       console.error("Failed to create user:", error);
       // 에러 발생 시에도 로컬에서 진행 (오프라인 모드)
@@ -74,27 +79,27 @@ function GameFlow() {
 
       setPlayerName(name);
       setUserId(tempUserId);
-      setScreen("menu");
+      navigate("/menu");
     } finally {
       setIsLoading(false);
     }
   };
 
   const handleStartGame = () => {
-    setScreen("map");
+    navigate("/map");
   };
 
   const handleSelectHabitat = (habitat) => {
     setSelectedHabitat(habitat);
-    setScreen("game");
+    navigate("/game");
   };
 
   const handleBackToMenu = () => {
-    setScreen("menu");
+    navigate("/menu");
   };
 
   const handleShowCollection = () => {
-    setScreen("collection");
+    navigate("/collection");
   };
 
   const handleLogout = () => {
@@ -105,56 +110,78 @@ function GameFlow() {
     // 상태 초기화
     setPlayerName("");
     setUserId(null);
-    setScreen("start");
+    navigate("/");
   };
 
   return (
-    <>
-      {screen === "start" && <StartScreen onPressStart={handlePressStart} />}
-      {screen === "nickname" && (
-        <NicknameInput onSubmit={handleNicknameSubmit} isLoading={isLoading} />
-      )}
-      {screen === "menu" && (
-        <Menu
-          onStartGame={handleStartGame}
-          playerName={playerName}
-          userId={userId}
-          onLogout={handleLogout}
-          onShowCollection={handleShowCollection}
-        />
-      )}
-      {screen === "map" && (
-        <div className="map-screen">
-          <img src="/map.png" alt="Map" className="map-image" />
-          <div className="map-buttons">
-            <button onClick={() => handleSelectHabitat("갯벌")}>갯벌</button>
-            <button onClick={() => handleSelectHabitat("바다")}>바다</button>
-            <button onClick={() => handleSelectHabitat("바다숲")}>
-              바다숲
-            </button>
-            <button onClick={() => handleSelectHabitat("바닷속암반")}>
-              바닷속암반
-            </button>
-            <button onClick={() => handleSelectHabitat("연안")}>연안</button>
-            <button onClick={() => handleSelectHabitat("하구역")}>
-              하구역
+    <Routes>
+      <Route
+        path="/"
+        element={<StartScreen onPressStart={handlePressStart} />}
+      />
+      <Route
+        path="/nickname"
+        element={
+          <NicknameInput
+            onSubmit={handleNicknameSubmit}
+            isLoading={isLoading}
+          />
+        }
+      />
+      <Route
+        path="/menu"
+        element={
+          <Menu
+            onStartGame={handleStartGame}
+            playerName={playerName}
+            userId={userId}
+            onLogout={handleLogout}
+            onShowCollection={handleShowCollection}
+          />
+        }
+      />
+      <Route
+        path="/map"
+        element={
+          <div className="map-screen">
+            <img src="/map.png" alt="Map" className="map-image" />
+            <div className="map-buttons">
+              <button onClick={() => handleSelectHabitat("갯벌")}>갯벌</button>
+              <button onClick={() => handleSelectHabitat("바다")}>바다</button>
+              <button onClick={() => handleSelectHabitat("바다숲")}>
+                바다숲
+              </button>
+              <button onClick={() => handleSelectHabitat("바닷속암반")}>
+                바닷속암반
+              </button>
+              <button onClick={() => handleSelectHabitat("연안")}>연안</button>
+              <button onClick={() => handleSelectHabitat("하구역")}>
+                하구역
+              </button>
+            </div>
+            <button className="close-map" onClick={handleBackToMenu}>
+              메뉴로 돌아가기
             </button>
           </div>
-          <button className="close-map" onClick={handleBackToMenu}>
-            메뉴로 돌아가기
-          </button>
-        </div>
-      )}
-      {screen === "game" && (
-        <App
-          playerName={playerName}
-          userId={userId}
-          selectedHabitat={selectedHabitat}
-          onBackToMenu={handleBackToMenu}
-        />
-      )}
-      {screen === "collection" && <Collection onClose={handleBackToMenu} />}
-    </>
+        }
+      />
+      <Route
+        path="/game"
+        element={
+          <App
+            playerName={playerName}
+            userId={userId}
+            selectedHabitat={selectedHabitat}
+            onBackToMenu={handleBackToMenu}
+          />
+        }
+      />
+      <Route
+        path="/collection"
+        element={<Collection onClose={handleBackToMenu} />}
+      />
+      <Route path="/collection/:fishId" element={<CollectionDetail />} />
+    </Routes>
   );
 }
 
