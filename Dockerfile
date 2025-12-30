@@ -2,7 +2,8 @@
 FROM node:20-alpine AS builder
 
 # Enable pnpm
-RUN corepack enable && corepack prepare pnpm@latest --activate
+# Install pnpm manually via npm to avoid corepack network issues
+RUN npm install -g pnpm
 
 WORKDIR /app
 

@@ -7,6 +7,5 @@ services:
         # .env 파일에 있는 값이 자동으로 주입됩니다.
         # 단, 변수 이름만 나열해야 합니다.
         - VITE_BACKEND_URL
-    ports:
-      - "3000:80"
+    network_mode: "host"
     restart: always
