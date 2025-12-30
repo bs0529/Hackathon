@@ -141,13 +141,9 @@ function App({
       <div className="game-container">
         {/* Background Images */}
         <img
-<<<<<<< Updated upstream
           src={
             selectedHabitat === "갯벌" ? "/foreshore_sky.png" : "/coast_sky.png"
           }
-=======
-          src={backgroundImages.sky}
->>>>>>> Stashed changes
           alt="Sky Background"
           style={{
             position: "absolute",
