@@ -185,7 +185,7 @@
     transparent 60px
   );
   opacity: 0.7;
-  animation: wave1 8s ease-in-out infinite;
+  animation: wave1 16s ease-in-out infinite;
 }
 
 .wave-2 {
@@ -198,7 +198,7 @@
     transparent 50px
   );
   opacity: 0.5;
-  animation: wave2 12s ease-in-out infinite reverse;
+  animation: wave2 24s ease-in-out infinite reverse;
 }
 
 .wave-3 {
@@ -211,7 +211,7 @@
     transparent 70px
   );
   opacity: 0.3;
-  animation: wave3 15s ease-in-out infinite;
+  animation: wave3 30s ease-in-out infinite;
 }
 
 @keyframes wave1 {
