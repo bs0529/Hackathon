@@ -131,14 +131,36 @@ function AppContent() {
 
   return (
     <div className="fishing-game" onClick={handleScreenClick}>
-      <div className="game-container" style={{
-        backgroundImage: 'url(/sky.png), url(/ground.png)',
-        backgroundSize: '100% 50%, 100% 50%',
-        backgroundPosition: 'top, bottom',
-        backgroundRepeat: 'no-repeat, no-repeat',
-        width: '100%',
-        height: '100%'
-      }}>
+      <div className="game-container">
+        {/* Background Images */}
+        <img
+          src="/sky.png"
+          alt="Sky Background"
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            width: '100%',
+            height: '50%',
+            objectFit: 'fill',
+            zIndex: 1,
+            pointerEvents: 'none'
+          }}
+        />
+        <img
+          src="/ground.png"
+          alt="Ground Background"
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: 0,
+            width: '100%',
+            height: '70%',
+            objectFit: 'fill',
+            zIndex: 2,
+            pointerEvents: 'none'
+          }}
+        />
 
         {/* User Interface */}
         <div className="user-interface">
