@@ -1,0 +1,245 @@
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&display=swap');
+
+.start-screen {
+  width: 100vw;
+  height: 100vh;
+  background: linear-gradient(to bottom,
+    #5DADE2 0%,
+    #85C1E9 40%,
+    #3498DB 100%
+  );
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Press Start 2P', cursive;
+  image-rendering: pixelated;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: crisp-edges;
+}
+
+/* Pixel Clouds */
+.pixel-clouds {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 50%;
+  pointer-events: none;
+}
+
+.pixel-cloud {
+  position: absolute;
+  width: 120px;
+  height: 60px;
+  background: white;
+  border-radius: 0;
+  box-shadow:
+    0 0 0 10px white,
+    0 0 0 20px white,
+    20px -10px 0 10px white,
+    40px -10px 0 10px white;
+  opacity: 0.9;
+  animation: floatCloud linear infinite;
+}
+
+.cloud-1 {
+  top: 10%;
+  left: -150px;
+  animation-duration: 30s;
+}
+
+.cloud-2 {
+  top: 25%;
+  left: -200px;
+  animation-duration: 40s;
+  animation-delay: 5s;
+}
+
+.cloud-3 {
+  top: 15%;
+  left: -180px;
+  animation-duration: 35s;
+  animation-delay: 10s;
+}
+
+@keyframes floatCloud {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(calc(100vw + 200px));
+  }
+}
+
+/* Main Content */
+.start-content {
+  position: relative;
+  z-index: 10;
+  text-align: center;
+}
+
+.game-logo {
+  margin-bottom: 80px;
+  animation: slideDown 1s ease-out;
+}
+
+.pixel-title {
+  font-size: 48px;
+  color: #FF6B9D;
+  text-shadow:
+    4px 4px 0 #C44569,
+    8px 8px 0 rgba(0, 0, 0, 0.2);
+  margin: 10px 0;
+  letter-spacing: 4px;
+  line-height: 1.5;
+}
+
+.pixel-fish-icon {
+  font-size: 64px;
+  margin-top: 20px;
+  animation: bounce 2s ease-in-out infinite;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-20px);
+  }
+}
+
+/* Press Start */
+.press-start-container {
+  animation: fadeIn 2s ease-in;
+}
+
+.press-start-text {
+  font-size: 32px;
+  color: #FFD93D;
+  text-shadow:
+    3px 3px 0 #FF6B6B,
+    6px 6px 0 rgba(0, 0, 0, 0.2);
+  margin: 0 0 20px 0;
+  letter-spacing: 2px;
+}
+
+.press-start-text.blink {
+  animation: blink 1.5s ease-in-out infinite;
+}
+
+.press-start-hint {
+  font-size: 14px;
+  color: white;
+  text-shadow: 2px 2px 0 rgba(0, 0, 0, 0.3);
+  margin: 0;
+}
+
+@keyframes blink {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Pixel Ocean */
+.pixel-ocean {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 30%;
+  background: linear-gradient(to bottom,
+    #3498DB 0%,
+    #2874A6 50%,
+    #1B4F72 100%
+  );
+  overflow: hidden;
+}
+
+.ocean-wave {
+  position: absolute;
+  width: 200%;
+  height: 30px;
+  background: repeating-linear-gradient(
+    90deg,
+    #5DADE2 0px,
+    #5DADE2 20px,
+    transparent 20px,
+    transparent 40px
+  );
+}
+
+.wave-1 {
+  top: 0;
+  animation: wave 3s linear infinite;
+}
+
+.wave-2 {
+  top: 15px;
+  opacity: 0.5;
+  animation: wave 4s linear infinite reverse;
+}
+
+@keyframes wave {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+/* Credits */
+.credits {
+  position: absolute;
+  bottom: 20px;
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 1px 1px 0 rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .pixel-title {
+    font-size: 32px;
+  }
+
+  .press-start-text {
+    font-size: 24px;
+  }
+
+  .press-start-hint {
+    font-size: 12px;
+  }
+
+  .pixel-fish-icon {
+    font-size: 48px;
+  }
+}
