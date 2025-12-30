@@ -1,7 +1,7 @@
 import React from 'react'
 import './ResultOverlay.css'
 
-const ResultOverlay = ({ result, caughtFish, onRelease, onSell, onSendToAquarium, actionResult }) => {
+const ResultOverlay = ({ result, caughtFish, onRelease, onSell, onSendToAquarium, actionResult, onClose }) => {
   return (
     <div className="result-overlay-backdrop">
       <div className="result-overlay">
@@ -51,6 +51,11 @@ const ResultOverlay = ({ result, caughtFish, onRelease, onSell, onSendToAquarium
           <>
             <h2 className="result-title fail">FAILED...</h2>
             <p className="fail-text">다시 시도해보세요!</p>
+            <div className="result-buttons">
+              <button className="result-btn" onClick={onClose} style={{ marginTop: '20px', backgroundColor: '#555', color: 'white' }}>
+                확인
+              </button>
+            </div>
           </>
         )}
       </div>

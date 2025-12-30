@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Aquarium.css";
-import { getAquariumFish } from "../services/api";
+import { getAquariumFish, markLetterAsRead } from "../services/api";
 
 // meis_data의 JSON 파일명과 생물 이름을 매칭하는 맵
 const nameToGlbMap = {
@@ -99,7 +99,9 @@ const nameToGlbMap = {
 function Aquarium({ onClose }) {
   const navigate = useNavigate();
   const [fishData, setFishData] = useState([]);
+  const [letters, setLetters] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedLetter, setSelectedLetter] = useState(null);
   const fishPositionsRef = useRef([]);
   const fishElementsRef = useRef([]);
   const animationFrameRef = useRef(null);
@@ -127,26 +129,29 @@ function Aquarium({ onClose }) {
         const data = await getAquariumFish(userId);
         const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
-        // 잡은 물고기만 필터링
-        const caughtFish = data
-          .filter((item) => item.is_caught)
-          .map((item) => {
-            const glbFileName = nameToGlbMap[item.name];
-            return {
-              species_id: item.species_id,
-              name: item.name,
-              type: item.type,
-              image_url: `${BACKEND_URL}${item.image_url}`,
-              model_url: glbFileName ? `/assets/models/${glbFileName}` : null,
-              caught_count: item.caught_count,
-              habitat: item.habitat,
-            };
-          });
+        // 새로운 API 응답 형식에 맞게 처리
+        const fishList = data.fish_list || [];
+        const letterList = data.letters || [];
 
-        setFishData(caughtFish);
+        const processedFish = fishList.map((item) => {
+          const glbFileName = nameToGlbMap[item.name];
+          return {
+            id: item.id,
+            species_id: item.species_id,
+            name: item.name,
+            image_url: item.image_url.startsWith("http")
+              ? item.image_url
+              : `${BACKEND_URL}${item.image_url}`,
+            model_url: glbFileName ? `/assets/models/${glbFileName}` : null,
+            caught_at: item.caught_at,
+          };
+        });
+
+        setFishData(processedFish);
+        setLetters(letterList);
 
         // 각 물고기의 초기 위치와 속도 설정
-        fishPositionsRef.current = caughtFish.map(() => ({
+        fishPositionsRef.current = processedFish.map(() => ({
           x:
             Math.random() * (TANK_BOUNDS.right - TANK_BOUNDS.left) +
             TANK_BOUNDS.left,
@@ -221,8 +226,45 @@ function Aquarium({ onClose }) {
     };
   }, [fishData.length]);
 
-  const handleFishClick = (fishId) => {
-    navigate(`/collection/${fishId}`, { state: { from: "aquarium" } });
+  // 해당 물고기에게 편지가 있는지 확인 (species_id 기준)
+  const getLetterForFish = (speciesId) => {
+    return letters.find(
+      (letter) => letter.species_id === speciesId && !letter.is_read
+    );
+  };
+
+  // 물고기 클릭 핸들러
+  const handleFishClick = (fish) => {
+    const letter = getLetterForFish(fish.species_id);
+    if (letter) {
+      // 편지가 있으면 편지 모달 열기
+      setSelectedLetter(letter);
+    } else {
+      // 편지가 없으면 도감 상세 페이지로 이동
+      navigate(`/collection/${fish.species_id}`, {
+        state: { from: "aquarium" },
+      });
+    }
+  };
+
+  // 편지 닫기 및 읽음 처리
+  const handleCloseLetter = async () => {
+    if (selectedLetter) {
+      try {
+        await markLetterAsRead(selectedLetter.id);
+        // 로컬 상태에서 편지 읽음 처리
+        setLetters((prevLetters) =>
+          prevLetters.map((letter) =>
+            letter.id === selectedLetter.id
+              ? { ...letter, is_read: true }
+              : letter
+          )
+        );
+      } catch (error) {
+        console.error("편지 읽음 처리 실패:", error);
+      }
+    }
+    setSelectedLetter(null);
   };
 
   return (
@@ -241,9 +283,11 @@ function Aquarium({ onClose }) {
             const pos = fishPositionsRef.current[index];
             if (!pos) return null;
 
+            const hasLetter = getLetterForFish(fish.species_id);
+
             return (
               <div
-                key={fish.species_id}
+                key={`${fish.id}-${index}`}
                 ref={(el) => (fishElementsRef.current[index] = el)}
                 className="swimming-fish"
                 style={{
@@ -254,12 +298,41 @@ function Aquarium({ onClose }) {
                   transform: pos.vx < 0 ? "scaleX(-1)" : "scaleX(1)",
                 }}
                 title={fish.name}
-                onClick={() => handleFishClick(fish.species_id)}
+                onClick={() => handleFishClick(fish)}
               >
                 <img src={fish.image_url} alt={fish.name} />
+                {hasLetter && (
+                  <div className="fish-mail-icon">
+                    <img src="/assets/images/mail.png" alt="새 편지" />
+                  </div>
+                )}
               </div>
             );
           })}
+        </div>
+      )}
+
+      {/* 편지 모달 */}
+      {selectedLetter && (
+        <div className="letter-modal-overlay" onClick={handleCloseLetter}>
+          <div className="letter-modal" onClick={(e) => e.stopPropagation()}>
+            <div className="letter-modal-content">
+              <img
+                src="/assets/images/open-mail.png"
+                alt="열린 편지"
+                className="letter-bg-image"
+              />
+              <div className="letter-text">
+                <p className="letter-from">
+                  {selectedLetter.species_name}로부터 온 편지
+                </p>
+                <p className="letter-message">{selectedLetter.content}</p>
+              </div>
+              <button className="letter-close-btn" onClick={handleCloseLetter}>
+                닫기
+              </button>
+            </div>
+          </div>
         </div>
       )}
     </div>

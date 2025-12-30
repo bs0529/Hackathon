@@ -101,4 +101,15 @@ export const getAquariumFish = async (userId) => {
   }
 };
 
+// 편지 읽음 처리
+export const markLetterAsRead = async (letterId) => {
+  try {
+    const response = await api.post(`/aquarium/read/${letterId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to mark letter as read:", error);
+    throw error;
+  }
+};
+
 export default api;
