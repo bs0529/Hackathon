@@ -1,6 +1,6 @@
 import './Menu.css'
 
-function Menu({ onStartGame, playerName }) {
+function Menu({ onStartGame, playerName, onLogout }) {
   return (
     <div className="menu-screen">
       <div className="menu-container">
@@ -18,8 +18,8 @@ function Menu({ onStartGame, playerName }) {
             <button className="menu-button">
               아쿠아리움
             </button>
-            <button className="menu-button">
-              설정
+            <button className="menu-button logout" onClick={onLogout}>
+              로그아웃
             </button>
           </div>
         </div>

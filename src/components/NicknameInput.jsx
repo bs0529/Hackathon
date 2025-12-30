@@ -1,11 +1,11 @@
 import { useState } from 'react'
 import './NicknameInput.css'
 
-function NicknameInput({ onSubmit }) {
+function NicknameInput({ onSubmit, isLoading }) {
   const [nickname, setNickname] = useState('')
   const [error, setError] = useState('')
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault()
 
     if (nickname.trim().length === 0) {
@@ -23,7 +23,7 @@ function NicknameInput({ onSubmit }) {
       return
     }
 
-    onSubmit(nickname.trim())
+    await onSubmit(nickname.trim())
   }
 
   const handleChange = (e) => {
@@ -56,8 +56,8 @@ function NicknameInput({ onSubmit }) {
             )}
 
             <div className="button-group">
-              <button type="submit" className="pixel-button primary">
-                확인
+              <button type="submit" className="pixel-button primary" disabled={isLoading}>
+                {isLoading ? '생성 중...' : '확인'}
               </button>
             </div>
           </form>

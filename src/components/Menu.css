@@ -133,6 +133,15 @@
   background: #F39C12;
 }
 
+.menu-button.logout {
+  background: #E74C3C;
+  margin-top: 10px;
+}
+
+.menu-button.logout:hover {
+  background: #C0392B;
+}
+
 @keyframes buttonPulse {
   0%, 100% {
     box-shadow:
