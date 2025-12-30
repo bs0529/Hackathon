@@ -1,0 +1,502 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "FastAPI",
+    "version": "0.1.0"
+  },
+  "paths": {
+    "/game/fish": {
+      "post": {
+        "tags": ["game"],
+        "summary": "Fishing",
+        "operationId": "fishing_game_fish_post",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/FishResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/action": {
+      "post": {
+        "tags": ["game"],
+        "summary": "Handle Action",
+        "description": "유저가 낚시 후 선택한 행동(판매, 방생, 수족관)을 처리하는 API",
+        "operationId": "handle_action_game_action_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserActionRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/game/collection/{user_id}": {
+      "get": {
+        "tags": ["game"],
+        "summary": "Get Collection",
+        "operationId": "get_collection_game_collection__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/CollectionItem"
+                  },
+                  "title": "Response Get Collection Game Collection  User Id  Get"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/": {
+      "post": {
+        "tags": ["users"],
+        "summary": "Create User",
+        "operationId": "create_user_users__post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UserCreate"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/list": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Get All Users",
+        "operationId": "get_all_users_users_list_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "items": {
+                    "$ref": "#/components/schemas/UserResponse"
+                  },
+                  "type": "array",
+                  "title": "Response Get All Users Users List Get"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{user_id}": {
+      "get": {
+        "tags": ["users"],
+        "summary": "Read User",
+        "operationId": "read_user_users__user_id__get",
+        "parameters": [
+          {
+            "name": "user_id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "title": "User Id"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UserResponse"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shop/items": {
+      "get": {
+        "tags": ["shop"],
+        "summary": "Get Items",
+        "operationId": "get_items_shop_items_get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    },
+    "/shop/buy": {
+      "post": {
+        "tags": ["shop"],
+        "summary": "Buy Item",
+        "operationId": "buy_item_shop_buy_post",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BuyRequest"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          },
+          "422": {
+            "description": "Validation Error",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/HTTPValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/": {
+      "get": {
+        "summary": "Read Root",
+        "operationId": "read_root__get",
+        "responses": {
+          "200": {
+            "description": "Successful Response",
+            "content": {
+              "application/json": {
+                "schema": {}
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "ActionType": {
+        "type": "string",
+        "enum": ["SELL", "RELEASE", "AQUARIUM"],
+        "title": "ActionType"
+      },
+      "BuyRequest": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "item_id": {
+            "type": "integer",
+            "title": "Item Id"
+          }
+        },
+        "type": "object",
+        "required": ["user_id", "item_id"],
+        "title": "BuyRequest"
+      },
+      "CollectionItem": {
+        "properties": {
+          "species_id": {
+            "type": "integer",
+            "title": "Species Id"
+          },
+          "name": {
+            "type": "string",
+            "title": "Name"
+          },
+          "type": {
+            "type": "string",
+            "title": "Type"
+          },
+          "image_url": {
+            "type": "string",
+            "title": "Image Url"
+          },
+          "caught_count": {
+            "type": "integer",
+            "title": "Caught Count"
+          },
+          "is_caught": {
+            "type": "boolean",
+            "title": "Is Caught"
+          }
+        },
+        "type": "object",
+        "required": [
+          "species_id",
+          "name",
+          "type",
+          "image_url",
+          "caught_count",
+          "is_caught"
+        ],
+        "title": "CollectionItem"
+      },
+      "FishResponse": {
+        "properties": {
+          "species_name": {
+            "type": "string",
+            "title": "Species Name"
+          },
+          "species_type": {
+            "$ref": "#/components/schemas/SpeciesType"
+          },
+          "image_url": {
+            "anyOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "null"
+              }
+            ],
+            "title": "Image Url"
+          },
+          "is_new": {
+            "type": "boolean",
+            "title": "Is New"
+          },
+          "pollution_level": {
+            "type": "integer",
+            "title": "Pollution Level"
+          }
+        },
+        "type": "object",
+        "required": [
+          "species_name",
+          "species_type",
+          "is_new",
+          "pollution_level"
+        ],
+        "title": "FishResponse"
+      },
+      "HTTPValidationError": {
+        "properties": {
+          "detail": {
+            "items": {
+              "$ref": "#/components/schemas/ValidationError"
+            },
+            "type": "array",
+            "title": "Detail"
+          }
+        },
+        "type": "object",
+        "title": "HTTPValidationError"
+      },
+      "SpeciesType": {
+        "type": "string",
+        "enum": ["TRASH", "INVASIVE", "NORMAL", "ENDANGERED"],
+        "title": "SpeciesType"
+      },
+      "UserActionRequest": {
+        "properties": {
+          "user_id": {
+            "type": "integer",
+            "title": "User Id"
+          },
+          "species_id": {
+            "type": "integer",
+            "title": "Species Id"
+          },
+          "action": {
+            "$ref": "#/components/schemas/ActionType"
+          }
+        },
+        "type": "object",
+        "required": ["user_id", "species_id", "action"],
+        "title": "UserActionRequest"
+      },
+      "UserCreate": {
+        "properties": {
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          }
+        },
+        "type": "object",
+        "required": ["nickname"],
+        "title": "UserCreate"
+      },
+      "UserResponse": {
+        "properties": {
+          "id": {
+            "type": "integer",
+            "title": "Id"
+          },
+          "nickname": {
+            "type": "string",
+            "title": "Nickname"
+          },
+          "money": {
+            "type": "integer",
+            "title": "Money"
+          },
+          "pollution_level": {
+            "type": "integer",
+            "title": "Pollution Level"
+          }
+        },
+        "type": "object",
+        "required": ["id", "nickname", "money", "pollution_level"],
+        "title": "UserResponse"
+      },
+      "ValidationError": {
+        "properties": {
+          "loc": {
+            "items": {
+              "anyOf": [
+                {
+                  "type": "string"
+                },
+                {
+                  "type": "integer"
+                }
+              ]
+            },
+            "type": "array",
+            "title": "Location"
+          },
+          "msg": {
+            "type": "string",
+            "title": "Message"
+          },
+          "type": {
+            "type": "string",
+            "title": "Error Type"
+          }
+        },
+        "type": "object",
+        "required": ["loc", "msg", "type"],
+        "title": "ValidationError"
+      }
+    }
+  }
+}
