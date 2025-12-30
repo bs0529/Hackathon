@@ -1,0 +1,61 @@
+/* Catching Bar Styles */
+
+/* Catching Bar Overlay */
+.catching-bar {
+  position: absolute;
+  top: 70%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90%;
+  max-width: 600px;
+  background: rgba(255, 255, 255, 0.9);
+  padding: 15px;
+  border-radius: 0px;
+  border: 4px solid #333;
+  text-align: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.gray-bar {
+  height: 30px;
+  background-color: #ddd;
+  border: 2px solid #555;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0px;
+}
+
+.green-bar {
+  height: 100%;
+  background-color: #4caf50;
+  position: absolute;
+  top: 0;
+  opacity: 0.8;
+}
+
+.red-bar {
+  height: 100%;
+  background-color: #f44336;
+  position: absolute;
+  top: 0;
+  box-shadow: 0 0 10px #f44336;
+}
+
+.moving-bar {
+  position: absolute;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  background-color: #000;
+  border-radius: 0px;
+  /* transition: left 0.05s ease; Removed for performance if using JS-driven frames, or keep if smoothing 20ms steps */
+  /* Using transform is better */
+  will-change: transform;
+  z-index: 5;
+}
+
+.catching-bar p {
+  margin: 10px 0 0;
+  font-weight: bold;
+  color: #333;
+}

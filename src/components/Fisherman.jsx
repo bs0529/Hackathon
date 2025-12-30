@@ -1,4 +1,5 @@
 import React from 'react'
+import './Fisherman.css'
 
 const Fisherman = ({ rodAnimation }) => {
   return (

@@ -1,4 +1,5 @@
 import React from 'react'
+import './CatchingBar.css'
 
 const CatchingBar = ({ greenStart, greenWidth, redStart, redWidth, barPosition, gauge, failures, onBarClick }) => {
   return (

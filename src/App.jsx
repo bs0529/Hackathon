@@ -1,14 +1,20 @@
 import { useState, useEffect, useRef } from 'react'
 import './App.css'
+import './components/UserInterface.css'
+import './components/Bobber.css'
 import { fishData } from './fishData'
 import Fisherman from './components/Fisherman'
 import FishingLine from './components/FishingLine'
 import Bobber from './components/Bobber'
 import CatchingBar from './components/CatchingBar'
 import ResultOverlay from './components/ResultOverlay'
+import Login from './components/Login'
+import Register from './components/Register'
+import Leaderboard from './components/Leaderboard'
 import GameLogic from './hooks/GameLogic'
+import { useUser, UserProvider } from './contexts/UserContext'
 
-function App() {
+function AppContent() {
   const [gamePhase, setGamePhase] = useState('ready')
   const [exclamation, setExclamation] = useState(false)
   const [gauge, setGauge] = useState(0)
@@ -26,6 +32,10 @@ function App() {
   const [catchAnimation, setCatchAnimation] = useState(false)
   const [isCasting, setIsCasting] = useState(false)
   const [caughtFish, setCaughtFish] = useState(null)
+  const [showAuth, setShowAuth] = useState(null) // 'login' or 'register'
+  const [currentScore, setCurrentScore] = useState(0)
+
+  const { user, stats, logout, updateStats } = useUser()
 
   const bobberRef = useRef(null)
   const lineRef = useRef(null)
@@ -64,6 +74,21 @@ function App() {
     isCasting,
   })
 
+  // Update user stats when game ends
+  useEffect(() => {
+    if (result !== null && user) {
+      const gameStats = {
+        result: result,
+        fishCaught: result === 'success' ? 1 : 0,
+        rareFish: result === 'success' && caughtFish && caughtFish.rarity === 'rare' ? 1 : 0,
+        score: currentScore,
+        attempts: attempts,
+        failures: failures
+      }
+      updateStats(gameStats)
+    }
+  }, [result, user, caughtFish, currentScore, attempts, failures, updateStats])
+
   const handleScreenClick = () => {
     // Allow immediate restart if result screen is visible
     if (result !== null) {
@@ -100,6 +125,36 @@ function App() {
     <div className="fishing-game" onClick={handleScreenClick}>
       <div className="game-container">
         {/* Sky and Water are part of the background image now, but we can add overlays if needed */}
+
+        {/* User Interface */}
+        <div className="user-interface">
+          {user ? (
+            <div className="user-info">
+              <div className="user-stats">
+                <span>환영합니다, {user.username}!</span>
+                <div className="stats-display">
+                  <span>총 물고기: {stats.totalFish}</span>
+                  <span>희귀 물고기: {stats.rareFish}</span>
+                  <span>최고 점수: {stats.highScore}</span>
+                </div>
+              </div>
+              <div className="user-actions">
+                <button onClick={(e) => { e.stopPropagation(); setShowAuth('leaderboard'); }}>
+                  리더보드
+                </button>
+                <button className="logout-btn" onClick={(e) => { e.stopPropagation(); logout(); }}>
+                  로그아웃
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div className="auth-buttons">
+              <button onClick={(e) => { e.stopPropagation(); setShowAuth('leaderboard'); }}>리더보드</button>
+              <button onClick={(e) => { e.stopPropagation(); setShowAuth('login'); }}>로그인</button>
+              <button onClick={(e) => { e.stopPropagation(); setShowAuth('register'); }}>회원가입</button>
+            </div>
+          )}
+        </div>
 
         {/* Fisherman */}
         <Fisherman rodAnimation={rodAnimation} />
@@ -154,7 +209,32 @@ function App() {
           )}
         </div>
       </div>
+
+      {/* Modals */}
+      {showAuth === 'login' && (
+        <Login
+          onSwitchToRegister={() => setShowAuth('register')}
+          onClose={() => setShowAuth(null)}
+        />
+      )}
+      {showAuth === 'register' && (
+        <Register
+          onSwitchToLogin={() => setShowAuth('login')}
+          onClose={() => setShowAuth(null)}
+        />
+      )}
+      {showAuth === 'leaderboard' && (
+        <Leaderboard onClose={() => setShowAuth(null)} />
+      )}
     </div>
+  )
+}
+
+function App() {
+  return (
+    <UserProvider>
+      <AppContent />
+    </UserProvider>
   )
 }
 

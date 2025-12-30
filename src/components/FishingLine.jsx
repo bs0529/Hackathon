@@ -1,4 +1,5 @@
 import React, { useEffect, useRef } from 'react'
+import './FishingLine.css'
 
 const FishingLine = ({ lineRef, gamePhase, isCasting, bobberRef }) => {
   const requestRef = useRef(null)

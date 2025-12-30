@@ -1,4 +1,5 @@
 import React from 'react'
+import './Bobber.css'
 
 const Bobber = ({ gamePhase, isCasting, catchAnimation, exclamation, bobberRef }) => {
   return (

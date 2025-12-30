@@ -1,0 +1,191 @@
+/* User Interface Styles */
+
+/* User Interface */
+.user-interface {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  z-index: 200;
+  font-family: 'RoundedFixedsys', sans-serif;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 10px;
+}
+
+.auth-buttons button {
+  padding: 8px 16px;
+  background-color: rgba(33, 150, 243, 0.9);
+  color: white;
+  border: none;
+  border-radius: 0px;
+  font-size: 0.9rem;
+  font-family: 'RoundedFixedsys', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.auth-buttons button:hover {
+  background-color: rgba(21, 101, 192, 0.9);
+}
+
+.user-info {
+  background: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  border-radius: 0px;
+  border: 2px solid #333;
+  min-width: 250px;
+}
+
+.user-stats {
+  margin-bottom: 10px;
+}
+
+.user-stats span:first-child {
+  display: block;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 5px;
+}
+
+.stats-display {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  font-size: 0.8rem;
+  color: #555;
+}
+
+.stats-display span {
+  background: rgba(0, 0, 0, 0.1);
+  padding: 2px 6px;
+  border-radius: 0px;
+}
+
+.logout-btn {
+  padding: 6px 12px;
+  background-color: #f44336;
+  color: white;
+  border: none;
+  border-radius: 0px;
+  font-size: 0.8rem;
+  font-family: 'RoundedFixedsys', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  width: 100%;
+}
+
+.logout-btn:hover {
+  background-color: #d32f2f;
+}
+
+/* Authentication Styles */
+.auth-container {
+  background: rgba(255, 255, 255, 0.95);
+  padding: 2rem;
+  border-radius: 0px;
+  border: 2px solid #333;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+}
+
+.auth-container h2 {
+  margin-bottom: 1.5rem;
+  color: #333;
+  font-size: 1.8rem;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #555;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid #ddd;
+  border-radius: 0px;
+  font-size: 1rem;
+  font-family: 'RoundedFixedsys', sans-serif;
+  box-sizing: border-box;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #2196f3;
+}
+
+.auth-buttons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+
+.auth-buttons button {
+  flex: 1;
+  padding: 0.75rem;
+  border: none;
+  border-radius: 0px;
+  font-size: 1rem;
+  font-family: 'RoundedFixedsys', sans-serif;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.auth-buttons button[type="submit"] {
+  background-color: #2196f3;
+  color: white;
+}
+
+.auth-buttons button[type="submit"]:hover:not(:disabled) {
+  background-color: #1976d2;
+}
+
+.auth-buttons button[type="button"] {
+  background-color: #666;
+  color: white;
+}
+
+.auth-buttons button[type="button"]:hover {
+  background-color: #555;
+}
+
+.auth-buttons button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.error-message {
+  color: #f44336;
+  margin: 1rem 0;
+  font-weight: bold;
+}
+
+.auth-switch {
+  margin-top: 1.5rem;
+  padding-top: 1rem;
+  border-top: 1px solid #ddd;
+}
+
+.auth-switch button {
+  background: none;
+  border: none;
+  color: #2196f3;
+  text-decoration: underline;
+  cursor: pointer;
+  font-family: 'RoundedFixedsys', sans-serif;
+}
+
+.auth-switch button:hover {
+  color: #1976d2;
+}
