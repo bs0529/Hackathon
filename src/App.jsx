@@ -252,6 +252,10 @@ function App({ playerName, userId, onBackToMenu }) {
 
   const backgroundImages = getBackgroundImages(selectedHabitat);
 
+  const pollutionFilter = `hue-rotate(-${
+    (habitatPollution[selectedHabitat] || 0) * 1.2
+  }deg)`;
+
   // Helper function to refresh user data (money and pollution)
   const refreshUserData = () => {
     getUser(userId)
@@ -448,6 +452,8 @@ function App({ playerName, userId, onBackToMenu }) {
             objectFit: "fill",
             zIndex: 1,
             pointerEvents: "none",
+            filter:
+              selectedHabitat === "바닷속암반" ? pollutionFilter : "none",
           }}
         />
         <img
