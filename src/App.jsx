@@ -8,7 +8,13 @@ import Bobber from "./components/Bobber";
 import CatchingBar from "./components/CatchingBar";
 import ResultOverlay from "./components/ResultOverlay";
 import GameLogic from "./hooks/GameLogic";
-import { handleAction, getUser, fishing } from "./services/api";
+import {
+  handleAction,
+  getUser,
+  fishing,
+  getShopItems,
+  buyItem,
+} from "./services/api";
 import { fishData } from "./fishData_original";
 
 function App({ playerName, userId, onBackToMenu }) {
@@ -34,13 +40,17 @@ function App({ playerName, userId, onBackToMenu }) {
   const [caughtFish, setCaughtFish] = useState(null);
   const [showMap, setShowMap] = useState(false);
   const [showShop, setShowShop] = useState(false);
+  const [shopItems, setShopItems] = useState([]);
+  const [shopLoading, setShopLoading] = useState(false);
   const [showPurchaseConfirm, setShowPurchaseConfirm] = useState(false);
   const [showPurchaseSuccess, setShowPurchaseSuccess] = useState(false);
-  const [selectedRod, setSelectedRod] = useState(null);
+  const [purchaseMessage, setPurchaseMessage] = useState("");
+  const [selectedItem, setSelectedItem] = useState(null);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
   const [actionResult, setActionResult] = useState(null);
   const [money, setMoney] = useState(0);
   const [habitatPollution, setHabitatPollution] = useState({});
+  const [notification, setNotification] = useState(null);
 
   const bobberRef = useRef(null);
 
@@ -84,14 +94,19 @@ function App({ playerName, userId, onBackToMenu }) {
       );
 
       // 응답에서 물고기 정보 추출 (새로운 API 구조)
+      const isSick = fishResponse.fish?.is_sick || false;
       const apiFish = {
         species_id: fishResponse.fish?.id, // fish.id가 species_id입니다
-        name: fishResponse.fish?.name,
+        name: isSick
+          ? `병든 ${fishResponse.fish?.name}`
+          : fishResponse.fish?.name,
+        originalName: fishResponse.fish?.name,
         type: fishResponse.fish?.type,
         price: fishResponse.fish?.price,
         image_url: fishResponse.fish?.image_url,
         habitat: fishResponse.fish?.habitat,
         is_new: fishResponse.is_new,
+        is_sick: isSick,
         message: fishResponse.message,
       };
 
@@ -289,13 +304,20 @@ function App({ playerName, userId, onBackToMenu }) {
           species_id: caughtFish.species_id,
           action: "RELEASE",
           habitat: selectedHabitat,
+          is_sick: caughtFish.is_sick,
         });
         const response = await handleAction(
           userId,
           caughtFish.species_id,
           "RELEASE",
-          selectedHabitat
+          selectedHabitat,
+          caughtFish.is_sick
         );
+        // 서버 메시지가 있으면 알림에 표시
+        if (response?.message) {
+          setNotification({ message: response.message, type: "release" });
+          setTimeout(() => setNotification(null), 5000);
+        }
         console.log("방생 처리 완료", response);
         setActionResult({
           type: "release",
@@ -340,19 +362,27 @@ function App({ playerName, userId, onBackToMenu }) {
           species_id: caughtFish.species_id,
           action: "SELL",
           habitat: selectedHabitat,
+          is_sick: caughtFish.is_sick,
         });
         const response = await handleAction(
           userId,
           caughtFish.species_id,
           "SELL",
-          selectedHabitat
+          selectedHabitat,
+          caughtFish.is_sick
         );
+        // 서버 메시지가 있으면 알림에 표시
+        if (response?.message) {
+          setNotification({ message: response.message, type: "sell" });
+          setTimeout(() => setNotification(null), 5000);
+        }
         console.log("판매 처리 완료", response);
         setActionResult({
           type: "sell",
           success: true,
           message: `${caughtFish.name}을(를) 판매했습니다!`,
-          money: caughtFish.price || response?.money_earned,
+          money:
+            response?.money_earned || response?.earned_money || response?.price,
           data: response,
         });
         // 판매 후 최신 유저 정보 가져오기
@@ -399,20 +429,30 @@ function App({ playerName, userId, onBackToMenu }) {
           species_id: caughtFish.species_id,
           action: "AQUARIUM",
           habitat: selectedHabitat,
+          is_sick: caughtFish.is_sick,
         });
         const response = await handleAction(
           userId,
           caughtFish.species_id,
           "AQUARIUM",
-          selectedHabitat
+          selectedHabitat,
+          caughtFish.is_sick
         );
+        // 서버 메시지가 있으면 알림에 표시
+        if (response?.message) {
+          setNotification({ message: response.message, type: "aquarium" });
+          setTimeout(() => setNotification(null), 5000);
+        }
         console.log("아쿠아리움 수송 처리 완료", response);
         setActionResult({
           type: "aquarium",
           success: true,
           message: `${caughtFish.name}을(를) 아쿠아리움으로 보냈습니다!`,
+          money: response?.money_change || response?.cost,
           data: response,
         });
+        // 아쿠아리움 수송 후 유저 데이터 갱신
+        refreshUserData();
       } catch (error) {
         console.error("아쿠아리움 수송 API 호출 실패:", error);
         setActionResult({
@@ -425,8 +465,9 @@ function App({ playerName, userId, onBackToMenu }) {
       setActionResult({
         type: "aquarium",
         success: true,
-        message: `${caughtFish?.name || "물고기"
-          }을(를) 아쿠아리움으로 보냈습니다!`,
+        message: `${
+          caughtFish?.name || "물고기"
+        }을(를) 아쿠아리움으로 보냈습니다!`,
       });
     }
 
@@ -452,8 +493,7 @@ function App({ playerName, userId, onBackToMenu }) {
             objectFit: "fill",
             zIndex: 1,
             pointerEvents: "none",
-            filter:
-              selectedHabitat === "바닷속암반" ? pollutionFilter : "none",
+            filter: selectedHabitat === "바닷속암반" ? pollutionFilter : "none",
           }}
         />
         <img
@@ -492,10 +532,19 @@ function App({ playerName, userId, onBackToMenu }) {
                 지도
               </button>
               <button
-                onClick={(e) => {
+                onClick={async (e) => {
                   e.stopPropagation();
                   resetGame();
                   setShowShop(true);
+                  setShopLoading(true);
+                  try {
+                    const items = await getShopItems();
+                    setShopItems(items || []);
+                  } catch (err) {
+                    console.error("Failed to fetch shop items:", err);
+                    setShopItems([]);
+                  }
+                  setShopLoading(false);
                 }}
               >
                 상점
@@ -555,6 +604,17 @@ function App({ playerName, userId, onBackToMenu }) {
                     : "측정 중..."}
                 </span>
               </div>
+              {notification && (
+                <div
+                  className={`notification-area notification-${
+                    notification.type || "default"
+                  }`}
+                >
+                  <span className="notification-message">
+                    {notification.message}
+                  </span>
+                </div>
+              )}
             </div>
           </>
         )}
@@ -672,59 +732,106 @@ function App({ playerName, userId, onBackToMenu }) {
       {showShop && (
         <div className="shop-screen">
           <div className="shop-content">
-            <h2>상점</h2>
-            <div className="shop-items">
-              <div
-                className="shop-item"
-                onClick={() => {
-                  setSelectedRod("일반 낚싯대");
-                  setShowPurchaseConfirm(true);
-                }}
-              >
-                <img src="/fishing_rod.png" alt="Fishing Rod 0" />
-                <p>일반 낚싯대</p>
-              </div>
-              <div
-                className="shop-item"
-                onClick={() => {
-                  setSelectedRod("머찐 낚싯대");
-                  setShowPurchaseConfirm(true);
-                }}
-              >
-                <img src="/cool_fishing_rod.png" alt="Fishing Rod 1" />
-                <p>머찐 낚싯대</p>
-              </div>
-              <div
-                className="shop-item"
-                onClick={() => {
-                  setSelectedRod("메우 믓찐 낚싯대");
-                  setShowPurchaseConfirm(true);
-                }}
-              >
-                <img src="/hansome_fishing_rod.png" alt="Fishing Rod 2" />
-                <p>메우 믓찐 낚싯대</p>
+            <div className="shop-header">
+              <h2>🎣 상점</h2>
+              <div className="shop-user-info">
+                <span className="shop-user-name">👤 {playerName}</span>
+                <span className="shop-user-money">
+                  💰 {money.toLocaleString()}원
+                </span>
               </div>
             </div>
+            {shopLoading ? (
+              <div className="shop-loading">로딩 중...</div>
+            ) : (
+              <div className="shop-items">
+                {shopItems.length > 0 ? (
+                  shopItems.map((item) => (
+                    <div
+                      className="shop-item"
+                      key={item.id}
+                      onClick={() => {
+                        setSelectedItem(item);
+                        setShowPurchaseConfirm(true);
+                      }}
+                    >
+                      <img
+                        src={item.image_url || "/fishing_rod.png"}
+                        alt={item.name}
+                      />
+                      <div className="shop-item-info">
+                        <p className="shop-item-name">{item.name}</p>
+                        <p className="shop-item-price">
+                          {item.price?.toLocaleString()}원
+                        </p>
+                        {item.effect && (
+                          <p className="shop-item-effect">{item.effect}</p>
+                        )}
+                        {item.trash_reduction && (
+                          <p className="shop-item-effect">
+                            🗑️ 쓰레기 감소: {item.trash_reduction}%
+                          </p>
+                        )}
+                        {item.good_fish_bonus && (
+                          <p className="shop-item-effect">
+                            🐟 좋은 물고기 확률: +{item.good_fish_bonus}%
+                          </p>
+                        )}
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <p className="shop-empty">상점에 아이템이 없습니다.</p>
+                )}
+              </div>
+            )}
           </div>
-          <button onClick={() => setShowShop(false)}>닫기</button>
+          <button className="shop-close-btn" onClick={() => setShowShop(false)}>
+            닫기
+          </button>
         </div>
       )}
 
       {/* Purchase Confirmation Modal */}
-      {showPurchaseConfirm && (
+      {showPurchaseConfirm && selectedItem && (
         <div className="purchase-confirm-modal">
           <div className="modal-content">
-            <p>{selectedRod}을 구매하시겠습니까?</p>
+            <h3>{selectedItem.name}</h3>
+            <p className="purchase-price">
+              가격: {selectedItem.price?.toLocaleString()}원
+            </p>
+            <p>구매하시겠습니까?</p>
             <div className="modal-buttons">
               <button
-                onClick={() => {
-                  setShowPurchaseConfirm(false);
-                  setShowPurchaseSuccess(true);
+                onClick={async () => {
+                  try {
+                    const response = await buyItem(userId, selectedItem.id);
+                    setPurchaseMessage(
+                      response?.message ||
+                        `${selectedItem.name}을(를) 구매했습니다!`
+                    );
+                    setShowPurchaseConfirm(false);
+                    setShowPurchaseSuccess(true);
+                    // 구매 후 유저 정보 갱신
+                    refreshUserData();
+                  } catch (error) {
+                    console.error("Purchase failed:", error);
+                    setPurchaseMessage(
+                      error.response?.data?.detail || "구매에 실패했습니다."
+                    );
+                    setShowPurchaseConfirm(false);
+                    setShowPurchaseSuccess(true);
+                  }
                 }}
               >
                 확인
               </button>
-              <button onClick={() => setShowPurchaseConfirm(false)}>
+              <button
+                onClick={() => {
+                  setShowPurchaseConfirm(false);
+                  setSelectedItem(null);
+                }}
+              >
                 취소
               </button>
             </div>
@@ -732,13 +839,19 @@ function App({ playerName, userId, onBackToMenu }) {
         </div>
       )}
 
-      {/* Purchase Success Modal */}
+      {/* Purchase Result Modal */}
       {showPurchaseSuccess && (
         <div className="purchase-confirm-modal">
           <div className="modal-content">
-            <p>구매 완료!</p>
+            <p>{purchaseMessage}</p>
             <div className="modal-buttons">
-              <button onClick={() => setShowPurchaseSuccess(false)}>
+              <button
+                onClick={() => {
+                  setShowPurchaseSuccess(false);
+                  setSelectedItem(null);
+                  setPurchaseMessage("");
+                }}
+              >
                 확인
               </button>
             </div>
