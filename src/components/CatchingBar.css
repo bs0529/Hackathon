@@ -30,16 +30,16 @@
 
 .green-bar {
   height: 100%;
-  background: linear-gradient(180deg, #66bb6a 0%, #43a047 50%, #2e7d32 100%);
+  background: #4caf50;
   position: absolute;
   top: 0;
-  opacity: 0.9;
+  opacity: 0.8;
   border-radius: 2px;
 }
 
 .red-bar {
   height: 100%;
-  background: linear-gradient(180deg, #ef5350 0%, #e53935 50%, #c62828 100%);
+  background: #f44336;
   position: absolute;
   top: 0;
   box-shadow: 0 0 8px rgba(244, 67, 54, 0.6);
@@ -102,7 +102,7 @@
 
 .catch-rate-bar-fill {
   height: 100%;
-  background: linear-gradient(90deg, #ffeb3b, #ff9800);
+  background: linear-gradient(90deg, #a7ff3b, #00c725);
   width: 0%; /* Dynamic */
   transition: width 0.3s ease-out;
   box-shadow: 2px 0 5px rgba(0,0,0,0.2);
