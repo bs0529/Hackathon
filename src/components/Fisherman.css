@@ -5,11 +5,32 @@
   position: absolute;
   /* Adjust these values based on where the dock is in the new background image */
   bottom: 200px;
-  left: 15%;
+  left: 12vw; /* Use viewport width for better responsiveness */
   z-index: 20;
   width: 350px;
   /* Increased size for V2 */
   height: auto;
+}
+
+/* Responsive positioning for different screen sizes */
+@media (max-width: 1200px) {
+  .fisherman-container {
+    left: 10vw;
+  }
+}
+
+@media (max-width: 768px) {
+  .fisherman-container {
+    left: 8vw;
+    width: 280px; /* Slightly smaller on mobile */
+  }
+}
+
+@media (max-width: 480px) {
+  .fisherman-container {
+    left: 6vw;
+    width: 220px; /* Even smaller on very small screens */
+  }
 }
 
 .stats-container {

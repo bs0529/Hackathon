@@ -12,10 +12,29 @@ const FishingLine = ({ lineRef, gamePhase, isCasting, bobberRef }) => {
       const containerWidth = window.innerWidth;
       const containerHeight = window.innerHeight;
 
-      // Rod tip fixed percentage relative to game-container
-      // Adjusted for larger fisherman (350px width) and moved right to 15%
-      const rodTipX = containerWidth * 0.40; // 40%
-      const rodTipY = containerHeight * 0.35; // 35%
+      // Calculate rod tip position based on fisherman position and screen size
+      // Fisherman positioning: 12vw on desktop, 10vw on <1200px, 8vw on <768px, 6vw on <480px
+      let fishermanLeftPercent;
+      let fishermanWidth;
+
+      if (containerWidth < 480) {
+        fishermanLeftPercent = 0.06; // 6vw
+        fishermanWidth = 220;
+      } else if (containerWidth < 768) {
+        fishermanLeftPercent = 0.08; // 8vw
+        fishermanWidth = 280;
+      } else if (containerWidth < 1200) {
+        fishermanLeftPercent = 0.10; // 10vw
+        fishermanWidth = 350;
+      } else {
+        fishermanLeftPercent = 0.12; // 12vw
+        fishermanWidth = 350;
+      }
+
+      const fishermanLeft = containerWidth * fishermanLeftPercent;
+      // Position rod tip at the right edge of fisherman, slightly below the top
+      const rodTipX = fishermanLeft + fishermanWidth; // Right edge of fisherman
+      const rodTipY = containerHeight * 0.35; // Slightly higher (35% from top)
 
       let targetX = rodTipX;
       let targetY = containerHeight * 0.75; // Default water level

@@ -211,8 +211,8 @@
 /* 던질 때 */
 @keyframes cast-bobber {
   0% {
-    left: 40%;
-    top: 35%;
+    left: 30%; /* Desktop rod tip position (right edge of fisherman) */
+    top: 35%; /* Slightly higher */
     transform: translate(-50%, -50%) scale(0.5);
   }
 
@@ -225,6 +225,70 @@
     left: 75%;
     top: 75%;
     transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Responsive casting animations */
+@media (max-width: 1200px) {
+  @keyframes cast-bobber {
+    0% {
+      left: 39%; /* <1200px rod tip position */
+      top: 35%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    50% {
+      top: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes cast-bobber {
+    0% {
+      left: 44%; /* <768px rod tip position */
+      top: 35%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    50% {
+      top: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes cast-bobber {
+    0% {
+      left: 52%; /* <480px rod tip position */
+      top: 35%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    50% {
+      top: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, -50%) scale(1);
+    }
   }
 }
 
@@ -244,17 +308,105 @@
 
   /* 🔥 빠르게 최종 위치 도착 */
   70% {
-    left: 40%;
-    top: 35%;
+    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
+    top: 35%; /* Slightly higher */
     transform: translate(-50%, 0%) scale(0.42);
   }
 
   /* 최종 위치 고정 */
   100% {
-    left: 40%;
-    top: 35%;
+    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
+    top: 37%; /* Slightly higher */
     transform: translate(-50%, 0%) scale(0.42);
     opacity: 1;
+  }
+}
+
+/* Responsive pull-down animations */
+@media (max-width: 1200px) {
+  @keyframes pull-down {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 43%; /* <1200px rod tip position */
+      top: 35%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 43%; /* <1200px rod tip position */
+      top: 37%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes pull-down {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 48%; /* <768px rod tip position */
+      top: 35%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 48%; /* <768px rod tip position */
+      top: 37%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes pull-down {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 56%; /* <480px rod tip position */
+      top: 35%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 56%; /* <480px rod tip position */
+      top: 37%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
   }
 }
 
@@ -302,16 +454,104 @@
 
   /* 🔥 빠르게 최종 위치 도착 */
   70% {
-    left: 40%;
-    top: 35%;
+    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
+    top: 35%; /* Slightly higher */
     transform: translate(-50%, 0%) scale(0.42);
   }
 
   /* 최종 위치 고정 */
   100% {
-    left: 40%;
-    top: 35%;
+    left: 34%; /* Desktop rod tip position (right edge of fisherman) */
+    top: 37%; /* Slightly higher */
     transform: translate(-50%, 0%) scale(0.42);
     opacity: 1;
+  }
+}
+
+/* Responsive pull-whale animations */
+@media (max-width: 1200px) {
+  @keyframes pull-whale {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 43%; /* <1200px rod tip position */
+      top: 35%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 43%; /* <1200px rod tip position */
+      top: 37%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes pull-whale {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 48%; /* <768px rod tip position */
+      top: 35%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 48%; /* <768px rod tip position */
+      top: 37%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes pull-whale {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 56%; /* <480px rod tip position */
+      top: 35%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 56%; /* <480px rod tip position */
+      top: 37%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
   }
 }
