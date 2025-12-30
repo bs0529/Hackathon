@@ -114,14 +114,40 @@ function App({
     }
   };
 
+  // Function to get background images based on habitat
+  const getBackgroundImages = (habitat) => {
+    switch (habitat) {
+      case '바다':
+        return { sky: '/sea_sky.png', ground: '/sea_ground.png' }
+      case '하구역':
+        return { sky: '/estuary_sky.png', ground: '/estuary_ground.png' }
+      case '바닷속암반':
+        return { sky: '/Undersea_rocks_sky.png', ground: '/Undersea_rocks_ground.png' }
+      case '바다숲':
+        return { sky: '/sea_forest_sky.png', ground: '/sea_forest_ground.png' }
+      case '갯벌':
+        return { sky: '/foreshore_sky.png', ground: '/foreshore_ground.png' }
+      case '연안':
+        return { sky: '/coast_sky.png', ground: '/coast_ground.png' }
+      default:
+        return { sky: '/coast_sky.png', ground: '/coast_ground.png' }
+    }
+  }
+
+  const backgroundImages = getBackgroundImages(selectedHabitat)
+
   return (
     <div className="fishing-game" onClick={handleScreenClick}>
       <div className="game-container">
         {/* Background Images */}
         <img
+<<<<<<< Updated upstream
           src={
             selectedHabitat === "갯벌" ? "/foreshore_sky.png" : "/coast_sky.png"
           }
+=======
+          src={backgroundImages.sky}
+>>>>>>> Stashed changes
           alt="Sky Background"
           style={{
             position: "absolute",
@@ -135,11 +161,15 @@ function App({
           }}
         />
         <img
+<<<<<<< Updated upstream
           src={
             selectedHabitat === "갯벌"
               ? "/foreshore_ground.png"
               : "/coast_ground.png"
           }
+=======
+          src={backgroundImages.ground}
+>>>>>>> Stashed changes
           alt="Ground Background"
           style={{
             position: "absolute",
