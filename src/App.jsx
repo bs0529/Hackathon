@@ -131,25 +131,14 @@ function AppContent() {
 
   return (
     <div className="fishing-game" onClick={handleScreenClick}>
-      <div className="game-container">
-        {/* Background Image */}
-        <img
-          src="/side_view_bg.png"
-          alt="Background"
-          className="background-image"
-          style={{
-            position: 'absolute',
-            top: 0,
-            left: 0,
-            width: '100%',
-            height: '100%',
-            objectFit: 'cover',
-            zIndex: 1,
-            pointerEvents: 'none'
-          }}
-        />
-
-        {/* Sky and Water are part of the background image now, but we can add overlays if needed */}
+      <div className="game-container" style={{
+        backgroundImage: 'url(/sky.png), url(/ground.png)',
+        backgroundSize: '100% 50%, 100% 50%',
+        backgroundPosition: 'top, bottom',
+        backgroundRepeat: 'no-repeat, no-repeat',
+        width: '100%',
+        height: '100%'
+      }}>
 
         {/* User Interface */}
         <div className="user-interface">
