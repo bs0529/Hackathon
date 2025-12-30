@@ -174,7 +174,9 @@ function Collection({ onClose }) {
 
   const handleFishClick = (fish) => {
     if (fish.is_caught) {
-      navigate(`/collection/${fish.species_id}`);
+      navigate(`/collection/${fish.species_id}`, {
+        state: { from: "collection" },
+      });
     }
   };
 

@@ -102,6 +102,40 @@ function CollectionDetail() {
   const location = useLocation();
   const [fish, setFish] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isFullScreen, setIsFullScreen] = useState(false);
+  const modelContainerRef = React.useRef(null);
+  const modelViewerRef = React.useRef(null);
+
+  const toggleFullScreen = () => {
+    if (!document.fullscreenElement) {
+      modelContainerRef.current.requestFullscreen().catch((err) => {
+        console.error(`Error attempting to enable full-screen mode: ${err.message} (${err.name})`);
+      });
+    } else {
+      document.exitFullscreen();
+    }
+  };
+
+  const handleARClick = () => {
+    if (modelViewerRef.current) {
+      if (modelViewerRef.current.canActivateAR) {
+        modelViewerRef.current.activateAR();
+      } else {
+        alert("이 기기에서는 AR 기능을 사용할 수 없습니다. 모바일에서 접속해 주세요!");
+      }
+    }
+  };
+
+  useEffect(() => {
+    const handleFullScreenChange = () => {
+      setIsFullScreen(!!document.fullscreenElement);
+    };
+
+    document.addEventListener('fullscreenchange', handleFullScreenChange);
+    return () => {
+      document.removeEventListener('fullscreenchange', handleFullScreenChange);
+    };
+  }, []);
 
   // 컴포넌트 마운트 시 스크롤을 최상단으로
   useEffect(() => {
@@ -172,26 +206,30 @@ function CollectionDetail() {
 
   const handleBackClick = () => {
     // location.state에서 from 확인
-    if (location.state?.from === 'aquarium') {
-      navigate('/aquarium');
+    if (location.state?.from === "aquarium") {
+      navigate("/aquarium");
     } else {
-      navigate('/collection');
+      navigate("/collection");
     }
   };
 
+  // location.state에서 from 값 가져오기 (aquarium 또는 collection)
+  const backgroundClass =
+    location.state?.from === "aquarium"
+      ? "collection-detail-page aquarium-background"
+      : "collection-detail-page";
+
   return (
-    <div className="collection-detail-page">
-      <button
-        className="detail-back-btn"
-        onClick={handleBackClick}
-      >
+    <div className={backgroundClass}>
+      <button className="detail-back-btn" onClick={handleBackClick}>
         ← 뒤로
       </button>
 
       <div className="detail-content">
         {/* 3D Model Section - model-viewer */}
-        <div className="detail-image-section">
+        <div className="detail-image-section" ref={modelContainerRef}>
           <model-viewer
+            ref={modelViewerRef}
             src={fish.model_url}
             alt={fish.name}
             camera-controls
@@ -200,12 +238,45 @@ function CollectionDetail() {
             auto-rotate-delay="0"
             rotation-per-second="30deg"
             shadow-intensity="1"
-            style={{
-              width: "100%",
-              height: "100%",
-              background: "transparent",
-            }}
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            ar-scale="auto"
           ></model-viewer>
+          
+          <button className="ar-btn" onClick={handleARClick} aria-label="AR 모드로 보기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 8V6a2 2 0 0 1 2-2h2"/>
+              <path d="M20 8V6a2 2 0 0 1-2-2h-2"/>
+              <path d="M2 16v2a2 2 0 0 1 2 2h2"/>
+              <path d="M20 16v2a2 2 0 0 1-2 2h-2"/>
+              <path d="M12 8v8"/>
+              <path d="M8 12h8"/>
+            </svg>
+          </button>
+
+          <button className="fullscreen-btn" onClick={toggleFullScreen} aria-label="전체화면 전환">
+            <svg 
+              xmlns="http://www.w3.org/2000/svg" 
+              width="24" 
+              height="24" 
+              viewBox="0 0 24 24" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2" 
+              strokeLinecap="round" 
+              strokeLinejoin="round"
+            >
+              {isFullScreen ? (
+                <>
+                  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+                </>
+              ) : (
+                <>
+                  <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+                </>
+              )}
+            </svg>
+          </button>
         </div>
 
         <div className="detail-info-box">
