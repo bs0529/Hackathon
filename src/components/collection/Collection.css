@@ -493,6 +493,39 @@ model-viewer {
   box-shadow: none;
 }
 
+/* AR Button */
+.ar-btn {
+  position: absolute;
+  bottom: 15px;
+  right: 15px;
+  width: 44px;
+  height: 44px;
+  border: 3px solid #000;
+  border-radius: 8px;
+  background-color: rgba(255, 255, 255, 0.8);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #000;
+  transition: all 0.2s;
+  z-index: 10;
+  padding: 0;
+  box-shadow: 2px 2px 0 rgba(0, 0, 0, 0.2);
+}
+
+.ar-btn:hover {
+  background-color: rgba(255, 255, 255, 0.95);
+  transform: scale(1.05);
+  box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.2);
+}
+
+.ar-btn:active {
+  transform: scale(0.95);
+  box-shadow: none;
+}
+
+
 .detail-fish-image {
   font-size: 12rem;
   filter: drop-shadow(5px 5px 5px rgba(0, 0, 0, 0.3));

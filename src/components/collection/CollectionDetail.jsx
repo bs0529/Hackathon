@@ -104,6 +104,7 @@ function CollectionDetail() {
   const [isLoading, setIsLoading] = useState(true);
   const [isFullScreen, setIsFullScreen] = useState(false);
   const modelContainerRef = React.useRef(null);
+  const modelViewerRef = React.useRef(null);
 
   const toggleFullScreen = () => {
     if (!document.fullscreenElement) {
@@ -112,6 +113,16 @@ function CollectionDetail() {
       });
     } else {
       document.exitFullscreen();
+    }
+  };
+
+  const handleARClick = () => {
+    if (modelViewerRef.current) {
+      if (modelViewerRef.current.canActivateAR) {
+        modelViewerRef.current.activateAR();
+      } else {
+        alert("이 기기에서는 AR 기능을 사용할 수 없습니다. 모바일에서 접속해 주세요!");
+      }
     }
   };
 
@@ -218,6 +229,7 @@ function CollectionDetail() {
         {/* 3D Model Section - model-viewer */}
         <div className="detail-image-section" ref={modelContainerRef}>
           <model-viewer
+            ref={modelViewerRef}
             src={fish.model_url}
             alt={fish.name}
             camera-controls
@@ -226,7 +238,22 @@ function CollectionDetail() {
             auto-rotate-delay="0"
             rotation-per-second="30deg"
             shadow-intensity="1"
+            ar
+            ar-modes="webxr scene-viewer quick-look"
+            ar-scale="auto"
           ></model-viewer>
+          
+          <button className="ar-btn" onClick={handleARClick} aria-label="AR 모드로 보기">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M2 8V6a2 2 0 0 1 2-2h2"/>
+              <path d="M20 8V6a2 2 0 0 1-2-2h-2"/>
+              <path d="M2 16v2a2 2 0 0 1 2 2h2"/>
+              <path d="M20 16v2a2 2 0 0 1-2 2h-2"/>
+              <path d="M12 8v8"/>
+              <path d="M8 12h8"/>
+            </svg>
+          </button>
+
           <button className="fullscreen-btn" onClick={toggleFullScreen} aria-label="전체화면 전환">
             <svg 
               xmlns="http://www.w3.org/2000/svg" 
