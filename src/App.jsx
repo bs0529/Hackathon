@@ -8,7 +8,7 @@ import Bobber from "./components/Bobber";
 import CatchingBar from "./components/CatchingBar";
 import ResultOverlay from "./components/ResultOverlay";
 import GameLogic from "./hooks/GameLogic";
-import { handleAction } from "./services/api";
+import { handleAction, getUser } from "./services/api";
 
 function App({ playerName, userId, onBackToMenu }) {
   const { habitat } = useParams();
@@ -39,8 +39,22 @@ function App({ playerName, userId, onBackToMenu }) {
   const [currentScore, setCurrentScore] = useState(0);
   const [preFetchedFish, setPreFetchedFish] = useState(null);
   const [actionResult, setActionResult] = useState(null);
+  const [money, setMoney] = useState(0);
 
   const bobberRef = useRef(null);
+
+  // Fetch user info for money
+  useEffect(() => {
+    if (userId) {
+      getUser(userId)
+        .then((userData) => {
+          if (userData && userData.money !== undefined) {
+            setMoney(userData.money);
+          }
+        })
+        .catch((err) => console.error("Failed to fetch user data:", err));
+    }
+  }, [userId]);
 
   // Update selectedHabitat when URL parameter changes
   useEffect(() => {
@@ -195,6 +209,11 @@ function App({ playerName, userId, onBackToMenu }) {
           money: caughtFish.price || response?.money_earned,
           data: response
         });
+        if (response && response.user_money !== undefined) {
+          setMoney(response.user_money);
+        } else if (response && response.money !== undefined) {
+          setMoney(response.money);
+        }
       } catch (error) {
         console.error("판매 API 호출 실패:", error);
         setActionResult({
@@ -291,6 +310,8 @@ function App({ playerName, userId, onBackToMenu }) {
           <div className="user-info">
             <div className="user-stats">
               <span>플레이어: {playerName}</span>
+              <span style={{ color: "black" }}>|</span>
+              <span className="user-money">{money.toLocaleString()}원</span>
             </div>
             <div className="user-actions">
               <button
@@ -460,6 +481,16 @@ function App({ playerName, userId, onBackToMenu }) {
           <div className="shop-content">
             <h2>상점</h2>
             <div className="shop-items">
+              <div
+                className="shop-item"
+                onClick={() => {
+                  setSelectedRod("일반 낚싯대");
+                  setShowPurchaseConfirm(true);
+                }}
+              >
+                <img src="/fishing_rod.png" alt="Fishing Rod 0" />
+                <p>일반 낚싯대</p>
+              </div>
               <div
                 className="shop-item"
                 onClick={() => {
