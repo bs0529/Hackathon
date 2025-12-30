@@ -156,73 +156,16 @@
   }
 }
 
-/* Pixel decorations */
-.menu-decoration {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  z-index: 1;
-}
-
-.floating-element {
-  position: absolute;
-  width: 64px;
-  height: 64px;
-  font-size: 48px;
-  opacity: 0.7;
-  animation: pixelFloat 6s ease-in-out infinite;
-  image-rendering: pixelated;
-}
-
-.floating-1 {
-  top: 15%;
-  left: 10%;
-  animation-delay: 0s;
-  animation-duration: 8s;
-}
-
-.floating-2 {
-  top: 60%;
-  left: 80%;
-  animation-delay: 2s;
-  animation-duration: 10s;
-}
-
-.floating-3 {
-  top: 40%;
-  left: 15%;
-  animation-delay: 4s;
-  animation-duration: 7s;
-}
-
-@keyframes pixelFloat {
-  0%, 100% {
-    transform: translateY(0) translateX(0);
-  }
-  25% {
-    transform: translateY(-30px) translateX(15px);
-  }
-  50% {
-    transform: translateY(-50px) translateX(-15px);
-  }
-  75% {
-    transform: translateY(-30px) translateX(8px);
-  }
-}
-
 /* Pixel ocean waves */
 .pixel-ocean {
   position: absolute;
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 25%;
+  height: 30%;
   background: linear-gradient(to bottom,
-    #3498DB 0%,
-    #2874A6 50%,
+    rgba(52, 152, 219, 0.8) 0%,
+    #2874A6 40%,
     #1B4F72 100%
   );
   overflow: hidden;
@@ -230,34 +173,257 @@
 
 .ocean-wave {
   position: absolute;
-  width: 200%;
-  height: 30px;
-  background: repeating-linear-gradient(
-    90deg,
-    #5DADE2 0px,
-    #5DADE2 20px,
-    transparent 20px,
-    transparent 40px
-  );
+  width: 300%;
+  height: 40px;
 }
 
 .wave-1 {
   top: 0;
-  animation: wave 3s linear infinite;
+  background: repeating-linear-gradient(
+    90deg,
+    #5DADE2 0px,
+    #5DADE2 30px,
+    transparent 30px,
+    transparent 60px
+  );
+  opacity: 0.7;
+  animation: wave1 8s ease-in-out infinite;
 }
 
 .wave-2 {
-  top: 15px;
-  opacity: 0.6;
-  animation: wave 4s linear infinite reverse;
+  top: 20px;
+  background: repeating-linear-gradient(
+    90deg,
+    #4A9FD8 0px,
+    #4A9FD8 25px,
+    transparent 25px,
+    transparent 50px
+  );
+  opacity: 0.5;
+  animation: wave2 12s ease-in-out infinite reverse;
 }
 
-@keyframes wave {
-  from {
-    transform: translateX(0);
+.wave-3 {
+  top: 35px;
+  background: repeating-linear-gradient(
+    90deg,
+    #3D8BC7 0px,
+    #3D8BC7 35px,
+    transparent 35px,
+    transparent 70px
+  );
+  opacity: 0.3;
+  animation: wave3 15s ease-in-out infinite;
+}
+
+@keyframes wave1 {
+  0% {
+    transform: translateX(0) translateY(0);
   }
-  to {
-    transform: translateX(-50%);
+  50% {
+    transform: translateX(-33.33%) translateY(-5px);
+  }
+  100% {
+    transform: translateX(-66.66%) translateY(0);
+  }
+}
+
+@keyframes wave2 {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-33.33%) translateY(8px);
+  }
+  100% {
+    transform: translateX(-66.66%) translateY(0);
+  }
+}
+
+@keyframes wave3 {
+  0% {
+    transform: translateX(0) translateY(0);
+  }
+  50% {
+    transform: translateX(-33.33%) translateY(-3px);
+  }
+  100% {
+    transform: translateX(-66.66%) translateY(0);
+  }
+}
+
+/* Underwater effects */
+.underwater-effects {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+/* Bubbles */
+.bubble {
+  position: absolute;
+  bottom: -20px;
+  width: 8px;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 0;
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+  animation: bubbleRise linear infinite;
+}
+
+.bubble-1 {
+  left: 15%;
+  animation-duration: 6s;
+  animation-delay: 0s;
+}
+
+.bubble-2 {
+  left: 35%;
+  width: 6px;
+  height: 6px;
+  animation-duration: 8s;
+  animation-delay: 2s;
+}
+
+.bubble-3 {
+  left: 55%;
+  animation-duration: 7s;
+  animation-delay: 1s;
+}
+
+.bubble-4 {
+  left: 75%;
+  width: 10px;
+  height: 10px;
+  animation-duration: 9s;
+  animation-delay: 3s;
+}
+
+.bubble-5 {
+  left: 85%;
+  width: 7px;
+  height: 7px;
+  animation-duration: 6.5s;
+  animation-delay: 4s;
+}
+
+@keyframes bubbleRise {
+  0% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+  90% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(-150vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  width: 4px;
+  height: 4px;
+  background: rgba(255, 255, 255, 0.4);
+  border-radius: 0;
+  animation: particleFloat linear infinite;
+}
+
+.particle-1 {
+  top: 30%;
+  left: 20%;
+  animation-duration: 15s;
+  animation-delay: 0s;
+}
+
+.particle-2 {
+  top: 50%;
+  left: 60%;
+  width: 3px;
+  height: 3px;
+  animation-duration: 20s;
+  animation-delay: 5s;
+}
+
+.particle-3 {
+  top: 70%;
+  left: 40%;
+  animation-duration: 18s;
+  animation-delay: 10s;
+}
+
+@keyframes particleFloat {
+  0% {
+    transform: translate(0, 0);
+    opacity: 0.3;
+  }
+  25% {
+    transform: translate(30px, -20px);
+    opacity: 0.6;
+  }
+  50% {
+    transform: translate(-20px, -40px);
+    opacity: 0.4;
+  }
+  75% {
+    transform: translate(40px, -60px);
+    opacity: 0.5;
+  }
+  100% {
+    transform: translate(0, -80px);
+    opacity: 0.3;
+  }
+}
+
+/* Pixel seaweed */
+.seaweed {
+  position: absolute;
+  bottom: 0;
+  width: 12px;
+  height: 60px;
+  background: repeating-linear-gradient(
+    to top,
+    #27AE60 0px,
+    #27AE60 8px,
+    #2ECC71 8px,
+    #2ECC71 16px
+  );
+  opacity: 0.6;
+  transform-origin: bottom center;
+  animation: seaweedSway ease-in-out infinite;
+}
+
+.seaweed-1 {
+  left: 10%;
+  animation-duration: 4s;
+  animation-delay: 0s;
+}
+
+.seaweed-2 {
+  left: 88%;
+  height: 50px;
+  animation-duration: 5s;
+  animation-delay: 1s;
+}
+
+@keyframes seaweedSway {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(3deg);
+  }
+  75% {
+    transform: rotate(-3deg);
   }
 }
 
