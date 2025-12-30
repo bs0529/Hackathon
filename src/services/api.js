@@ -91,4 +91,14 @@ export const invalidateLastFish = async (userId) => {
   }
 };
 
+export const getAquariumFish = async (userId) => {
+  try {
+    const response = await api.get(`/aquarium/${userId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get aquarium fish:", error);
+    throw error;
+  }
+};
+
 export default api;
