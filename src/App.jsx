@@ -348,14 +348,14 @@ function App({
             <h2>상점</h2>
             <div className="shop-items">
             <div className="shop-item" onClick={() => {
-              setSelectedRod('낚싯대 1');
+              setSelectedRod('머찐 낚싯대');
               setShowPurchaseConfirm(true);
             }}>
               <img src="/cool_fishing_rod.png" alt="Fishing Rod 1" />
               <p>머찐 낚싯대</p>
             </div>
             <div className="shop-item" onClick={() => {
-              setSelectedRod('낚싯대 2');
+              setSelectedRod('메우 믓찐 낚싯대');
               setShowPurchaseConfirm(true);
             }}>
               <img src="/hansome_fishing_rod.png" alt="Fishing Rod 2" />
