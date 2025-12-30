@@ -252,6 +252,25 @@ function App({ playerName, userId, onBackToMenu }) {
 
   const backgroundImages = getBackgroundImages(selectedHabitat);
 
+  // Helper function to refresh user data (money and pollution)
+  const refreshUserData = () => {
+    getUser(userId)
+      .then((userData) => {
+        if (userData && userData.money !== undefined) {
+          setMoney(userData.money);
+        }
+        if (userData && userData.habitat_pollutions) {
+          // habitat_pollutions 배열을 객체로 변환
+          const pollutionMap = {};
+          userData.habitat_pollutions.forEach((item) => {
+            pollutionMap[item.habitat_name] = item.pollution_level;
+          });
+          setHabitatPollution(pollutionMap);
+        }
+      })
+      .catch((err) => console.error("Failed to refresh user data:", err));
+  };
+
   // Result overlay button handlers
   const handleRelease = async () => {
     console.log("물고기를 방생했습니다:", caughtFish?.name);
@@ -280,6 +299,8 @@ function App({ playerName, userId, onBackToMenu }) {
           message: `${caughtFish.name}을(를) 방생했습니다!`,
           data: response,
         });
+        // 방생 후 유저 데이터 갱신 (오염도 등)
+        refreshUserData();
       } catch (error) {
         console.error("방생 API 호출 실패:", error);
         setActionResult({
@@ -337,21 +358,7 @@ function App({ playerName, userId, onBackToMenu }) {
           setMoney(response.money);
         }
         // 추가로 유저 정보 다시 fetch하여 확실하게 동기화
-        getUser(userId)
-          .then((userData) => {
-            if (userData && userData.money !== undefined) {
-              setMoney(userData.money);
-            }
-            if (userData && userData.habitat_pollutions) {
-              // habitat_pollutions 배열을 객체로 변환
-              const pollutionMap = {};
-              userData.habitat_pollutions.forEach((item) => {
-                pollutionMap[item.habitat_name] = item.pollution_level;
-              });
-              setHabitatPollution(pollutionMap);
-            }
-          })
-          .catch((err) => console.error("Failed to refresh user money:", err));
+        refreshUserData();
       } catch (error) {
         console.error("판매 API 호출 실패:", error);
         setActionResult({
@@ -456,6 +463,9 @@ function App({ playerName, userId, onBackToMenu }) {
             objectFit: "fill",
             zIndex: 2,
             pointerEvents: "none",
+            filter: `hue-rotate(-${
+              (habitatPollution[selectedHabitat] || 0) * 1.2
+            }deg)`,
           }}
         />
 
@@ -523,7 +533,18 @@ function App({ playerName, userId, onBackToMenu }) {
               현재 위치: {selectedHabitat}
               <div className="pollution-display">
                 오염도:
-                <span className="pollution-value">
+                <span
+                  className="pollution-value"
+                  style={{
+                    color:
+                      (habitatPollution[selectedHabitat] || 0) < 30
+                        ? "#4CAF50" // Green
+                        : (habitatPollution[selectedHabitat] || 0) <= 70
+                        ? "#FFC107" // Yellow/Amber
+                        : "#F44336", // Red
+                    fontWeight: "bold",
+                  }}
+                >
                   {habitatPollution[selectedHabitat] !== undefined
                     ? `${habitatPollution[selectedHabitat]}%`
                     : "측정 중..."}
