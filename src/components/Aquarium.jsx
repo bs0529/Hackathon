@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import "./Aquarium.css";
-import { getCollection } from "../services/api";
+import { getAquariumFish } from "../services/api";
 
 // meis_data의 JSON 파일명과 생물 이름을 매칭하는 맵
 const nameToGlbMap = {
@@ -124,7 +124,7 @@ function Aquarium({ onClose }) {
         const userData = JSON.parse(savedUser);
         const userId = userData.id;
 
-        const data = await getCollection(userId);
+        const data = await getAquariumFish(userId);
         const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
         // 잡은 물고기만 필터링
@@ -153,8 +153,8 @@ function Aquarium({ onClose }) {
           y:
             Math.random() * (TANK_BOUNDS.bottom - TANK_BOUNDS.top) +
             TANK_BOUNDS.top,
-          vx: (Math.random() - 0.2) * 0.25, // 속도: -0.15 ~ 0.15
-          vy: (Math.random() - 0.2) * 0.25,
+          vx: (Math.random() - 0.2) * 0.015, // 속도: -0.15 ~ 0.15
+          vy: (Math.random() - 0.2) * 0.015,
           size: Math.random() * 60 + 80, // 80px ~ 140px
         }));
       } catch (err) {
@@ -222,7 +222,7 @@ function Aquarium({ onClose }) {
   }, [fishData.length]);
 
   const handleFishClick = (fishId) => {
-    navigate(`/collection/${fishId}`, { state: { from: 'aquarium' } });
+    navigate(`/collection/${fishId}`, { state: { from: "aquarium" } });
   };
 
   return (
