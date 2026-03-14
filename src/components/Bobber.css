@@ -1,0 +1,555 @@
+/* Bobber Styles */
+
+/* Bobber Container */
+.bobber-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 18;
+}
+
+.bobber {
+  position: absolute;
+  /* Bobber position needs to be dynamically updated or fixed to a reasonable spot */
+  left: 75%;
+  top: 75%;
+  width: 40px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  transition: top 0.3s ease, left 0.3s ease;
+  will-change: transform;
+}
+
+.bobber.bobber-float {
+  animation: bob 2s infinite ease-in-out;
+}
+
+.bobber.bobber-shake {
+  animation: shake 0.5s infinite;
+}
+
+.exclamation {
+  position: absolute;
+  left: 75%;
+  top: 65%;
+  transform: translateX(-50%);
+  font-size: 4rem;
+  color: red;
+  font-weight: bold;
+  animation: blink 0.5s infinite, bounce 0.5s infinite;
+  z-index: 30;
+  text-shadow: 2px 2px 0px white;
+}
+
+/* Animations */
+@keyframes bob {
+  0%,
+  100% {
+    transform: translate(-50%, -50%) translateY(0);
+  }
+
+  50% {
+    transform: translate(-50%, -50%) translateY(10px);
+  }
+}
+
+@keyframes shake {
+  0% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+
+  25% {
+    transform: translate(-50%, -50%) rotate(5deg);
+  }
+
+  75% {
+    transform: translate(-50%, -50%) rotate(-5deg);
+  }
+
+  100% {
+    transform: translate(-50%, -50%) rotate(0deg);
+  }
+}
+
+@keyframes blink {
+  0%,
+  50% {
+    opacity: 1;
+  }
+
+  51%,
+  100% {
+    opacity: 0;
+  }
+}
+
+@keyframes bounce {
+  0%,
+  100% {
+    top: 65%;
+  }
+
+  50% {
+    top: 62%;
+  }
+}
+
+/* Catch Animation */
+.pulling-whale {
+  position: absolute;
+  width: 250px;
+  /* Adjust size based on image */
+  height: auto;
+  z-index: 25;
+  animation: pull-whale 2s ease-in-out forwards;
+  will-change: transform, opacity;
+}
+
+/* ===============================
+   Bobber Container
+================================ */
+.bobber-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 18;
+}
+
+/* ===============================
+   Bobber Base
+================================ */
+.bobber {
+  position: absolute;
+  left: 75%;
+  top: 75%;
+  width: 40px;
+  height: auto;
+  transform: translate(-50%, -50%);
+  will-change: transform;
+}
+
+/* ===============================
+   Idle Animations
+================================ */
+.bobber.bobber-float {
+  animation: bob 2s infinite ease-in-out;
+}
+
+.bobber.bobber-shake {
+  animation: shake 0.5s infinite;
+}
+
+/* ===============================
+   Container
+================================ */
+.bobber-container {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ===============================
+   Bobber
+================================ */
+.bobber {
+  position: absolute;
+  left: 75%;
+  top: 75%;
+  width: 40px;
+  transform: translate(-50%, -50%);
+  z-index: 20;
+  will-change: transform;
+}
+
+/* ===============================
+   Fish / Whale
+================================ */
+.pulling-whale {
+  position: absolute;
+  left: 75%;
+  top: 75%;
+  width: 220px;
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 0;
+  z-index: 18;
+}
+
+/* ===============================
+   Casting
+================================ */
+.bobber-container.casting .bobber {
+  animation: cast-bobber 1s ease-out forwards;
+}
+
+/* ===============================
+   Pulling (핵심)
+================================ */
+.bobber-container.pulling .bobber {
+  animation: pull-down 2s ease-in forwards;
+}
+
+.bobber-container.pulling .pulling-whale {
+  opacity: 1;
+  animation: pull-down 2s ease-in forwards;
+}
+
+/* ===============================
+   Keyframes
+================================ */
+
+/* 던질 때 */
+@keyframes cast-bobber {
+  0% {
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 30%; /* Rod tip height */
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  50% {
+    top: 20%;
+    transform: translate(-50%, -50%) scale(1.2);
+  }
+
+  100% {
+    left: 75%;
+    top: 75%;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+
+/* Responsive casting animations */
+@media (max-width: 1200px) {
+  @keyframes cast-bobber {
+    0% {
+      left: 40%; /* <1200px rod tip position */
+      top: 30%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    50% {
+      top: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes cast-bobber {
+    0% {
+      left: 44%; /* <768px rod tip position */
+      top: 30%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    50% {
+      top: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes cast-bobber {
+    0% {
+      left: 50%; /* <480px rod tip position */
+      top: 30%;
+      transform: translate(-50%, -50%) scale(0.5);
+    }
+
+    50% {
+      top: 20%;
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+}
+
+/* 🔥 아주 많이 아래로 끌려감 */
+@keyframes pull-down {
+  0% {
+    left: 75%;
+    top: 75%;
+    transform: translate(-50%, 40%) scale(0.42);
+    opacity: 1;
+  }
+
+  30% {
+    top: 20%;
+    transform: translate(-50%, -30%) scale(0.42);
+  }
+
+  /* 🔥 빠르게 최종 위치 도착 */
+  70% {
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 37%; /* Rod tip height */
+    transform: translate(-50%, 0%) scale(0.42);
+  }
+
+  /* 최종 위치 고정 */
+  100% {
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 39%; /* Slightly lower for visual comfort */
+    transform: translate(-50%, 0%) scale(0.42);
+    opacity: 1;
+  }
+}
+
+/* Responsive pull-down animations */
+@media (max-width: 1200px) {
+  @keyframes pull-down {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 40%; /* <1200px rod tip position */
+      top: 30%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 40%; /* <1200px rod tip position */
+      top: 32%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes pull-down {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 44%; /* <768px rod tip position */
+      top: 30%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 44%; /* <768px rod tip position */
+      top: 32%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes pull-down {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 50%; /* <480px rod tip position */
+      top: 30%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 50%; /* <480px rod tip position */
+      top: 32%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+/* 물고기 위로 끌려 올라감 */
+@keyframes pull-up {
+  0% {
+    transform: translate(-50%, -50%) scale(0.5);
+  }
+
+  40% {
+    transform: translate(-50%, -70%) scale(0.48);
+  }
+
+  70% {
+    transform: translate(-50%, -90%) scale(0.46);
+  }
+
+  100% {
+    transform: translate(-50%, -110%) scale(0.42);
+  }
+}
+
+/* 물고기 버둥거림 */
+@keyframes fish-wiggle {
+  from {
+    transform: translateX(-50%) rotate(-4deg);
+  }
+  to {
+    transform: translateX(-50%) rotate(4deg);
+  }
+}
+
+@keyframes pull-whale {
+  0% {
+    left: 75%;
+    top: 75%;
+    transform: translate(-50%, 40%) scale(0.42);
+    opacity: 1;
+  }
+
+  30% {
+    top: 20%;
+    transform: translate(-50%, -30%) scale(0.42);
+  }
+
+  /* 🔥 빠르게 최종 위치 도착 */
+  70% {
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 30%; /* Rod tip height */
+    transform: translate(-50%, 0%) scale(0.42);
+  }
+
+  /* 최종 위치 고정 */
+  100% {
+    left: 33%; /* Desktop rod tip position (near fisherman edge) */
+    top: 32%; /* Slightly lower for visual comfort */
+    transform: translate(-50%, 0%) scale(0.42);
+    opacity: 1;
+  }
+}
+
+/* Responsive pull-whale animations */
+@media (max-width: 1200px) {
+  @keyframes pull-whale {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 40%; /* <1200px rod tip position */
+      top: 30%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 40%; /* <1200px rod tip position */
+      top: 32%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  @keyframes pull-whale {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 44%; /* <768px rod tip position */
+      top: 30%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 44%; /* <768px rod tip position */
+      top: 32%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}
+
+@media (max-width: 480px) {
+  @keyframes pull-whale {
+    0% {
+      left: 75%;
+      top: 75%;
+      transform: translate(-50%, 40%) scale(0.42);
+      opacity: 1;
+    }
+
+    30% {
+      top: 20%;
+      transform: translate(-50%, -30%) scale(0.42);
+    }
+
+    70% {
+      left: 50%; /* <480px rod tip position */
+      top: 30%;
+      transform: translate(-50%, 0%) scale(0.42);
+    }
+
+    100% {
+      left: 50%; /* <480px rod tip position */
+      top: 32%;
+      transform: translate(-50%, 0%) scale(0.42);
+      opacity: 1;
+    }
+  }
+}

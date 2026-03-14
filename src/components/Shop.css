@@ -1,0 +1,295 @@
+.shop-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5) url("/shop.png") center/cover no-repeat;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  font-family: "RoundedFixedsys", cursive;
+  color: white;
+}
+
+.shop-content {
+  background: rgba(0, 0, 0, 0.85);
+  padding: 2rem 3rem;
+  border-radius: 10px;
+  border: 3px solid #3498db;
+  min-width: 700px;
+  max-width: 90vw;
+  max-height: 80vh;
+  overflow-y: auto;
+  margin-top: -50px;
+}
+
+.shop-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+}
+
+.shop-screen h2 {
+  margin: 0;
+  font-size: 2rem;
+  color: white;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.shop-user-info {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+}
+
+.shop-user-name {
+  font-size: 1.2rem;
+  color: #ecf0f1;
+  background: rgba(52, 152, 219, 0.3);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+}
+
+.shop-user-money {
+  font-size: 1.3rem;
+  color: #f1c40f;
+  font-weight: bold;
+  background: rgba(241, 196, 15, 0.2);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  border: 2px solid #f1c40f;
+}
+
+.shop-items {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.shop-item {
+  position: relative; /* For badge positioning */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  cursor: pointer;
+  padding: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 10px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  min-width: 180px;
+  max-width: 220px;
+}
+
+.shop-item:hover {
+  background: rgba(52, 152, 219, 0.3);
+  border-color: #3498db;
+  transform: translateY(-5px);
+  box-shadow: 0 8px 20px rgba(52, 152, 219, 0.3);
+}
+
+/* Equipped/Owned Styles */
+.shop-item.equipped {
+  border-color: #2ecc71;
+  background: rgba(46, 204, 113, 0.15);
+  box-shadow: 0 0 15px rgba(46, 204, 113, 0.4);
+}
+
+.shop-item.owned {
+  border-color: #f39c12;
+}
+
+.shop-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: bold;
+  box-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.shop-badge.equipped {
+  background-color: #2ecc71;
+  color: #000;
+}
+
+.shop-badge.owned {
+  background-color: #f39c12;
+  color: #000;
+}
+
+.shop-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 0.5rem;
+  filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.shop-item-info {
+  text-align: center;
+  width: 100%;
+}
+
+.shop-item-name {
+  margin: 0 0 0.3rem 0;
+  font-size: 1.1rem;
+  color: white;
+  font-weight: bold;
+}
+
+.shop-item-price {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #f1c40f;
+  font-weight: bold;
+}
+
+.shop-item-effect {
+  margin: 0.2rem 0;
+  font-size: 0.85rem;
+  color: #2ecc71;
+  background: rgba(46, 204, 113, 0.2);
+  padding: 0.2rem 0.5rem;
+  border-radius: 4px;
+}
+
+.shop-loading {
+  text-align: center;
+  font-size: 1.5rem;
+  color: white;
+  padding: 3rem;
+  animation: pulse-opacity 1.5s infinite;
+}
+
+@keyframes pulse-opacity {
+  0%,
+  100% {
+    opacity: 0.5;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+
+.shop-empty {
+  text-align: center;
+  font-size: 1.2rem;
+  color: #bdc3c7;
+  padding: 2rem;
+}
+
+.shop-close-btn {
+  position: absolute;
+  bottom: 30px;
+  right: 30px;
+  padding: 14px 40px;
+  font-size: 16px;
+  font-family: "RoundedFixedsys", cursive;
+  color: white;
+  background: #e74c3c;
+  border: 4px solid #2c3e50;
+  cursor: pointer;
+  transition: all 0.1s;
+  box-shadow: 4px 4px 0 #2c3e50, 4px 4px 0 2px #34495e;
+  z-index: 2002;
+}
+
+.shop-close-btn:hover {
+  background: #c0392b;
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 #2c3e50, 6px 6px 0 2px #34495e;
+}
+
+.shop-close-btn:active {
+  transform: translate(2px, 2px);
+  box-shadow: 2px 2px 0 #2c3e50, 2px 2px 0 1px #34495e;
+}
+
+.purchase-price {
+  font-size: 1.3rem;
+  color: #f1c40f;
+  font-weight: bold;
+}
+
+.purchase-confirm-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3000;
+}
+
+.modal-content {
+  background: white;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 4px solid #2c3e50;
+  box-shadow: 0 0 30px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  font-family: "RoundedFixedsys", cursive;
+  min-width: 300px;
+}
+
+.modal-content h3 {
+  margin: 0 0 1rem 0;
+  font-size: 1.5rem;
+  color: #2c3e50;
+}
+
+.modal-content p {
+  margin-bottom: 1.5rem;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.modal-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.modal-buttons button {
+  padding: 10px 20px;
+  border: 2px solid #2c3e50;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "RoundedFixedsys", cursive;
+  font-size: 1rem;
+  transition: all 0.1s;
+}
+
+.modal-buttons button:first-child {
+  background: #3498db;
+  color: white;
+}
+
+.modal-buttons button:first-child:hover {
+  background: #5dade2;
+  transform: translate(-1px, -1px);
+}
+
+.modal-buttons button:last-child {
+  background: #e74c3c;
+  color: white;
+}
+
+.modal-buttons button:last-child:hover {
+  background: #c0392b;
+  transform: translate(-1px, -1px);
+}

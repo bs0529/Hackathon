@@ -1,0 +1,154 @@
+import axios from "axios";
+
+// API 베이스 URL - 환경에 따라 변경 필요
+const API_BASE_URL = import.meta.env.VITE_BACKEND_URL;
+
+const api = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+// 유저 생성
+export const createUser = async (nickname) => {
+  try {
+    const response = await api.post("/users/", { nickname });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to create user:", error);
+    throw error;
+  }
+};
+
+// 유저 정보 조회
+export const getUser = async (userId) => {
+  try {
+    // 캐싱 방지를 위해 timestamp 추가
+    const response = await api.get(
+      `/users/${userId}?_t=${new Date().getTime()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get user:", error);
+    throw error;
+  }
+};
+
+// 낚시하기
+export const fishing = async (userId, habitat) => {
+  try {
+    console.log("DEBUG - fishing API 호출:", { userId, habitat });
+    const response = await api.post("/game/fish", null, {
+      params: {
+        user_id: userId,
+        habitat: habitat,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to fish:", error);
+    throw error;
+  }
+};
+
+// 행동 처리 (판매/방생/수족관)
+export const handleAction = async (
+  userId,
+  speciesId,
+  action,
+  habitat,
+  isSick = false
+) => {
+  try {
+    const response = await api.post("/game/action", {
+      user_id: userId,
+      species_id: speciesId,
+      action: action, // "SELL", "RELEASE", "AQUARIUM"
+      habitat: habitat, // "바다", "갯벌", etc.
+      is_sick: isSick,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to handle action:", error);
+    throw error;
+  }
+};
+
+// 도감 조회
+export const getCollection = async (userId) => {
+  try {
+    const response = await api.get(
+      `/game/collection/${userId}?_t=${new Date().getTime()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get collection:", error);
+    throw error;
+  }
+};
+
+// 마지막 낚시 무효화 (실패 시)
+export const invalidateLastFish = async (userId) => {
+  try {
+    const response = await api.post("/game/invalidate-last-fish", null, {
+      params: {
+        user_id: userId,
+      },
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to invalidate last fish:", error);
+    throw error;
+  }
+};
+
+export const getAquariumFish = async (userId) => {
+  try {
+    const response = await api.get(
+      `/aquarium/${userId}?_t=${new Date().getTime()}`
+    );
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get aquarium fish:", error);
+    throw error;
+  }
+};
+
+// 편지 읽음 처리
+export const markLetterAsRead = async (letterId) => {
+  try {
+    const response = await api.post(`/aquarium/read/${letterId}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to mark letter as read:", error);
+    throw error;
+  }
+};
+
+// 상점 아이템 목록 조회
+export const getShopItems = async () => {
+  try {
+    const response = await api.get(`/shop/items?_t=${new Date().getTime()}`);
+    return response.data;
+  } catch (error) {
+    console.error("Failed to get shop items:", error);
+    throw error;
+  }
+};
+
+// 상점 아이템 구매
+export const buyItem = async (userId, itemId) => {
+  try {
+    const response = await api.post("/shop/buy", {
+      user_id: userId,
+      item_id: itemId,
+    });
+    return response.data;
+  } catch (error) {
+    console.error("Failed to buy item:", error);
+    throw error;
+  }
+};
+
+export default api;
